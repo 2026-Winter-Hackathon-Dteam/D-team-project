@@ -1,1 +1,10 @@
 .env
+
+# node
+node_modules/
+
+# tailwind build
+static/dist/
+
+# mac
+.DS_Store

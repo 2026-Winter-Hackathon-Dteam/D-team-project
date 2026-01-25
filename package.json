@@ -1,0 +1,25 @@
+{
+  "name": "d-team-project",
+  "version": "1.0.0",
+  "description": "2026 ハッカソン冬の陣、開発用リポジトリです",
+  "main": "index.js",
+"scripts": {
+  "dev": "npx tailwindcss -i ./static/src/input.css -o ./static/dist/tailwind.css --watch",
+  "build": "npx tailwindcss -i ./static/src/input.css -o ./static/dist/tailwind.css"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2026-Winter-Hackathon-Dteam/D-team-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/2026-Winter-Hackathon-Dteam/D-team-project/issues"
+  },
+  "homepage": "https://github.com/2026-Winter-Hackathon-Dteam/D-team-project#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}
