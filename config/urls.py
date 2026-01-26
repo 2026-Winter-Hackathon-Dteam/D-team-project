@@ -6,9 +6,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
-    path('', include('spaces.urls')),
-    path('', include('teams.urls')),
-    path('', include('analysis.urls')),
+    path('spaces/', include('spaces.urls')),
+    path('teams/', include('teams.urls')),
+    path('analysis/', include('analysis.urls')),
 ]
 
 # Tailwind.CSS 動作確認のための開発環境用static配信設定（DEBUG=True時のみ有効）
