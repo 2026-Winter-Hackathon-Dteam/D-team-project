@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}login{% endblock %}
+
+{% block content %}
+  <main>
+  <!-- ======== 説明文 ======== -->
+    <div>  
+      <h1>ログイン</h1>
+    </div>
+
+  <!-- ======== フォーム ======== -->
+    <div>
+      <form method="post">
+        {% csrf_token %}
+
+        <label>
+          スペースコード
+          <input type="text" name="employee_code" minlength="3" maxlength="3" required>
+        </label>
+
+        <label>
+          社員ID
+          <input type="number" name="employee_id" required>
+        </label>
+
+        <label>
+          パスワード
+          <input type="password" name="password" required>
+        </label>
+
+        <button type="submit">ログイン</button>
+      </form>
+    </div>
+
+  <!-- ======== サインアップ導線 ======== -->
+    <div>
+        <a href="#">アカウント作成へ</a>
+      <!-- url signup -->
+    </div>
+
+  </main>
+{% endblock %}
