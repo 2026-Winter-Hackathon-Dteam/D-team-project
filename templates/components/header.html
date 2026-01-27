@@ -1,0 +1,37 @@
+{% load static %}
+<header>
+  <!-- ロゴ -->
+   <a href="#">  <!-- home -->
+    <img src="{% static 'images/Teamy_logo.png' %}" alt="Teamy_logo">
+   </a>
+
+ <!-- ログイン判定 -->
+ <!-- ======== ログイン後 ======== -->
+ <nav>
+   <a href="#">Analysis</a>
+   <a href="#">Questions</a>
+   <a href="#">Teams</a>
+   <!-- is_admin判定   -->
+    <a href="#">Members</a>
+ </nav>
+
+<!-- チーム名 -->
+ <button>チーム名<span>▼</span></button>
+ <!-- current_teamと所属チームをここで受け取る -->
+
+<!-- ユーザー名 -->
+ <button>ユーザー名<span>▼</span></button>
+ <!-- プルダウン -->
+  <a href="#">プロフィール変更</a>
+  <a href="#">パスワード変更</a>
+  <!-- is_owner判定 -->
+  <a href="#">スペース編集</a>
+  <a href="#">ログアウト</a>
+
+ <!-- ======== ログイン前 ======== -->
+ <nav>
+   <a href="#">Home</a>
+   <a href="#">Login</a>
+ </nav>
+
+</header>
