@@ -37,7 +37,7 @@ class UserValueScore(models.Model):
     
     # モデルのDB・表示まわりの設定(特にadmin使用時)
     class Meta:
-        db_table = "user_value_scores"
+        db_table = "User_Value_Scores"
         indexes = [
             models.Index(fields=["user", "created_at"]),
             models.Index(fields=["user", "value_key"]),
@@ -65,7 +65,7 @@ class TeamValueScore(models.Model):
 
     # モデルのDB・表示まわりの設定(特にadmin使用時)
     class Meta:
-        db_table = "team_value_scores"
+        db_table = "Team_Value_Scores"
         indexes = [
             models.Index(fields=["team", "created_at"]),
             models.Index(fields=["team", "value_key"]),
@@ -99,7 +99,7 @@ class UserAdvice(models.Model):
 
     # モデルのDB・表示まわりの設定(特にadmin使用時)
     class Meta:
-        db_table = "user_advices"
+        db_table = "User_Advices"
         constraints = [
             models.UniqueConstraint(
                 fields=["value_key", "importance", "is_minus_side"],
@@ -139,7 +139,7 @@ class TeamAdvice(models.Model):
     
     # モデルのDB・表示まわりの設定(特にadmin使用時)
     class Meta:
-        db_table = "team_advices"
+        db_table = "Team_Advices"
         constraints = [
             models.UniqueConstraint(
                 fields=["value_key", "code"],
@@ -165,7 +165,7 @@ class Question(models.Model):
 
     # モデルのDB・表示まわりの設定(特にadmin使用時)
     class Meta:
-        db_table = "questions"
+        db_table = "Questions"
         
     # adminやログに出力する文字列の設定
     def __str__(self):
