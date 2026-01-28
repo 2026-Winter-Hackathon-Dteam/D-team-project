@@ -23,12 +23,12 @@ class UserValueScore(models.Model):
         default=uuid.uuid4, 
         editable=False, 
         verbose_name="ユーザー回答スコアID"
-        )
+    )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="user_value_scores"
-        )
+    )
     value_key = models.ForeignKey("ValueMaster", on_delete=models.PROTECT, related_name="user_scores")
     personal_score = models.SmallIntegerField(
         validators=[MinValueValidator(-12), MaxValueValidator(12)]
@@ -54,7 +54,7 @@ class TeamValueScore(models.Model):
         default=uuid.uuid4, 
         editable=False, 
         verbose_name="チーム回答スコアID"
-        )
+    )
     team = models.ForeignKey("teams.Teams", on_delete=models.CASCADE, related_name="team_value_scores")
     value_key = models.ForeignKey("ValueMaster", on_delete=models.PROTECT, related_name="team_scores")
     mean = models.FloatField()
@@ -169,4 +169,6 @@ class Question(models.Model):
         
     # adminやログに出力する文字列の設定
     def __str__(self):
-        return f"{self.value_key}({self.text})"
+        text = self.text
+        short = text[:25] + "…" if len(text) > 25 else text
+        return f"{self.value_key}({short})"
