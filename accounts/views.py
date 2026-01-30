@@ -3,4 +3,4 @@ from django.http import HttpResponse
 
 def sample(request):
     # return HttpResponse("")
-    return render(request, "sample.html")  # 画面表示テスト用にHttpRespomseをコメントアウトしてrenderへ 削除予定
+    return render(request, "discription_space.html")  # 画面表示テスト用にHttpRespomseをコメントアウトしてrenderに変更中（削除予定）
