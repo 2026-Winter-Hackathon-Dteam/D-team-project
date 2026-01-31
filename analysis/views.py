@@ -35,38 +35,65 @@ def question_page(request, page):
 
 
 # 回答保存
-"""
-@login_required
+#@login_required
 @require_http_methods(["POST"])
 @transaction.atomic
 def submit_answers(request):
-    #json受け取り
+
+    # 回答受け取る
     data = json.loads(request.body)
     answers = data["answers"]
     user = request.user
-    
 
+    # Questionからまとめて取得（id,value_key,is_reverse）
+    questions = Question.objects.filter(
+        id__in=answers.keys()
+    ).values(
+        "id",
+        "value_key_id",
+        "is_reverse"
+    )
+
+    # 取得したクエリセットをインデックス化する
     question_map = {
-        str(q.id): q.value_key_id
-        for q in Question.objects.filter(id__in=answers.keys())
+        str(q["id"]): q
+        for q in questions
     }
 
-    #保存用リスト
-    objs = []
-    
-    for question_id, score in answers.items():
-        objs.append(
-            UserValueScore(
-                user=user,
-                value_key_id=question_map[question_id],
-                personal_score=int(score)
-            )
-        )
+    # 集計用
+    value_totals = {}  # value_key → 合計点
 
+    for question_id, raw_score in answers.items():
+        
+        q = question_map[question_id]
+
+        # 逆転処理
+        score = int(raw_score)
+        if q["is_reverse"]:
+            score *= -1
+
+        value_key = q["value_key_id"]
+
+        # valueごとにscoreを足していく
+        value_totals[value_key] = value_totals.get(value_key, 0) + score
+    
+    # 集計結果から保存オブジェクト作成
+    objs = [
+        UserValueScore(
+            user=user,
+            value_key_id=value_key,
+            personal_score=total_score
+        )
+        for value_key, total_score in value_totals.items()
+    ]
+
+    # DB保存
     UserValueScore.objects.bulk_create(objs)
-    #js側に成功通知を送る
-    return JsonResponse({"status": "ok"})
-"""
+
+    return JsonResponse({
+        "status": "ok",
+        "totals": value_totals,  # 必要なら返す
+    })
 
 
 # スコア計算
