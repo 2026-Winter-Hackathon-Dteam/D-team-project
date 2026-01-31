@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}Questions{% endblock %}
 
 {% block content %}
@@ -32,5 +34,11 @@
     <button type="button" onclick="submitAll()">診断する</button>
   {% endif %}
 </form>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'analysis/questions_save.js' %}"></script>
 
 {% endblock %}
