@@ -9,8 +9,8 @@
 <form id="question-form">
   {% csrf_token %}
 
-  {% for q in page_obj %}
-    <div class="question">
+  {% for q in page_obj.object_list %}
+    <div class="question">  
       <p>{{ q.text }}</p>
 
       <select data-qid="{{ q.id }}" class="answer">
