@@ -29,7 +29,7 @@
   {% endif %}
 
   {% if page_obj.has_next %}
-    <a href="{% url 'question_page' page_obj.next_page_number %}">次へ</a>
+    <button type="button" onclick="nextPage({{ page_obj.next_page_number }})">次へ</button>
   {% else %}
     <button type="button" onclick="submitAll()">診断する</button>
   {% endif %}

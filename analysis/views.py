@@ -4,36 +4,64 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from .models import ValueMaster, UserValueScore, TeamValueScore, UserAdvice, TeamAdvice, Question
+from accounts.models import CustomUser
 from .forms import QuestionForm
 from django.db import transaction
 from django.http import JsonResponse
 import json
+from django.db.models import Case, When
+from uuid import UUID
+import random
 
 #テスト用
 def index(request):
     return HttpResponse("INDEX OK")
 
 
-QUESTIONS_PER_PAGE = 8  # ページ数は自由に設定可
+QUESTIONS_PER_PAGE = 6  # ページ数は自由に設定可
 
 # 質問取得
 #@login_required
 @require_http_methods(["GET"])
 def question_page(request, page):
-    questions = (
-        Question.objects.filter(is_active=True).order_by("?")
+    
+    # 初回アクセス時だけシャッフル生成
+    if "question_ids" not in request.session:
+
+        ids = list(
+            Question.objects
+            .filter(is_active=True)
+            .values_list("id", flat=True)
+        )
+
+        random.shuffle(ids)
+
+        # セッションは JSON シリアライズされるため UUID を文字列化して保存する
+        request.session["question_ids"] = [str(i) for i in ids]
+
+    # セッションから順序取得
+    ids = request.session["question_ids"]
+
+    # セッションから取り出した文字列を UUID に戻してクエリに渡す
+    ids_uuid = [UUID(pk) for pk in ids]
+
+    # Case/Whenで順序維持
+    preserved = Case(
+        *[When(id=pk, then=pos) for pos, pk in enumerate(ids_uuid)]
     )
+
+    questions = Question.objects.filter(id__in=ids_uuid).order_by(preserved)
+
     paginator = Paginator(questions, QUESTIONS_PER_PAGE)
     page_obj = paginator.get_page(page)
-    
+
     context = {
-        "page_obj": page_obj, #1ページ分の質問
-        "total_pages": paginator.num_pages, #全体ページ数
+        "page_obj": page_obj,
+        "total_pages": paginator.num_pages,
     }
 
     return render(request, "analysis/questions.html", context)
-
-
+    
 # 回答保存
 #@login_required
 @require_http_methods(["POST"])
@@ -43,7 +71,9 @@ def submit_answers(request):
     # 回答受け取る
     data = json.loads(request.body)
     answers = data["answers"]
-    user = request.user
+    print("ANSWERS:", answers) # saveAnswers()動いているか確認用
+    #user = request.user
+    user = get_object_or_404(CustomUser, pk=1)  # テスト用（ユーザーID=1固定）
 
     # Questionからまとめて取得（id,value_key,is_reverse）
     questions = Question.objects.filter(
@@ -94,6 +124,7 @@ def submit_answers(request):
         "status": "ok",
         "totals": value_totals,  # 必要なら返す
     })
+
 
 
 # スコア計算
