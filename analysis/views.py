@@ -13,6 +13,11 @@ from django.db.models import Case, When
 from uuid import UUID
 import random
 
+
+def questions_index(request):
+    # ページ番号指定なしでアクセスされた場合は1ページ目へリダイレクト
+    return redirect('question_page', page=1)
+
 #テスト用
 def index(request):
     return HttpResponse("INDEX OK")
@@ -45,14 +50,16 @@ def question_page(request, page):
     # セッションから取り出した文字列を UUID に戻してクエリに渡す
     ids_uuid = [UUID(pk) for pk in ids]
 
-    # Case/Whenで順序維持
-    preserved = Case(
-        *[When(id=pk, then=pos) for pos, pk in enumerate(ids_uuid)]
-    )
+    # DB から全件取得してマッピング用に保持
+    questions = Question.objects.filter(id__in=ids_uuid)
+    
+    # id -> Question オブジェクトのマッピングを作成
+    question_map = {str(q.id): q for q in questions}
+    
+    # セッションの順序に従って並べ替える
+    questions_ordered = [question_map[pk] for pk in ids if pk in question_map]
 
-    questions = Question.objects.filter(id__in=ids_uuid).order_by(preserved)
-
-    paginator = Paginator(questions, QUESTIONS_PER_PAGE)
+    paginator = Paginator(questions_ordered, QUESTIONS_PER_PAGE)
     page_obj = paginator.get_page(page)
 
     context = {
@@ -119,7 +126,9 @@ def submit_answers(request):
 
     # DB保存
     UserValueScore.objects.bulk_create(objs)
-
+    
+    request.session.pop("question_ids", None)  # セッションの質問リスト削除
+    
     return JsonResponse({
         "status": "ok",
         "totals": value_totals,  # 必要なら返す
