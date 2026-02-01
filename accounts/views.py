@@ -3,5 +3,5 @@ from django.http import HttpResponse
 
 def sample(request):
     # return HttpResponse("")
-    return render(request, "signup_owner.html")
+    return render(request, "accounts/signup_owner.html")
 # 画面表示テスト用にHttpRespomseをコメントアウトしてrenderに変更中（削除予定）
