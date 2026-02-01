@@ -30,18 +30,28 @@ async function submitAll() {
 
   const answers = getAnswers()
 
-  const res = await fetch("/analysis/answers/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": getCookie("csrftoken"),
-    },
-    body: JSON.stringify({ answers })
-  })
+  try {
+    const res = await fetch("/analysis/answers/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      body: JSON.stringify({ answers })
+    })
 
-  localStorage.removeItem(STORAGE_KEY)
-
-  window.location.href = "/analysis/answers/"
+    if (res.ok) {
+      const data = await res.json()
+      localStorage.removeItem(STORAGE_KEY)
+      // 結果ページにリダイレクト（または適切なページへ）
+      window.location.href = "/analysis/results/"
+    } else {
+      alert(`エラーが発生しました: ${res.status}`)
+    }
+  } catch (error) {
+    console.error("通信エラー:", error)
+    alert("通信エラーが発生しました")
+  }
 }
 
 /* CSRF */
