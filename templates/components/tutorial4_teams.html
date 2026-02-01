@@ -1,0 +1,55 @@
+{% load static %}
+
+<div class="w-full max-w-[840px] mx-auto bg-white p-8 rounded-lg relative">
+
+  <!-- ======== 閉じるボタン ======== -->
+  <button type="button" class="btn-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">×</button>
+
+  <!-- ======== 全体レイアウト（3カラム） ======== -->
+  <div class="grid grid-cols-[auto_1fr_auto] items-center gap-12">
+
+    <!-- 左：戻る -->
+    <div class="flex justify-center">
+      <button type="button" class="btn-prev w-12 h-12 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:-translate-x-1 transition">←</button>
+    </div>
+
+    <!-- ======== 中央 ======== -->
+    <div>
+
+      <!-- 見出し -->
+      <h1 class="text-2xl font-semibold h-[72px] flex items-center">
+        チームを作りましょう
+      </h1>
+
+      <!-- 説明文 -->
+      <p class="h-[140px] flex items-center">
+        <span>
+          部署やプロジェクトごとに、チームを作成します。<br><br>
+          チームには<span class="font-bold">リーダーを設定</span>します。<br>
+          リーダーにはマネージャー向け分析表示の機能があります。
+        </span>
+      </p>
+
+      <!-- 画像 -->
+      <img src="{% static 'imgs/discription_teams.svg' %}" alt="teams" class="w-full py-6">
+
+      <!-- ステップインジケーター -->
+      <div class="flex justify-center">
+        <div class="relative flex items-center w-48">
+          <div class="absolute inset-x-0 top-1/2 h-[1px] bg-teamy-gray -translate-y-1/2"></div>
+          <div class="relative z-10 w-3 h-3 rounded-full bg-teamy-gray"></div>
+          <div class="relative z-10 w-3 h-3 rounded-full bg-teamy-gray ml-auto"></div>
+          <div class="relative z-10 w-3 h-3 rounded-full bg-teamy-gray ml-auto"></div>
+          <div class="relative z-10 flex items-center justify-center w-9 h-9 rounded-full bg-teamy-navy text-white text-md font-bold ml-auto">4</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 右：次へ（最終なので非表示） -->
+    <div class="flex justify-center">
+      <button type="button" class="btn-next invisible w-12 h-12 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md transition">→</button>
+    </div>
+
+  </div>
+</div>

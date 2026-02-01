@@ -1,0 +1,24 @@
+<!-- モーダル全体＋背景 -->
+<div id="tutorial-modal" class="hidden fixed inset-0 z-50">
+  <!-- モーダル背景（背景クリックでモーダルを閉じる） -->
+  <div id="tutorial-bg" class="absolute inset-0 bg-black/40 flex items-center justify-center">
+    <!-- モーダル本体 -->
+    <div id="tutorial-content" class=" relative z-10 mx-auto my-auto">
+      <div class="tutorial-slide" data-step="1">
+        {% include "components/tutorial1_space.html" %}
+      </div>
+      
+      <div class="tutorial-slide hidden" data-step="2">
+        {% include "components/tutorial2_members.html" %}
+      </div>
+      
+      <div class="tutorial-slide hidden" data-step="3">
+        {% include "components/tutorial3_admin.html" %}
+      </div>
+      
+      <div class="tutorial-slide hidden" data-step="4">
+        {% include "components/tutorial4_teams.html" %}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,10 +1,12 @@
 .env
+docker-compose.dev.yml
 
 # node
 node_modules/
 
 # tailwind build
-static/dist/
+static/dist/*
+!static/dist/tailwind.css
 
 # mac
 .DS_Store
