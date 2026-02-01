@@ -87,8 +87,6 @@ def submit_answers(request):
         print(f"[DEBUG] JSON parsing error: {e}")
         return JsonResponse({"error": "invalid json"}, status=400)
 
-#    data = json.loads(request.body)
-#    answers = data["answers"]
     print("ANSWERS:", answers) # saveAnswers()動いているか確認用
     
     if not answers:
