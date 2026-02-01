@@ -9,6 +9,7 @@ from .forms import QuestionForm
 from django.db import transaction
 from django.http import JsonResponse
 import json
+import sys
 from django.db.models import Case, When
 from uuid import UUID
 import random
@@ -75,12 +76,27 @@ def question_page(request, page):
 @transaction.atomic
 def submit_answers(request):
 
+    print(f"[DEBUG] submit_answers called - Method: {request.method}")
+    
     # 回答受け取る
-    data = json.loads(request.body)
-    answers = data["answers"]
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+        answers = data.get("answers", {})
+        print(f"[DEBUG] Parsed answers: {answers}")
+    except Exception as e:
+        print(f"[DEBUG] JSON parsing error: {e}")
+        return JsonResponse({"error": "invalid json"}, status=400)
+
+#    data = json.loads(request.body)
+#    answers = data["answers"]
     print("ANSWERS:", answers) # saveAnswers()動いているか確認用
-    #user = request.user
-    user = get_object_or_404(CustomUser, pk=1)  # テスト用（ユーザーID=1固定）
+    
+    if not answers:
+        return JsonResponse({"error": "no answers"}, status=400)
+
+    # テスト用ユーザー（users.json の最初のユーザー）
+    user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
+    #user = request.user # 本番用
 
     # Questionからまとめて取得（id,value_key,is_reverse）
     questions = Question.objects.filter(
@@ -102,7 +118,9 @@ def submit_answers(request):
 
     for question_id, raw_score in answers.items():
         
-        q = question_map[question_id]
+        q = question_map.get(question_id)
+        if not q:
+            return JsonResponse({"error": f"invalid question_id: {question_id}"}, status=400)
 
         # 逆転処理
         score = int(raw_score)
@@ -123,11 +141,23 @@ def submit_answers(request):
         )
         for value_key, total_score in value_totals.items()
     ]
+    
+    print(f"[DEBUG] UserValueScore objects to save: {len(objs)}")
+    print(f"[DEBUG] value_totals: {value_totals}")
+    print(f"[DEBUG] First object to save: user={objs[0].user if objs else 'N/A'}, value_key_id={objs[0].value_key_id if objs else 'N/A'}, personal_score={objs[0].personal_score if objs else 'N/A'}")
+    sys.stdout.flush()
 
     # DB保存
-    UserValueScore.objects.bulk_create(objs)
+    try:
+        result = UserValueScore.objects.bulk_create(objs)
+        print(f"[DEBUG] bulk_create succeeded, saved {len(result)} objects")
+    except Exception as e:
+        print(f"[ERROR] bulk_create failed: {e}")
+        return JsonResponse({"error": f"DB save failed: {e}"}, status=500)
     
     request.session.pop("question_ids", None)  # セッションの質問リスト削除
+    
+    print(f"[DEBUG] submit_answers returning success")
     
     return JsonResponse({
         "status": "ok",
@@ -141,6 +171,10 @@ def submit_answers(request):
 
 
 # 結果表示（ユーザー）
+@require_http_methods(["GET"])
+def results(request):
+    """診断結果を表示するページ"""
+    return render(request, "analysis/members_page.html")
 
 
 # 結果表示（チーム）
