@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Questions{% endblock %}
+
+{% block content %}
+
+<form id="question-form">
+  {% csrf_token %}
+
+  {% for q in page_obj %}
+    <div class="question">
+      <p>{{ q.text }}</p>
+
+      <select data-qid="{{ q.id }}" class="answer">
+        <option value="">--選択--</option>
+        <option value="-2">-2</option>
+        <option value="-1">-1</option>
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+      </select>
+    </div>
+  {% endfor %}
+
+  {% if page_obj.has_previous %}
+    <a href="{% url 'question_page' page_obj.previous_page_number %}">戻る</a>
+  {% endif %}
+
+  {% if page_obj.has_next %}
+    <a href="{% url 'question_page' page_obj.next_page_number %}">次へ</a>
+  {% else %}
+    <button type="button" onclick="submitAll()">診断する</button>
+  {% endif %}
+</form>
+
+{% endblock %}

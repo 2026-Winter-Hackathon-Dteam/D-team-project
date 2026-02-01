@@ -1,0 +1,11 @@
+[
+  {"model":"analysis.valuemaster","pk":"context","fields":{"is_active":true}},
+  {"model":"analysis.valuemaster","pk":"feedback","fields":{"is_active":true}},
+  {"model":"analysis.valuemaster","pk":"persuasion","fields":{"is_active":true}},
+  {"model":"analysis.valuemaster","pk":"hierarchy","fields":{"is_active":true}},
+  {"model":"analysis.valuemaster","pk":"decision","fields":{"is_active":true}},
+  {"model":"analysis.valuemaster","pk":"trust","fields":{"is_active":true}},
+  {"model":"analysis.valuemaster","pk":"conflict","fields":{"is_active":true}},
+  {"model":"analysis.valuemaster","pk":"time","fields":{"is_active":true}}
+]
+
