@@ -1,6 +1,5 @@
 from collections import defaultdict
 from statistics import pstdev
-from teams.models import Team_Users
 from .models import UserValueScore, TeamValueScore
 
 
@@ -18,15 +17,15 @@ def recalc_team_scores(team_id):
         grouped[s.value_key_id].append(s.personal_score)
 
     # 保存用オブジェクト作成
-    objs = []
+    team_objs = []
 
     for value_key, values in grouped.items():
 
         mean = sum(values) / len(values)
         max_diff = max(values) - min(values)
-        std = pstdev(values) if len(values) > 1 else 0
+        std = pstdev(values) if len(values) > 1 else 0 # データが1つしかない場合、標準偏差は0とする
 
-        objs.append(
+        team_objs.append(
             TeamValueScore(
                 team_id=team_id,
                 value_key_id=value_key,
@@ -37,4 +36,4 @@ def recalc_team_scores(team_id):
         )
 
     # チームスコア保存
-    TeamValueScore.objects.bulk_create(objs)
+    TeamValueScore.objects.bulk_create(team_objs)
