@@ -71,7 +71,7 @@ def question_page(request, page):
 
     return render(request, "analysis/questions.html", context)
     
-# 回答保存
+# 回答保存　submit_answersを1回実行すると、SQLへのクエリは3+N回（Nはユーザーが所属するチーム数）
 #@login_required
 @require_http_methods(["POST"])
 @transaction.atomic

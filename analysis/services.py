@@ -8,9 +8,9 @@ def recalc_team_scores(team_id):
 
     #1チーム分の統計を再計算
 
-    user_ids = Team_Users.objects.filter(team_id=team_id).values_list("user_id", flat=True)
-
-    scores = UserValueScore.objects.filter(user_id__in=user_ids)
+    scores = UserValueScore.objects.filter(
+    user__team_users__team_id=team_id
+    )
 
     grouped = defaultdict(list)
 
