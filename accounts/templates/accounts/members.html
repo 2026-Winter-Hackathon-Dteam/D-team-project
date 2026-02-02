@@ -3,64 +3,184 @@
 {% block title %}members{% endblock %}
 
 {% block content %}
-<!-- ======== top帯 ======== -->
+<!-- ======== top ======== -->
 <div class="mx-auto p-8">
+
   <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-teamy-navy">スペース名</h1> 
-    <!-- 変数：space_name にする -->
+    <!-- スペース名 -->
+    <h1 class="text-3xl font-bold text-teamy-navy">スペース名</h1>  <!-- 変数：space_name にする -->
+    
+          <div class="add_member flex items-center gap-2">
+      <!-- [？]ヘルプリンク -->
+      <a href="#"
+        class="btn-help inline-flex items-center justify-center">
+        <img src="{% static 'imgs/help.png' %}" alt="へルプを表示" class="h-6 w-6">
+      </a>
 
-    <div class="add_member flex items-center gap-2">
-    <!-- [？]ヘルプボタン -->
-    <button type="button" class="btn-help">
-      <img src="{% static 'imgs/help.png' %}" alt="へルプを表示" class="h-6 w-6">
-    </button>
-
-    <!-- メンバーを作成ボタン -->
-    <button type="button" class="btn-addmember inline-block bg-[#F1A46C] hover:bg-[#E89455] hover:scale-[1.03] transition-transform text-white font-medium px-6 py-2 rounded-[36px]">
-      ＋ メンバーを作成
-    </button>
+      <!-- メンバーを作成リンク -->
+      <a href="#"
+        class="btn-addmember inline-block bg-[#F1A46C] hover:bg-[#E89455]
+                hover:scale-[1.03] active:scale-[0.98] transition-transform
+                text-white font-medium px-4 py-1.5 rounded-[36px]">
+        ＋ メンバーを作成
+      </a>
     </div>
   </div>
-    
-    <!-- ======== テーブル部分 ======== -->
-    <div>
-       <span class="inline-flex items-center gap-1"><img src="{% static 'accounts/imgs/leader.png' %}" alt="leader" class="h-6 w-6">…リーダー</span>
-      <table>
-        <tr>
-          <th class="invisible">is_admin</th>
-          <th>名前</th>
-          <th>ユーザーID</th>
-          <th>チーム</th>
-          <th></th>
-          <th></th>
-        </tr>
-        <tr>
-          <td>オーナー</td>
-          <td>山田 太郎</td>
-          <td>taro yamada</td>
-          <td>Aチーム</td>
-          <td>
-            <img src="{% static 'accounts/imgs/edit.png' %}" alt="">
-          </td>
-          <td>
-            <img src="{% static 'accounts/imgs/trash.png' %}" alt="">
-          </td>
-        </tr>
-        {% comment %}
-        変数準備後↓に差し替え
-        {% for member in members %}
-        <tr>
-          <td></td>
-          <td>{{ g_user_name}}</td>
-          <td>{{ employee_id }}</td>
-          <td>{{ g_team_name }}</td>
-        </tr>
-      </table>
-        {% empty %}
-        <div>まだメンバーは登録されていません</div>
-        {% endfor %}
-        {% endcomment %}
-     </div>
-</div>
 
+  <!-- ======== 検索ウインドウ ======== -->
+  <div class="flex justify-end my-4">
+    <form method="get" class="relative w-full max-w-xs">
+
+      <!-- 虫眼鏡アイコン -->
+      <span class="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center">
+        <img src="{% static 'accounts/imgs/search.svg' %}" alt="虫眼鏡">
+      </span>
+
+      <input
+        type="text"
+        name="search"
+        value="{{ request.GET.search|default:'' }}"
+        placeholder="検索"
+        class="w-full rounded-full border border-teamy-grayDark bg-white py-1.5 px-10
+               focus:border-teamy-teal focus:ring-2 focus:ring-teamy-teal/20">
+
+      <!-- クリアボタン（searchがあるときだけ表示） -->
+      {% if request.GET.search %}
+        <a
+          href="?"
+          class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center
+                 text-teamy-gray hover:text-teamy-grayText h-6 w-6 text-xl"
+          aria-label="clear">
+          ×
+        </a>
+      {% endif %}
+    </form>
+  </div>
+
+  <!-- ======== テーブル部分 ======== -->
+  <div class="overflow-x-auto">
+    <table class="w-full table-fixed text-left">
+      <thead>
+        <tr class="text-teamy-grayText text-base border-b-2 border-gray-300">
+          <th class="w-[15%] py-3 px-1 font-medium invisible">権限</th>
+          <th class="w-[25%] py-3 font-medium">名前</th>
+          <th class="w-[25%] py-3 font-medium">ユーザーID</th>
+          <th class="w-[30%] py-3 font-medium">
+            <div class="flex items-center gap-10">
+              <span>所属チーム</span>
+                <span class="inline-flex items-center gap-1">
+                  <img src="{% static 'accounts/imgs/leader.png' %}" alt="leader" class="h-4 w-4">
+                  …リーダー
+                </span>
+            </div>
+
+          </th>
+          <th class="w-24 py-3"></th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-gray-100"> <!-- divideはtr間に線を入れてくれる -->
+        <tr class="hover:bg-gray-50">
+          <td class="py-3 px-1">
+            <a href="#"
+              class="btn-role inline-block border border-[#E89455] text-[#E89455]
+                      px-4 rounded-full transition-transform
+                      hover:scale-[1.03] hover:shadow-md active:scale-[0.98]">
+              管理者
+            </a>
+          </td>
+
+          <td class="py-3 px-1">山田 太郎</td>
+          <td class="py-3 px-1">taro yamada</td>
+
+          <td class="py-3 px-1">
+            <div class="flex items-center flex-nowrap gap-2 overflow-x-auto w-full">
+              <div class="flex-shrink-0 inline-flex items-center gap-1 bg-teamy-grayLight rounded-full px-3 py-1 whitespace-nowrap h-7">
+                <img src="{% static 'accounts/imgs/leader.png' %}" alt="leader"class="w-7 h-7 -ml-3 flex-shrink-0 ">
+                Aチーム
+              </div>
+              <div class="flex-shrink-0 inline-flex items-center gap-1 bg-teamy-grayLight rounded-full px-3 py-1 whitespace-nowrap h-7">
+                  Aチーム
+                </div>
+            </div>
+          </td>
+
+          <td class="py-3 px-1 text-right">
+            <div class="inline-flex items-center gap-3">
+              <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
+                <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-5 h-5">
+              </a>
+              <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
+                <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-5 h-5">
+              </a>
+            </div>
+          </td>
+        </tr>
+
+        {% comment %}
+        {% for member in members %}
+        <tr class="hover:bg-gray-50">
+          <!-- ===== 権限 ===== -->
+          <td class="py-3 px-1">
+            {% if member.g_is_owner %} <!-- レコードがownerなら［オーナー］ラベル -->
+            <span class="inline-block border border-[#E89455] text-[#E89455] px-4 rounded-full">
+              オーナー
+            </span>
+            {% elif member.g_is_admin %} <!-- レコードがadminなら -->
+            {% if request.user.g_is_owner %} <!-- ユーザーがownerなら［管理者］ボタン -->
+            <a href="#"
+            class="btn-role inline-block border border-[#E89455] text-[#E89455]
+            px-4 rounded-full transition-transform
+            hover:scale-[1.03] hover:shadow-md active:scale-[0.98]">
+            管理者
+          </a>
+          {% else %} <!-- ユーザーがowner以外なら［管理者］ラベル -->
+          <span class="inline-block border border-[#E89455] text-[#E89455] px-4 rounded-full">
+            管理者
+          </span>
+          {% endif %}
+          {% endif %}
+        </td>
+        
+        <!-- ===== 名前 ===== -->
+        <td class="py-3 px-1">{{ member.g_user_name }}</td>
+        <!-- ===== ユーザーID ===== -->
+        <td class="py-3 px-1">{{ member.employee_id }}</td>
+        <!-- ===== チーム ===== -->
+        <td class="py-3 px-1">
+          <div class="flex items-center flex-nowrap gap-2 overflow-x-auto w-full">
+          {% for team in member.teams.all %}
+            <div class="flex-shrink-0 inline-flex items-center gap-1 bg-teamy-grayLight rounded-full px-3 py-1 whitespace-nowrap h-7">
+            {% if team.is_leader %}
+            <img src="{% static 'accounts/imgs/leader.png' %}" alt="leader"class="w-7 h-7 -ml-3 flex-shrink-0 ">
+            {% endif %}
+            {{ team.name }}
+          </div>
+          {% endfor %}
+        </td>
+        <!-- ===== 編集・削除 ===== -->
+        <td class="py-3 px-1">
+              <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
+            <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-5 h-5">
+          </a>
+              <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
+            <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-5 h-5">
+          </a>
+          </td>
+        </tr>
+
+        {% empty %}
+        <tr>
+          <td colspan="6" class="py-3 px-1"> <!-- colspanは6カラム分の幅を使う -->
+            まだメンバーがいません
+          </td>
+        </tr>
+        {% endfor %}
+        
+      </tbody>
+    </table>
+    {% endcomment %}
+
+  </div>
+</div>
 {% endblock %}
