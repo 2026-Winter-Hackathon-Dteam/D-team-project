@@ -1,0 +1,40 @@
+from collections import defaultdict
+from statistics import pstdev
+from teams.models import Team_Users
+from .models import UserValueScore, TeamValueScore
+
+
+def recalc_team_scores(team_id):
+
+    #1チーム分の統計を再計算
+
+    user_ids = Team_Users.objects.filter(team_id=team_id).values_list("user_id", flat=True)
+
+    scores = UserValueScore.objects.filter(user_id__in=user_ids)
+
+    grouped = defaultdict(list)
+
+    for s in scores:
+        grouped[s.value_key_id].append(s.personal_score)
+
+    # 保存用オブジェクト作成
+    objs = []
+
+    for value_key, values in grouped.items():
+
+        mean = sum(values) / len(values)
+        max_diff = max(values) - min(values)
+        std = pstdev(values) if len(values) > 1 else 0
+
+        objs.append(
+            TeamValueScore(
+                team_id=team_id,
+                value_key_id=value_key,
+                mean=mean,
+                max_diff=max_diff,
+                std=std,
+            )
+        )
+
+    # チームスコア保存
+    TeamValueScore.objects.bulk_create(objs)
