@@ -10,12 +10,11 @@
     <!-- スペース名 -->
     <h1 class="text-3xl font-bold text-teamy-navy">スペース名</h1>  <!-- 変数：space_name にする -->
     
-          <div class="add_member flex items-center gap-2">
+    <div class="add_member flex items-center gap-2">
       <!-- [？]ヘルプリンク -->
-      <a href="#"
-        class="btn-help inline-flex items-center justify-center">
-        <img src="{% static 'imgs/help.png' %}" alt="へルプを表示" class="h-6 w-6">
-      </a>
+        <button type="button" class="btn-help">
+          <img src="{% static 'imgs/help.png' %}" alt="へルプを表示">
+        </button>
 
       <!-- メンバーを作成リンク -->
       <a href="#"
@@ -33,7 +32,7 @@
 
       <!-- 虫眼鏡アイコン -->
       <span class="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center">
-        <img src="{% static 'accounts/imgs/search.svg' %}" alt="虫眼鏡">
+        <img src="{% static 'accounts/imgs/search.svg' %}" alt="検索">
       </span>
 
       <input
@@ -66,9 +65,9 @@
           <th class="w-[25%] py-3 font-medium">名前</th>
           <th class="w-[25%] py-3 font-medium">ユーザーID</th>
           <th class="w-[30%] py-3 font-medium">
-            <div class="flex items-center gap-10">
+            <div class="inline-flex items-center gap-6">
               <span>所属チーム</span>
-                <span class="inline-flex items-center gap-1">
+                <span class="inline-flex items-center gap-1 text-sm text-gray-500">
                   <img src="{% static 'accounts/imgs/leader.png' %}" alt="leader" class="h-4 w-4">
                   …リーダー
                 </span>
@@ -96,12 +95,12 @@
           <td class="py-3 px-1">
             <div class="flex items-center flex-nowrap gap-2 overflow-x-auto w-full">
               <div class="flex-shrink-0 inline-flex items-center gap-1 bg-teamy-grayLight rounded-full px-3 py-1 whitespace-nowrap h-7">
-                <img src="{% static 'accounts/imgs/leader.png' %}" alt="leader"class="w-7 h-7 -ml-3 flex-shrink-0 ">
+                <img src="{% static 'accounts/imgs/leader.png' %}" alt="leader" class="w-7 h-7 -ml-3 flex-shrink-0 ">
                 Aチーム
               </div>
               <div class="flex-shrink-0 inline-flex items-center gap-1 bg-teamy-grayLight rounded-full px-3 py-1 whitespace-nowrap h-7">
-                  Aチーム
-                </div>
+                Bチーム
+              </div>
             </div>
           </td>
 
@@ -118,6 +117,7 @@
         </tr>
 
         {% comment %}
+        変数ができたらこちらに差し替え
         {% for member in members %}
         <tr class="hover:bg-gray-50">
           <!-- ===== 権限 ===== -->
@@ -171,7 +171,7 @@
 
         {% empty %}
         <tr>
-          <td colspan="6" class="py-3 px-1"> <!-- colspanは6カラム分の幅を使う -->
+          <td colspan="5" class="py-3 px-1"> <!-- colspanは6カラム分の幅を使う -->
             まだメンバーがいません
           </td>
         </tr>
