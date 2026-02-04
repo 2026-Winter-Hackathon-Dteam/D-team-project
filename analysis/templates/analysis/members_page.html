@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}診断結果{% endblock %}
 
 {% block content %}
@@ -9,9 +11,25 @@
   <p>ご回答ありがとうございました。</p>
   <p>あなたの回答がUser_Value_ScoresとTeam_Value_Scoresに保存されました。</p>
   
+  <!-- グラフ表示エリア -->
+  <div id="chart-container">
+    <!-- JavaScriptでCSSグラフを実装 -->
+  </div>
+  
   <div class="results-links">
-    <a href="{% url 'question_page' 1 %}">もう一度診断する</a>
+    <a href="{% url 'analysis:question_page' 1 %}">もう一度診断する</a>
   </div>
 </div>
+
+<!-- グラフデータをJSON形式で埋め込み -->
+<script>
+  const graphData = {{ graph_data|safe }};
+</script>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'analysis/user_answer_results.js' %}"></script>
 
 {% endblock %}

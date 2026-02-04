@@ -14,11 +14,13 @@ from uuid import UUID
 import random
 from teams.models import Team_Users
 from .services import recalc_team_scores
+from django.db.models import F, FloatField, ExpressionWrapper, OuterRef, Subquery
+
 
 
 def questions_index(request):
     # ページ番号指定なしでアクセスされた場合は1ページ目へリダイレクト
-    return redirect('question_page', page=1)
+    return redirect('analysis:question_page', page=1)
 
 #テスト用
 def index(request):
@@ -175,13 +177,150 @@ def submit_answers(request):
 
 
 # 結果表示（ユーザー）
+#@login_required
 @require_http_methods(["GET"])
 def results(request):
-    """診断結果を表示するページ"""
-    return render(request, "analysis/members_page.html")
+    """診断結果を表示するページ（ユーザーのみ）"""
+    # テスト用ユーザー
+    user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
+    team_id = "aaa11111-1111-1111-1111-111111111111"
+    
+    # 最新のUserValueScoreを取得
+    latest_scores = (
+        UserValueScore.objects
+        .filter(user=user)
+        .values('value_key_id')
+        .annotate(latest_id=Subquery(
+            UserValueScore.objects
+            .filter(user=user, value_key_id=OuterRef('value_key_id'))
+            .order_by('-created_at', '-id')
+            .values('id')[:1]
+        ))
+    )
+    
+    latest_user_scores = UserValueScore.objects.filter(
+        id__in=[s['latest_id'] for s in latest_scores]
+    ).select_related('value_key')
+    
+    # データをメモリで処理
+    results_data = {}
+    for score in latest_user_scores:
+        value_key_id = score.value_key_id
+        
+        # team_meanを取得
+        team_score = TeamValueScore.objects.filter(
+            team_id=team_id,
+            value_key_id=value_key_id
+        ).first()
+        
+        if team_score:
+            team_mean = team_score.mean
+            diff = score.personal_score - team_mean
+            results_data[str(value_key_id)] = {
+                "value_key_id": str(value_key_id),
+                "value_key_name": score.value_key.value_key,
+                "personal_score": score.personal_score,
+                "team_mean": team_mean,
+                "diff": diff
+            }
+    
+    diffs = list(results_data.values())
+    
+    context = {
+        "graph_data": diffs
+    }
+    return render(request, "analysis/members_page.html", context)
 
 
-# 結果表示（チーム）
+#　グラフ表示データ取得（ユーザー）
+#@login_required
+@require_http_methods(["GET"])
+def get_user_graph(request):
+
+    # テスト用ユーザー（users.json の最初のユーザー）
+    user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
+    #user = request.user # 本番用
+    
+    #チームを指定
+    #team_id = request.GET.get("team_id")
+    team_id = "aaa11111-1111-1111-1111-111111111111"  # テスト用チームID
+    if not team_id:
+        return redirect("analysis:results")
+    
+    # 最新のUserValueScoreを取得
+    latest_scores = (
+        UserValueScore.objects
+        .filter(user=user)
+        .values('value_key_id')
+        .annotate(latest_id=Subquery(
+            UserValueScore.objects
+            .filter(user=user, value_key_id=OuterRef('value_key_id'))
+            .order_by('-created_at', '-id')
+            .values('id')[:1]
+        ))
+    )
+    
+    latest_user_scores = UserValueScore.objects.filter(
+        id__in=[s['latest_id'] for s in latest_scores]
+    ).select_related('value_key')
+    
+    # データをメモリで処理
+    results_data = {}
+    for score in latest_user_scores:
+        value_key_id = score.value_key_id
+        
+        # team_meanを取得
+        team_score = TeamValueScore.objects.filter(
+            team_id=team_id,
+            value_key_id=value_key_id
+        ).first()
+        
+        if team_score:
+            team_mean = team_score.mean
+            diff = score.personal_score - team_mean
+            results_data[str(value_key_id)] = {
+                "value_key_id": str(value_key_id),
+                "personal_score": score.personal_score,
+                "team_mean": team_mean,
+                "diff": diff
+            }
+    
+    diffs = list(results_data.values())
+
+    return JsonResponse({"results": list(diffs)})
+    
+    
+#　アドバイス表示（ユーザー）
+#@login_required
+@require_http_methods(["GET"])
+def get_user_advice(request):
+    
+    user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
+    #user = request.user # 本番用
+    
+    advices = UserAdvice.objects.filter(user=user).values(
+        "value_key__name",
+        "importance",
+        "is_minus_side",
+        "advice_text"
+    )
+
+    advice_list = [
+        {
+            "value_key": a["value_key__name"],
+            "importance": a["importance"],
+            "advice": a["advice_text"]
+        }
+        for a in advices
+    ]
+
+    return JsonResponse({
+        "advices": advice_list
+    })
 
 
-#　アドバイス取得（ユーザー、チーム）
+
+
+
+
+#　結果表示/アドバイス取得（チーム）
