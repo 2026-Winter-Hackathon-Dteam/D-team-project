@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_http_methods
 from django.db import transaction
 from django.http import JsonResponse
@@ -9,6 +9,7 @@ from accounts.models import CustomUser
 from teams.models import Team_Users
 from .models import UserValueScore, Question
 from .services import recalc_team_scores
+from .views_graph import _get_user_scores_only
 
 
 # 回答保存　submit_answersを1回実行すると、SQLへのクエリは3+N回（Nはユーザーが所属するチーム数）
@@ -107,8 +108,33 @@ def submit_answers(request):
 
     print(f"[DEBUG] submit_answers returning success")
 
-    # 結果返す
-    return JsonResponse({
-        "status": "ok",
-        "totals": value_totals,
-    })
+    # POST処理完了後、members_pageのURLをJSONで返す
+    return JsonResponse({"redirect_url": "/analysis/members/"})
+
+
+def members_page(request):
+    """
+    ユーザーの評価結果ページを表示（GET）
+    グラフデータをコンテキストに含める
+    """
+    # テスト用ユーザー（users.json の最初のユーザー）
+    user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
+    # user = request.user # 本番用
+
+    # グラフデータ取得
+    scores = _get_user_scores_only(user)
+    
+    # value_key_id と personal_score のみにフィルタリング
+    graph_data = [
+        {
+            "value_key_id": item["value_key_id"],
+            "personal_score": item["personal_score"]
+        }
+        for item in scores
+    ]
+
+    context = {
+        "graph_data": graph_data
+    }
+    
+    return render(request, "analysis/members_page.html", context)

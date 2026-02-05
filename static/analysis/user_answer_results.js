@@ -1,13 +1,16 @@
 async function loadResults() {
-  const [scoresRes, advicesRes] = await Promise.all([
-    fetch("/analysis/results/"),
+  const [scoresRes, graphsRes, advicesRes] = await Promise.all([
+    fetch("/analysis/members/"),
+    fetch("/analysis/graphs/me/"),
     fetch("/analysis/advices/me/")
   ])
 
   const scores = await scoresRes.json()
+  const graphs = await graphsRes.json()
   const advices = await advicesRes.json()
 
   renderGraph(scores)
+  renderGraphData(graphs)
   renderAdvice(advices)
 }
 

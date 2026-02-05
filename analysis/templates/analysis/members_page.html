@@ -11,9 +11,9 @@
   <p>ご回答ありがとうございました。</p>
   <p>あなたの回答がUser_Value_ScoresとTeam_Value_Scoresに保存されました。</p>
   
-  <!-- グラフ表示エリア -->
+  <!-- グラフ表示 -->
   <div id="chart-container">
-    <!-- JavaScriptでCSSグラフを実装 -->
+    <!-- HTMLとCSSでグラフを実装 -->
   </div>
   
   <div class="results-links">
@@ -24,6 +24,7 @@
 <!-- グラフデータをJSON形式で埋め込み -->
 <script>
   const graphData = {{ graph_data|safe }};
+  console.log("Graph data:", graphData);
 </script>
 
 {% endblock %}
