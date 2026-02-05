@@ -5,10 +5,8 @@ from django.http import JsonResponse
 from accounts.models import CustomUser
 from .models import UserValueScore
 from django.db.models import (
-    F, FloatField, ExpressionWrapper,
-    Case, When, Value, CharField, BooleanField,
     OuterRef, Subquery)
-from django.db.models.functions import Abs
+from .models import TeamValueScore, UserAdvice
 
 
 #　アドバイス表示（ユーザー）
@@ -37,7 +35,6 @@ def _get_user_advices_with_team(user, team_id):
         value_key_id = score.value_key_id
 
         # team_meanを取得
-        from .models import TeamValueScore, UserAdvice
         team_score = TeamValueScore.objects.filter(
             team_id=team_id,
             value_key_id=value_key_id

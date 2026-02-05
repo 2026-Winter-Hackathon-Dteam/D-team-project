@@ -4,7 +4,6 @@ from django.db import transaction
 from django.http import JsonResponse
 import json
 import sys
-
 from accounts.models import CustomUser
 from teams.models import Team_Users
 from .models import UserValueScore, Question

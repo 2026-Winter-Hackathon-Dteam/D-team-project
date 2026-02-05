@@ -3,7 +3,6 @@ from django.views.decorators.http import require_http_methods
 import json
 from django.http import JsonResponse
 from django.db.models import OuterRef, Subquery
-
 from accounts.models import CustomUser
 from .models import UserValueScore, TeamValueScore
 
