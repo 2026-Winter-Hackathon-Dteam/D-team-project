@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
+import json
 from django.http import JsonResponse
 from django.db.models import OuterRef, Subquery
 
@@ -87,7 +88,7 @@ def _get_user_scores_with_team(user, team_id):
 
 # ユーザーグラフデータ取得（チーム所属あり対応）
 #@login_required
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST"])
 def get_user_graph(request):
     """ユーザースコア＋チーム比較データを返すAPI"""
     # テスト用ユーザー
@@ -96,6 +97,12 @@ def get_user_graph(request):
 
     # チームを指定（必須）
     team_id = request.GET.get("team_id")
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            team_id = data.get("team_id") or team_id
+        except Exception:
+            pass
     if not team_id:
         team_id = "aaa11111-1111-1111-1111-111111111111"  # テスト用チームID
 

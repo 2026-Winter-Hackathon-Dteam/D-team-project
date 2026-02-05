@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
+import json
 from django.http import JsonResponse
 from accounts.models import CustomUser
 from .models import UserValueScore
@@ -12,14 +13,21 @@ from django.db.models.functions import Abs
 
 #　アドバイス表示（ユーザー）
 #@login_required
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST"])
 def get_user_advice(request):
 
     user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
     #user = request.user # 本番用
 
-    team_id = "aaa11111-1111-1111-1111-111111111111"  # テスト用チームID
-    #team_id = request.GET.get("team_id") # 本番用
+    team_id = request.GET.get("team_id")
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            team_id = data.get("team_id") or team_id
+        except Exception:
+            pass
+    if not team_id:
+        team_id = "aaa11111-1111-1111-1111-111111111111"  # テスト用チームID
     
     # value_key_id ごとに最新のIDを取得
     latest_ids = (

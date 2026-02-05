@@ -133,8 +133,27 @@ def members_page(request):
         for item in scores
     ]
 
+    team_options = [
+        {
+            "id": str(team_user.team_id),
+            "name": team_user.team.name,
+        }
+        for team_user in Team_Users.objects.filter(user=user).select_related("team")
+    ]
+
     context = {
-        "graph_data": graph_data
+        "graph_data": graph_data,
+        "teams": team_options,
     }
     
     return render(request, "analysis/members_page.html", context)
+
+
+@require_http_methods(["GET"])
+def personal_analysis(request):
+    """チーム比較＋アドバイス表示ページ（GET）"""
+    team_id = request.GET.get("team_id", "")
+    context = {
+        "team_id": team_id,
+    }
+    return render(request, "analysis/personal_analysis.html", context)
