@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.http import require_http_methods
 from django.db import transaction
 from django.http import JsonResponse
@@ -9,7 +9,8 @@ from accounts.models import CustomUser
 from teams.models import Team_Users
 from .models import UserValueScore, Question
 from .services import recalc_team_scores
-from .views_graph import _get_user_scores_only
+from .views_graph import _get_user_scores_only, _get_user_scores_with_team
+from .views_advices import _get_user_advices_with_team
 
 
 # 回答保存　submit_answersを1回実行すると、SQLへのクエリは3+N回（Nはユーザーが所属するチーム数）
@@ -146,6 +147,8 @@ def members_page(request):
         "teams": team_options,
     }
     
+    print(f"[DEBUG] Rendering members_page with context: {context}")
+    
     return render(request, "analysis/members_page.html", context)
 
 
@@ -153,7 +156,19 @@ def members_page(request):
 def personal_analysis(request):
     """チーム比較＋アドバイス表示ページ（GET）"""
     team_id = request.GET.get("team_id", "")
+    if not team_id:
+        return redirect("analysis:members_page")
+
+    # テスト用ユーザー（users.json の最初のユーザー）
+    user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
+    # user = request.user # 本番用
+
+    graph_data = _get_user_scores_with_team(user, team_id=team_id)
+    advice_data = _get_user_advices_with_team(user, team_id=team_id)
     context = {
         "team_id": team_id,
+        "graph_data": graph_data,
+        "advice_data": advice_data,
     }
+    print(f"[DEBUG] Rendering personal_analysis with context: {context}")
     return render(request, "analysis/personal_analysis.html", context)

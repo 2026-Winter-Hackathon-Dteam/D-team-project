@@ -12,19 +12,23 @@
 
   <div id="graph-container">
     <!-- チーム比較グラフ（後で実装） -->
+    {{ graph_data }}
   </div>
 
   <div id="advice-container">
     <!-- アドバイス表示（後で実装） -->
+    {{ advice_data }}
   </div>
 </div>
 
 <script>
   const TEAM_ID = "{{ team_id }}";
+  const graphData = {{ graph_data|safe }};
+  const adviceData = {{ advice_data|safe }};
+  console.log("Graph data:", graphData);
+  console.log("Advice data:", adviceData);
 </script>
 
 {% endblock %}
 
-{% block extra_js %}
-<script src="{% static 'analysis/user_answer_results.js' %}"></script>
-{% endblock %}
+{% block extra_js %}{% endblock %}

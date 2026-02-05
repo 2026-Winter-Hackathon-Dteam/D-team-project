@@ -82,7 +82,7 @@ def _get_user_scores_with_team(user, team_id):
                 "team_mean": team_mean,
                 "diff": diff
             }
-
+        print(f"[DEBUG] UserValueScore: {score}, TeamValueScore: {team_score}")
     return list(results_data.values())
 
 
@@ -104,10 +104,11 @@ def get_user_graph(request):
         except Exception:
             pass
     if not team_id:
-        return redirect('analysis:members_page')  # チーム未指定ならメンバーページへリダイレクト
+        team_id = "aaa11111-1111-1111-1111-111111111111"  # テスト用チームID
+        #return redirect('analysis:members_page')  # チーム未指定ならメンバーページへリダイレクト
 
     diffs = _get_user_scores_with_team(user, team_id=team_id)
-    print("USER GRAPH DATA:", diffs)  # デバッグ用出力
+    print(f"[DEBUG] User graph data: {diffs}")  # デバッグ用出力
     
     return JsonResponse({"results": diffs})
 
