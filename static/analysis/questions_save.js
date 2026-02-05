@@ -44,7 +44,7 @@ async function submitAll() {
       const data = await res.json()
       localStorage.removeItem(STORAGE_KEY)
       // members_pageにリダイレクト
-      window.location.href = data.redirect_url || "/analysis/members/"
+      window.location.href = data.redirect_url || "/analysis/members_page/"
     } else {
       alert(`エラーが発生しました: ${res.status}`)
     }

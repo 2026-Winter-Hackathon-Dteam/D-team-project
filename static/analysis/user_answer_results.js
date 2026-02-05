@@ -1,6 +1,6 @@
 async function loadResults() {
   const [scoresRes, graphsRes, advicesRes] = await Promise.all([
-    fetch("/analysis/members/"),
+    fetch("/analysis/members_page/"),
     fetch("/analysis/graphs/me/"),
     fetch("/analysis/advices/me/")
   ])

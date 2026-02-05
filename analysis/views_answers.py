@@ -109,7 +109,7 @@ def submit_answers(request):
     print(f"[DEBUG] submit_answers returning success")
 
     # POST処理完了後、members_pageのURLをJSONで返す
-    return JsonResponse({"redirect_url": "/analysis/members/"})
+    return JsonResponse({"redirect_url": "/analysis/members_page/"})
 
 
 def members_page(request):
