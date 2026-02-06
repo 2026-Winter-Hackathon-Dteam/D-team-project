@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Teams{% endblock %}
+
+{% block content %}
+<div class="max-w-[1600px] mx-auto px-8 py-10">
+
+  <div class="flex flex-row gap-12 items-start">
+
+    <!-- ======== チームリスト ======== -->
+    <div class="w-[48%] bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold text-teamy-navy">チームリスト</h1>
+        
+        <div class="flex items-center gap-4">
+          <button type="button" class="btn-help h-8 w-8 transition-transform hover:scale-110">
+            <img src="{% static 'imgs/help.png' %}" alt="へルプを表示" class="w-full h-full">
+          </button>
+          <button type="button" id="openCreateTeam"
+          class="bg-teamy-orange hover:bg-teamy-orangeDark text-white px-5 py-2 rounded-full text-base font-bold transition-all hover:scale-[1.03] active:scale-[0.98]">
+          ＋ チームを作成
+          </button>
+        </div>
+      </div>
+
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-teamy-grayText border-b-2 border-gray-200">
+            <th class="py-4 px-2 font-medium text-xl">チーム</th>
+            <th class="py-4 px-2 font-medium text-xl">リーダー</th>
+            <th class="py-4 w-16"></th>
+          </tr>
+        </thead>
+        <tbody class="text-xl">
+          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
+            <td class="py-4 px-2">Aチーム</td>
+            <td class="py-4 px-2">山田 太郎</td>
+            <td class="py-4 text-right">
+              <button class="transition-transform hover:scale-125 active:scale-95">
+                <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-7 h-7">
+              </button>
+              <button class="transition-transform hover:scale-125 active:scale-95">
+                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+              </button>
+            </td>
+          </tr>
+          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
+            <td class="py-4 px-2">Bチーム</td>
+            <td class="py-4 px-2">鈴木</td>
+            <td class="py-4 text-right flex gap-3 justify-end">
+              <button class="transition-transform hover:scale-125 active:scale-95">
+                <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-7 h-7">
+              </button>
+              <button class="transition-transform hover:scale-125 active:scale-95">
+                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+              </button>
+            </td>
+          </tr>
+          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
+            <td class="py-4 px-2">Cチーム</td>
+            <td class="py-4 px-2">小林</td>
+            <td class="py-4 text-right flex gap-3 justify-end">
+              <button class="transition-transform hover:scale-125 active:scale-95">
+                <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-7 h-7">
+              </button>
+              <button class="transition-transform hover:scale-125 active:scale-95">
+                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+              </button>
+            </td>
+          </tr>
+          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
+            <td class="py-4 px-2">Dチーム</td>
+            <td class="py-4 px-2">加藤</td>
+            <td class="py-4 text-right flex gap-3 justify-end">
+              <button class="transition-transform hover:scale-125 active:scale-95">
+                <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-7 h-7">
+              </button>
+              <button class="transition-transform hover:scale-125 active:scale-95">
+                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ======== チーム詳細 ======== -->
+    <div class="w-[52%] bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+      <div class="flex items-center justify-between mb-8">
+        <div class="flex items-baseline gap-6">
+          <h2 class="text-3xl font-bold text-teamy-navy">Aチーム</h2>
+          <p class="text-gray-500 text-lg">Aチームに関する説明文です。</p>
+        </div>
+        
+        <button type="button"
+          class="bg-teamy-teal hover:bg-teamy-tealDark text-white px-6 py-2 rounded-full text-base font-bold transition-all hover:scale-[1.03] active:scale-[0.98]">
+          ＋ メンバーを追加
+        </button>
+      </div>
+
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-teamy-grayText border-b-2 border-gray-200">
+            <th class="py-4 px-2 font-medium text-xl w-[30%]">名前</th>
+            <th class="py-4 px-2 font-medium text-xl w-[30%]">ユーザーID</th>
+            <th class="py-4 px-2 font-medium text-xl w-[30%]">価値観ページ</th>
+            <th class="py-4 w-12"></th>
+          </tr>
+        </thead>
+        <tbody class="text-xl">
+          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors">
+            <td class="py-4 px-2 flex items-center gap-2">
+              <div>
+                 <img src="{% static 'accounts/imgs/leader.png' %}" class="w-7 h-7" alt="leader">
+              </div>
+              <span>山田 太郎</span>
+            </td>
+            <td class="py-4 px-2 text-gray-700">taro yamada</td>
+            <td class="py-4 px-2">
+              <button class="border border-cyan-400 text-cyan-400 text-base px-4 py-1 rounded-full hover:bg-cyan-50 transition-colors">
+                ページをみる
+              </button>
+            </td>
+            <td class="py-4"></td>
+          </tr>
+          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors">
+            <td class="py-4 px-12">田中</td>
+            <td class="py-4 px-2 text-gray-700">suzuki</td>
+            <td class="py-4 px-2"></td>
+            <td class="py-4 text-right">
+              <button class="transition-transform hover:scale-125 active:scale-95">
+                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+              </button>
+            </td>
+          </tr>
+          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors">
+            <td class="py-4 px-12">鈴木</td>
+            <td class="py-4 px-2 text-gray-700">kobayashi</td>
+            <td class="py-4 px-2">
+              <button class="border border-teamy-teal text-teamy-teal text-base px-4 py-1 rounded-full hover:bg-cyan-50 transition-colors">
+                ページをみる
+              </button>
+            </td>
+            <td class="py-4 text-right">
+              <button class="transition-transform hover:scale-125 active:scale-95">
+                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+              </button>
+            </td>
+          </tr>
+          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors">
+            <td class="py-4 px-12">内田</td>
+            <td class="py-4 px-2 text-gray-700">uchida</td>
+            <td class="py-4 px-2"></td>
+            <td class="py-4 text-right">
+              <button class="transition-transform hover:scale-125 active:scale-95">
+                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+              </button>
+            </td>
+          </tr>
+          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors">
+            <td class="py-4 px-12">加藤</td>
+            <td class="py-4 px-2 text-gray-700">kato</td>
+            <td class="py-4 px-2"></td>
+            <td class="py-4"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+{% include "components/tutorial_modal.html" %}
+{% include "accounts/modals/delete_member.html" %}
+{% endblock %}
+
+{% comment %}
+変数ができたらこちらに差し替え
+<div class="max-w-[1600px] mx-auto px-8 py-10">
+
+  <div class="flex flex-row gap-12 items-start">
+
+    <!-- ======== チームリスト ======== -->
+    <div class="w-[48%] bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold text-teamy-navy">チームリスト</h1>
+        <div class="flex items-center gap-4">
+          <button type="button" class="btn-help h-8 w-8 transition-transform hover:scale-110">
+            <img src="{% static 'imgs/help.png' %}" alt="へルプを表示" class="w-full h-full">
+          </button>
+          {% if user.is_admin %}
+          <button type="button" id="openCreateTeam"
+            class="bg-teamy-orange hover:bg-teamy-orangeDark text-white px-5 py-2 rounded-full text-base font-bold transition-all hover:scale-[1.03] active:scale-[0.98]">
+            ＋ チームを作成
+          </button>
+          {% endif %}
+        </div>
+      </div>
+
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-teamy-grayText border-b-2 border-gray-200">
+            <th class="py-4 px-2 font-medium text-xl">チーム</th>
+            <th class="py-4 px-2 font-medium text-xl">リーダー</th>
+            <th class="py-4 w-16"></th>
+          </tr>
+        </thead>
+        <tbody class="text-xl">
+          {% for t in teams %}
+          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors cursor-pointer {% if t.id == selected_team.id %}bg-gray-50{% endif %}"
+              hx-get="?team_id={{ t.id }}" 
+              hx-target="#team-detail" 
+              hx-select="#team-detail"
+              hx-push-url="true">
+            <td class="py-4 px-2">{{ t.name }}</td>
+            <td class="py-4 px-2">
+              {% for m in t.members.all %}
+                {% if m.is_leader %}{{ m.user_name }}{% endif %}
+              {% endfor %}
+            </td>
+            <td class="py-4 text-right">
+              {% if user.is_admin %}
+              <div class="flex gap-3 justify-end">
+                <button class="transition-transform hover:scale-125 active:scale-95">
+                  <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-7 h-7">
+                </button>
+                <button class="transition-transform hover:scale-125 active:scale-95">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+                </button>
+              </div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ======== チーム詳細 ======== -->
+    <div id="team-detail" class="w-[52%] bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+      {% if selected_team %}
+      <div class="flex items-center justify-between mb-8">
+        <div class="flex items-baseline gap-6">
+          <h2 class="text-3xl font-bold text-teamy-navy">{{ selected_team.name }}</h2>
+          <p class="text-gray-500 text-lg">{{ selected_team.description }}</p>
+        </div>
+        
+        {% if user.is_admin %}
+        <button type="button"
+          class="bg-teamy-teal hover:bg-teamy-tealDark text-white px-6 py-2 rounded-full text-base font-bold transition-all hover:scale-[1.03] active:scale-[0.98]">
+          ＋ メンバーを追加
+        </button>
+        {% endif %}
+      </div>
+
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-teamy-grayText border-b-2 border-gray-200">
+            <th class="py-4 px-2 font-medium text-xl w-[30%]">名前</th>
+            <th class="py-4 px-2 font-medium text-xl w-[30%]">ユーザーID</th>
+            <th class="py-4 px-2 font-medium text-xl w-[30%]">価値観ページ</th>
+            <th class="py-4 w-12"></th>
+          </tr>
+        </thead>
+        <tbody class="text-xl">
+          {% for member in selected_team.members.all %}
+          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors">
+            <td class="py-4 px-2">
+              <div class="flex items-center gap-2">
+                {% if member.is_leader %}
+                <div>
+                   <img src="{% static 'accounts/imgs/leader.png' %}" class="w-7 h-7" alt="leader">
+                </div>
+                {% else %}
+                <div class="w-8 flex-shrink-0"></div>
+                {% endif %}
+                <span>{{ member.user_name }}</span>
+              </div>
+            </td>
+            <td class="py-4 px-2 text-gray-700">{{ member.employee_id }}</td>
+            <td class="py-4 px-2">
+              {% if member.is_profile_public %}
+              <button class="border border-teamy-teal text-teamy-teal text-base px-4 py-1 rounded-full hover:bg-cyan-50 transition-colors">
+                ページをみる
+              </button>
+              {% endif %}
+            </td>
+            <td class="py-4 text-right">
+              {% if user.is_admin %}
+              <button class="transition-transform hover:scale-125 active:scale-95">
+                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+              </button>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="flex items-center justify-center h-64 text-gray-400 text-xl">
+        チームを選択してください
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endcomment %}
