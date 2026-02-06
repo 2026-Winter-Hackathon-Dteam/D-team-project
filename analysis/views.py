@@ -10,9 +10,10 @@ from django.db import transaction
 from django.http import JsonResponse
 import json
 import sys
-from django.db.models import Case, When
 from uuid import UUID
 import random
+from teams.models import Team_Users
+from .services import recalc_team_scores
 
 
 def questions_index(request):
@@ -70,7 +71,7 @@ def question_page(request, page):
 
     return render(request, "analysis/questions.html", context)
     
-# 回答保存
+# 回答保存　submit_answersを1回実行すると、SQLへのクエリは3+N回（Nはユーザーが所属するチーム数）
 #@login_required
 @require_http_methods(["POST"])
 @transaction.atomic
@@ -153,19 +154,24 @@ def submit_answers(request):
         print(f"[ERROR] bulk_create failed: {e}")
         return JsonResponse({"error": f"DB save failed: {e}"}, status=500)
     
-    request.session.pop("question_ids", None)  # セッションの質問リスト削除
+    # チームスコア再計算
+    team_ids = Team_Users.objects.filter(
+        user=user
+    ).values_list("team_id", flat=True)
+
+    for team_id in team_ids:
+        recalc_team_scores(team_id)
+    
+    # セッションの質問リスト削除
+    request.session.pop("question_ids", None)
     
     print(f"[DEBUG] submit_answers returning success")
     
+    # 結果返す 
     return JsonResponse({
         "status": "ok",
-        "totals": value_totals,  # 必要なら返す
+        "totals": value_totals,
     })
-
-
-
-# スコア計算
-
 
 
 # 結果表示（ユーザー）
