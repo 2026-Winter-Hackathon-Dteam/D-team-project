@@ -3,16 +3,14 @@
 <div id="createMemberModal" class="hidden fixed inset-0 z-50">
 
   <!-- モーダル背景 -->
-  <div id="modal-bg"
-       class="absolute inset-0 bg-black/50 flex items-center justify-center">
+  <div class="modal-bg absolute inset-0 bg-black/50 flex items-center justify-center">
 
     <!-- モーダル本体 -->
-    <div id="modal-content"
-         class="bg-white rounded-lg shadow-xl w-full max-w-[480px] p-10 relative text-xl">
+    <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-[480px] p-10 relative text-xl">
 
       <!-- 閉じるボタン -->
-      <button type="button" id="btn-close"
-        class="absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">×</button>
+      <button type="button"
+        class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">×</button>
 
         <!-- ======== フォーム ======== -->
         <form method="POST">
@@ -68,9 +66,11 @@
                   class="flex justify-between items-center py-3 px-3 cursor-pointer
                         bg-white hover:bg-gray-50">
                   <span class="text-gray-500">チームを選択してください</span>
-                    <svg class="ml-1 w-4 h-4 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
+                  <svg class="ml-1 w-4 h-4 transition-transform duration-200 group-open:rotate-180"
+                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 9l-7 7-7-7"></path>
+                  </svg>
                 </summary>
 
                 <div class="p-3 border-t border-gray-100 max-h-40 overflow-y-auto space-y-2">
@@ -106,7 +106,7 @@
             <!-- 作成ボタン -->
             <div class="flex justify-center pt-6">
               <button type="submit"
-                class="bg-[#F1A46C] hover:bg-[#E89455] text-white font-semibold
+                class="bg-teamy-orange hover:bg-teamy-orangeDark text-white font-semibold
                       py-3 px-16 rounded-full transition-all active:scale-95 shadow-md">
                 作成
               </button>

@@ -20,7 +20,7 @@
       <button
         type="button"
         id="openCreateMember"
-        class="btn-addmember inline-block bg-[#F1A46C] hover:bg-[#E89455]
+        class="btn-addmember inline-block bg-teamy-orange hover:bg-teamy-orangeDark
               hover:scale-[1.03] active:scale-[0.98] transition-transform
               text-white font-medium px-4 py-1.5 rounded-[36px]">
         ＋ メンバーを作成
@@ -82,12 +82,9 @@
       <tbody class="divide-y divide-gray-100"> <!-- divideはtr間に線を入れてくれる -->
         <tr class="hover:bg-gray-50">
           <td class="py-4 px-2">
-            <a href="#"
-              class="btn-role inline-block border border-[#E89455] text-[#E89455]
-                      px-4 rounded-full transition-transform
-                      hover:scale-[1.03] hover:shadow-md active:scale-[0.98]">
+            <span class="inline-block border border-teamy-orangeDark text-teamy-orangeDark px-4 py-1 rounded-full">
               管理者
-            </a>
+            </span>
           </td>
 
           <td class="py-4 px-2">山田 太郎</td>
@@ -108,84 +105,93 @@
           <td class="py-4 px-2 text-right">
             <div class="inline-flex items-center gap-3">
               <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
-                <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-7 h-7">
+                 <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-7 h-7">
               </a>
-              <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
+              <button type="button" class="btn-delete transition-transform hover:scale-125 active:scale-95 inline-block"
+                data-modal="deleteMemberModal" 
+                data-name="山田 太郎"
+                data-user-id="12345">
                 <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-7 h-7">
-              </a>
+              </button> 
             </div>
           </td>
         </tr>
 
         {% comment %}
         変数ができたらこちらに差し替え
+        <tbody class="divide-y divide-gray-100">
         {% for member in members %}
-        <tr class="hover:bg-gray-50">
-          <!-- ===== 権限 ===== -->
-          <td class="py-4 px-2">
-            {% if member.g_is_owner %} <!-- レコードがownerなら［オーナー］ラベル -->
-            <span class="inline-block border border-[#E89455] text-[#E89455] px-4 rounded-full">
-              オーナー
-            </span>
-            {% elif member.g_is_admin %} <!-- レコードがadminなら -->
-            {% if request.user.g_is_owner %} <!-- ユーザーがownerなら［管理者］ボタン -->
-            <a href="#"
-            class="btn-role inline-block border border-[#E89455] text-[#E89455]
-            px-4 rounded-full transition-transform
-            hover:scale-[1.03] hover:shadow-md active:scale-[0.98]">
-            管理者
-          </a>
-          {% else %} <!-- ユーザーがowner以外なら［管理者］ラベル -->
-          <span class="inline-block border border-[#E89455] text-[#E89455] px-4 rounded-full">
-            管理者
-          </span>
-          {% endif %}
-          {% endif %}
-        </td>
-        
-        <!-- ===== 名前 ===== -->
-        <td class="py-4 px-4">{{ member.g_user_name }}</td>
-        <!-- ===== ユーザーID ===== -->
-        <td class="py-4 px-4">{{ member.employee_id }}</td>
-        <!-- ===== チーム ===== -->
-        <td class="py-4 px-2">
-          <div class="flex items-center flex-nowrap gap-2 overflow-x-auto w-full">
-          {% for team in member.teams.all %}
-            <div class="flex-shrink-0 inline-flex items-center gap-1 bg-teamy-grayLight rounded-full px-3 py-1 whitespace-nowrap h-7">
-            {% if team.is_leader %}
-            <img src="{% static 'accounts/imgs/leader.png' %}" alt="leader"class="w-7 h-7 -ml-3 flex-shrink-0 ">
-            {% endif %}
-            {{ team.name }}
-          </div>
-          {% endfor %}
-        </td>
-        <!-- ===== 編集・削除 ===== -->
-        <td class="py-4 px-2">
-              <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
-            <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-7 h-7">
-          </a>
-              <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
-            <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-7 h-7">
-          </a>
-          </td>
-        </tr>
+          <tr class="hover:bg-gray-50">
 
+            <!-- ===== 権限 ===== -->
+            <td class="py-4 px-2">
+              {% if member.g_is_owner %}
+                <span class="inline-block border border-teamy-orangeDark text-teamy-orangeDark px-4 py-1 rounded-full">
+                  オーナー
+                </span>
+              {% elif member.g_is_admin %}
+                <span class="inline-block border border-teamy-orangeDark text-teamy-orangeDark px-4 py-1 rounded-full">
+                  管理者
+                </span>
+              {% else %}
+                <span class="inline-block px-4 py-1"></span>
+              {% endif %}
+            </td>
+
+            <!-- ===== 名前 ===== -->
+            <td class="py-4 px-2">{{ member.user_name }}</td>
+
+            <!-- ===== ユーザーID ===== -->
+            <td class="py-4 px-2">{{ member.employee_id }}</td>
+
+            <!-- ===== 所属チーム ===== -->
+            <td class="py-4 px-2">
+              <div class="flex items-center flex-nowrap gap-2 overflow-x-auto w-full">
+                {% for team in member.teams.all %}
+                  <div class="flex-shrink-0 inline-flex items-center gap-1 bg-teamy-grayLight rounded-full px-3 py-1 whitespace-nowrap h-7">
+                    {% if team.is_leader %}
+                      <img src="{% static 'accounts/imgs/leader.png' %}"
+                          alt="leader"
+                          class="w-7 h-7 -ml-3 flex-shrink-0">
+                    {% endif %}
+                    {{ team.name }}
+                  </div>
+                {% endfor %}
+              </div>
+            </td>
+
+            <!-- ===== 編集・削除 ===== -->
+            <td class="py-4 px-2 text-right">
+              <div class="inline-flex items-center gap-3">
+              <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
+                 <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-7 h-7">
+              </a>
+
+                <button type="button" class="btn-delete transition-transform hover:scale-125 active:scale-95 inline-block"
+                        data-modal="deleteMemberModal"
+                        data-name="{{ member.user_name }}"
+                        data-user-id="{{ member.employee_id }}">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-7 h-7">
+                </button>
+              </div>
+            </td>
+          </tr>
         {% empty %}
-        <tr>
-          <td colspan="5" class="py-4 px-2"> <!-- colspanは6カラム分の幅を使う -->
-            まだメンバーがいません
-          </td>
-        </tr>
+          <tr>
+            <td colspan="5" class="py-4 px-2 text-center text-teamy-grayText">
+              まだメンバーがいません
+            </td>
+          </tr>
         {% endfor %}
-        
-      </tbody>
-    </table>
-    {% endcomment %}
+        </tbody>
+      {% endcomment %}
 
   </div>
 </div>
+
 {% include "components/tutorial_modal.html" %}
 {% include "accounts/modals/create_member.html" %}
+{% include "accounts/modals/delete_member.html" %}
 {% endblock %}
 
 <!-- ======== JS ======== -->
@@ -205,8 +211,8 @@
   // -----　メンバーを作成ボタン -----
   const openBtn = document.getElementById('openCreateMember');
   const modal = document.getElementById('createMemberModal');
-  const closeBtn = document.getElementById('btn-close');
-  const bg = document.getElementById('modal-bg');
+  const closeBtn = modal.querySelector('.modal-close');
+  const bg = modal.querySelector('.modal-bg');
   
   // 開く&パスワード生成
   openBtn.addEventListener('click',() => {
@@ -226,5 +232,42 @@
       modal.classList.add('hidden');
     }
   });
-  </script>
+
+  // -----　メンバーを削除ボタン -----
+  const deleteModal = document.getElementById('deleteMemberModal');
+  const deleteText = document.getElementById('deleteTargetText');
+  const deleteIdInput = document.getElementById('deleteTargetId');
+  const deleteCloseBtn = deleteModal.querySelectorAll('.modal-close');
+  const deleteBg = deleteModal.querySelector('.modal-bg');
+
+  document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const name = btn.dataset.name;
+      const userId = btn.dataset.userId;
+
+      // 表示用テキスト
+      deleteText.textContent = `${name}：${userId}`;
+
+      // 削除用ID
+      deleteIdInput.value = userId;
+
+      // モーダル表示
+      deleteModal.classList.remove('hidden');
+    });
+  });
+
+  // 閉じる(×ボタン・キャンセル)
+  deleteCloseBtn.forEach(btn => {
+    btn.addEventListener('click', () => {
+      deleteModal.classList.add('hidden');
+    });
+  });
+
+  // 閉じる(背景)
+  deleteBg.addEventListener('click', (e) => {
+    if (e.target === deleteBg) {
+      deleteModal.classList.add('hidden');
+    }
+  });
+</script>
 {% endblock %}
