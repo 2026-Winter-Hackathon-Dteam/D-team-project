@@ -25,7 +25,7 @@
   {% endfor %}
 
   {% if page_obj.has_previous %}
-    <a href="{% url 'question_page' page_obj.previous_page_number %}">戻る</a>
+    <a href="{% url 'analysis:question_page' page_obj.previous_page_number %}">戻る</a>
   {% endif %}
 
   {% if page_obj.has_next %}
