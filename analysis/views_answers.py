@@ -34,9 +34,13 @@ def submit_answers(request):
     if not answers:
         return JsonResponse({"error": "no answers"}, status=400)
 
-    # テスト用ユーザー（users.json の最初のユーザー）
-    user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
-    #user = request.user # 本番用
+    # ログインユーザー取得（未ログイン時はテスト用ユーザー）
+    if getattr(request, "user", None) and request.user.is_authenticated: #本番では、getattr(・・・None)は外しても良い 
+        user = request.user
+    else:
+        user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
+        #return redirect("analysis:login")  # 未ログインならログインページへ（本番用）
+
 
     # Questionからまとめて取得（id,value_key,is_reverse）
     questions = Question.objects.filter(
@@ -108,18 +112,38 @@ def submit_answers(request):
 
     print(f"[DEBUG] submit_answers returning success")
 
-    # POST処理完了後、members_pageのURLをJSONで返す
-    return JsonResponse({"redirect_url": "/analysis/members_page/"})
+    # POST処理完了後、personal_analysisのURLをJSONで返す
+    return JsonResponse({"redirect_url": "/analysis/personal_analysis/"})
 
 
+#@login_required
+@require_http_methods(["GET", "POST"])
 def members_page(request):
     """
-    ユーザーの評価結果ページを表示（GET）
+    価値観公開しているユーザーの評価結果ページを表示（GET）
     グラフデータをコンテキストに含める
     """
-    # テスト用ユーザー（users.json の最初のユーザー）
-    user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
-    # user = request.user # 本番用
+    # ログインユーザー取得（未ログイン時はテスト用ユーザー）
+    if getattr(request, "user", None) and request.user.is_authenticated: #本番では、getattr(・・・None)は外しても良い 
+        current_user = request.user
+    else:
+        current_user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222002")
+        #return redirect("analysis:login")  # 未ログインならログインページへ（本番用）
+
+    target_user_id = "11111111-1111-1111-1111-222222222001" # テスト用ユーザーID
+    #target_user_id = request.GET.get("user_id") # 本番用
+    if not target_user_id or str(current_user.id) == target_user_id:
+        return redirect("analysis:personal_analysis")
+
+    # 同一スペースの他ユーザーのみ表示可能
+    user = get_object_or_404(
+        CustomUser,
+        pk=target_user_id,
+        space_id=current_user.space_id,
+    )
+
+    # target_user_idのユーザー名取得
+    target_user_name = user.name
 
     # グラフデータ取得
     scores = _get_user_scores_only(user)
@@ -133,6 +157,30 @@ def members_page(request):
         for item in scores
     ]
 
+    context = {
+        "target_user_name": target_user_name,
+        "graph_data": graph_data,
+    }
+    
+    print(f"[DEBUG] Rendering members_page with context: {context}")
+    
+    return render(request, "analysis/members_page.html", context)
+
+
+#@login_required
+@require_http_methods(["GET"])
+def personal_analysis(request):
+    """チーム比較＋アドバイス表示ページ（GET）"""
+    team_id = request.GET.get("team_id", "")
+
+    # ログインユーザー取得（未ログイン時はテスト用ユーザー）
+    if getattr(request, "user", None) and request.user.is_authenticated: #本番では、getattr(・・・None)は外しても良い 
+        user = request.user
+    else:
+        user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
+        #return redirect("analysis:login")  # 未ログインならログインページへ（本番用）
+        
+
     team_options = [
         {
             "id": str(team_user.team_id),
@@ -141,33 +189,21 @@ def members_page(request):
         for team_user in Team_Users.objects.filter(user=user).select_related("team")
     ]
 
-    context = {
-        "graph_data": graph_data,
-        "teams": team_options,
-    }
-    
-    print(f"[DEBUG] Rendering members_page with context: {context}")
-    
-    return render(request, "analysis/members_page.html", context)
-
-
-@require_http_methods(["GET"])
-def personal_analysis(request):
-    """チーム比較＋アドバイス表示ページ（GET）"""
-    team_id = request.GET.get("team_id", "")
+    # チーム未選択時はスコアのみ表示、ユーザーがteamに所属していなければ、チーム選択前にリダイレクト
     if not team_id:
-        return redirect("analysis:members_page")
-
-    # テスト用ユーザー（users.json の最初のユーザー）
-    user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
-    # user = request.user # 本番用
-
-    graph_data = _get_user_scores_with_team(user, team_id=team_id)
-    advice_data = _get_user_advices_with_team(user, team_id=team_id)
+        graph_data = _get_user_scores_only(user)
+        advice_data = []
+    else:
+        is_member = Team_Users.objects.filter(user=user, team_id=team_id).exists()
+        if not is_member:
+            return redirect("analysis:personal_analysis")
+        graph_data = _get_user_scores_with_team(user, team_id=team_id)
+        advice_data = _get_user_advices_with_team(user, team_id=team_id)
     context = {
         "team_id": team_id,
         "graph_data": graph_data,
         "advice_data": advice_data,
+        "teams": team_options,
     }
     print(f"[DEBUG] Rendering personal_analysis with context: {context}")
     return render(request, "analysis/personal_analysis.html", context)
