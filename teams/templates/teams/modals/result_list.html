@@ -1,0 +1,19 @@
+{% for member in members %}
+<div class="flex w-full items-center border-b border-gray-100 px-6 py-4 hover:bg-gray-50 transition-colors">
+  <span class="w-1/3 text-center text-gray-900">{{ member.name }}</span>
+  <span class="w-2/3 text-center text-gray-500">{{ member.user_id }}</span>
+  
+  <button type="button" 
+          hx-post="{# {% url 'add_member' selected_team.id member.id %} #}"
+          hx-target="#search-results"
+          class="ml-2 text-teamy-orange hover:text-teamy-orangeDark transition-transform active:scale-90">
+    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11H9v2H7v2h2v2h2v-2h2v-2h-2V7z" clip-rule="evenodd" />
+    </svg>
+  </button>
+</div>
+{% empty %}
+<div class="flex flex-col items-center justify-center p-10 text-gray-400">
+  <span class="text-base">ユーザーが見つかりません</span>
+</div>
+{% endfor %}

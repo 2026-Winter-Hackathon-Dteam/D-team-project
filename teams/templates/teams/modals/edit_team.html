@@ -1,0 +1,95 @@
+{% load static %}
+
+<!-- モーダル全体 -->
+<div id="editTeamModal" class="hidden fixed inset-0 z-50">
+
+  <!-- モーダル背景 -->
+  <div class="modal-bg absolute inset-0 bg-black/50 flex items-center justify-center">
+
+    <!-- モーダル本体 -->
+    <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-[480px] p-10 relative text-xl">
+
+      <!-- 閉じるボタン -->
+      <button type="button"
+        class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">×</button>
+
+        <!-- ======== フォーム ======== -->
+        <form method="POST" action="#">
+          {% csrf_token %}
+
+          <div class="space-y-8 pt-6">
+          <!-- チーム名 -->
+            <div>
+              <label class="block font-medium mb-2">チーム名</label>
+              <input type="text" name="team_name" value="{{ selected_team.name }}" class="w-full border border-gray-400 rounded-lg p-3" required>
+            </div>
+
+            <!-- リーダー -->
+            <div>
+              <label class="block font-medium mb-2">リーダー</label>
+              <details id="leader-details" class="group border border-gray-400 rounded-lg overflow-hidden">
+                <summary class="flex justify-between items-center py-3 px-3 cursor-pointer bg-white hover:bg-gray-50">
+                  <span id="selected-leader-name" class="{% if selected_team.leader %}text-gray-900 font-bold{% else %}text-gray-500{% endif %}">
+                    {{ selected_team.leader.user_name|default:"リーダーを選択してください" }}
+                  </span>
+                  <svg class="ml-1 w-4 h-4 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+
+                <div class="p-3 border-t border-gray-100 max-h-40 overflow-y-auto space-y-2">
+                  {% for member in team_members %}
+                  <label class="flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50 transition-colors">
+                  <input type="radio" name="leader_id" value="{{ member.id }}" class="leader-radio w-5 h-5 border border-gray-400 appearance-none rounded-full checked:bg-teamy-orange cursor-pointer"
+                    {% if member.id == selected_team.leader.id %}checked{% endif %} required>
+                    <span class="text-gray-700">{{ member.user_name }}</span>
+                  </label>
+                  {% empty %}
+                  <div class="p-2 text-gray-400 text-center">メンバーがいません</div>
+                  {% endfor %}
+                </div>
+              </details>
+            </div>
+
+            <!-- チーム説明 -->
+            <div>
+              <label class="block font-medium mb-2">チームについての説明（任意）</label>
+              <textarea 
+                name="team_description" 
+                maxlength="30"
+                class="w-full border border-gray-400 rounded-lg p-3 min-h-36 resize-none"
+              >{{ selected_team.description }}</textarea>
+            </div>
+            
+            <!-- 作成ボタン -->
+            <div class="flex justify-center pt-6">
+              <button type="submit"
+                class="bg-teamy-orange hover:bg-teamy-orangeDark text-white font-semibold
+                      py-3 px-16 rounded-full transition-all active:scale-95 shadow-md">
+                変更
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // リーダー選択の変更をinputに反映する
+  document.querySelectorAll('.leader-radio').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      // 選択されたラジオボタンのすぐ横にある名前（span）を取得
+      const name = e.target.nextElementSibling.textContent;
+      // summary内のテキストを書き換え
+      const displaySpan = document.getElementById('selected-leader-name');
+      displaySpan.textContent = name;
+      displaySpan.classList.remove('text-gray-500');
+      displaySpan.classList.add('text-gray-900', 'font-bold');
+
+      // 選択したらプルダウンを閉じる
+      document.getElementById('leader-details').removeAttribute('open');
+    });
+  });
+</script>
