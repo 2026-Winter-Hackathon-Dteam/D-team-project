@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}チーム分析結果{% endblock %}
+
+{% block content %}
+
+ <!-- チームリーダーのみ閲覧可能。チームリーダー以外は分析が表示されません） -->
+
+
+<div class="results-container">
+  <h1>チーム分析結果</h1>
+  <p>所属しているチームのマネージャー向けの分析結果です</p>
+
+  {% if is_team_leader %}
+    <!-- グラフ表示 -->
+    <div id="chart-container">
+      <!-- HTMLとCSSでグラフを実装 -->
+      {{ graph_data }}
+    </div>
+  {% else %}
+    <p>このページはチームリーダーのみ閲覧できます。</p>
+  {% endif %}
+</div>
+
+<!-- グラフデータをJSON形式で埋め込み -->
+<script>
+  const TEAM_ID = "{{ team_id }}";
+  const graphData = {{ graph_data|safe }};
+  console.log("Team graph data:", graphData);
+</script>
+
+{% endblock %}
+
+{% block extra_js %}{% endblock %}

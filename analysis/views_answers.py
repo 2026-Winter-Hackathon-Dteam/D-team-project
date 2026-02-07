@@ -5,7 +5,7 @@ from django.http import JsonResponse
 import json
 import sys
 from accounts.models import CustomUser
-from teams.models import Team_Users
+from teams.models import Team_Users, Teams
 from .models import UserValueScore, Question
 from .services import recalc_team_scores
 from .views_graph import _get_user_scores_only, _get_user_scores_with_team
@@ -193,17 +193,20 @@ def personal_analysis(request):
     if not team_id:
         graph_data = _get_user_scores_only(user)
         advice_data = []
+        is_team_leader = False
     else:
         is_member = Team_Users.objects.filter(user=user, team_id=team_id).exists()
         if not is_member:
             return redirect("analysis:personal_analysis")
         graph_data = _get_user_scores_with_team(user, team_id=team_id)
         advice_data = _get_user_advices_with_team(user, team_id=team_id)
+        is_team_leader = Teams.objects.filter(id=team_id, leader_user_id=user.id).exists()
     context = {
         "team_id": team_id,
         "graph_data": graph_data,
         "advice_data": advice_data,
         "teams": team_options,
+        "is_team_leader": is_team_leader,
     }
     print(f"[DEBUG] Rendering personal_analysis with context: {context}")
     return render(request, "analysis/personal_analysis.html", context)
