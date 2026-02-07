@@ -1,0 +1,164 @@
+{% load static %}
+<!-- モーダル全体 -->
+<div id="createMemberModal" class="hidden fixed inset-0 z-50">
+
+  <!-- モーダル背景 -->
+  <div class="modal-bg absolute inset-0 bg-black/50 flex items-center justify-center">
+
+    <!-- モーダル本体 -->
+    <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-[480px] p-10 relative text-xl">
+
+      <!-- 閉じるボタン -->
+      <button type="button"
+        class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">×</button>
+
+        <!-- ======== フォーム ======== -->
+        <form method="POST">
+          {% csrf_token %}
+          
+          <div class="space-y-8 pt-6">
+            <div>
+              <label class="block font-medium mb-2">名前</label>
+              <input type="text" name="user_name" class="w-full border border-gray-400 rounded-lg p-3" required>
+            </div>
+
+            <div>
+              <label class="block font-medium mb-2">社員ID</label>
+              <input type="password" name="password" class="w-full border border-gray-400 rounded-lg p-3" required>
+            </div>
+
+            <!-- パスワード -->
+            <div>
+              <label class="block font-medium mb-2">初期パスワード</label>
+
+              <div class="relative">
+                <input type="text" id="pass-display" name="password" readonly
+                  class="w-full border border-gray-400 rounded-lg p-3 bg-white
+                        text-gray-600 cursor-default"
+                  placeholder="生成中...">
+
+                <!-- コピーボタン -->
+                <button type="button" onclick="copyToClipboard()"
+                  class="absolute right-2 top-3 text-gray-400 hover:text-gray-600">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                      fill="none" viewBox="0 0 24 24"
+                      stroke-width="1.5" stroke="currentColor"
+                      class="size-8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
+                  </svg>
+                </button>
+
+                <!-- コピーしました -->
+                <p id="copy-msg"
+                  class="absolute right-1 -bottom-6 text-sm text-gray-500
+                        opacity-0 transition-opacity">
+                  コピーしました
+                </p>
+              </div>
+            </div>
+
+            <!-- チームリスト -->
+            <div>
+              <label class="block font-medium mb-2">チーム</label>
+              <details class="group border border-gray-400 rounded-lg overflow-hidden">
+                <summary
+                  class="flex justify-between items-center py-3 px-3 cursor-pointer
+                        bg-white hover:bg-gray-50">
+                  <span class="text-gray-500">チームを選択してください</span>
+                  <svg class="ml-1 w-4 h-4 transition-transform duration-200 group-open:rotate-180"
+                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </summary>
+
+                <div class="p-3 border-t border-gray-100 max-h-40 overflow-y-auto space-y-2">
+                  {# {% for team in team_list %} #}
+                  <label class="flex items-center gap-2 
+                                p-2 rounded cursor-pointer">
+                    <input type="checkbox" name="teams"  value="{{ team.id }}"
+                    class="w-5 h-5 border border-gray-400 appearance-none rounded-full checked:bg-teamy-orange cursor-pointer">
+                    <span>{{ team.name }}Aチーム</span>
+                  </label>
+                  {# {% endfor %} #}
+                </div>
+              </details>
+            </div>
+
+            <!-- 管理者設定トグル（オーナーのみ） -->
+            {# {% if user.is_owner %} #}
+            <div class="flex items-center justify-around py-2">
+              <span class="font-medium">管理者にする</span>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" name="is_admin" class="sr-only peer">
+                <div
+                  class="w-14 h-7 bg-gray-200 rounded-full peer
+                        peer-checked:after:translate-x-full
+                        after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                        after:bg-white after:border after:rounded-full after:h-6 after:w-6
+                        after:transition-all peer-checked:bg-teamy-orange">
+                </div>
+              </label>
+            </div>
+            {# {% endif %} #}
+
+            <!-- 作成ボタン -->
+            <div class="flex justify-center pt-6">
+              <button type="submit"
+                class="bg-teamy-orange hover:bg-teamy-orangeDark text-white font-semibold
+                      py-3 px-16 rounded-full transition-all active:scale-95 shadow-md">
+                作成
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== JS ======== -->
+<script>
+
+// ----- パスワードを生成 -----
+function generatePassword() {
+
+  // パスワード生成に使う文字の種類/長さ/生成したパスワードを格納する変数を用意
+  const string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+='
+  const passwordLength = 12;
+  let password = ""
+
+  for(let i = 0; i < passwordLength; i++){
+    password += string.charAt(Math.floor(Math.random() * string.length));
+  }
+  /*
+  使用する文字群（string）からランダムに1文字を取り出し、変数passwordに追加。これをパスワードの長さ分だけ繰り返す処理。
+  charAt()は文字列から文字を取得するメソッドで、引数のインデックス文字を返す
+  Math.floor(Math.random())は乱数を生成するメソッドで、Math.random()に文字列の長さをかける
+  */
+
+  // 画面に表示させる枠（name="password"）にセット
+  document.getElementById('pass-display').value = password;
+}
+
+// ----- パスワードをコピー ----- 
+function copyToClipboard() {
+
+  // pass-displayの値を取得（空なら終了）
+  const pass = document.getElementById('pass-display').value;
+  if (!pass) return;
+
+  // クリップボードに保存が成功したらコピー済みと通知を出す
+  navigator.clipboard.writeText(pass).then(() => {
+    const msg = document.getElementById('copy-msg');
+    msg.classList.remove('opacity-0');
+    setTimeout(() => msg.classList.add('opacity-0'), 2000); // 2秒で消す
+
+    /*
+    navigator.clipboard.はクリップボードに保存するメソッドで、writeText(pass)でコピーする場所を指定
+    Id('copy-msg')の要素を取得して変数msgに格納し、透明クラス（opacity-0）を外すことで表示/2秒後に戻す
+    */
+  });
+}
+</script>

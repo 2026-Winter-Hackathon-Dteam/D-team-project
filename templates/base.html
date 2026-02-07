@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <!-- Google Fonts -->
@@ -11,8 +12,8 @@
         rel="stylesheet">
     <title>{% block title %}{% endblock %} | Teamy</title>
     {% block extra_head %}{% endblock %}
-    {% load static %}
     <link rel="stylesheet" href="{% static 'dist/tailwind.css' %}">
+    <link rel="icon" href="{% static 'imgs/team.png' %}">
   </head>
 
   <body>
