@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Teams
+{% endblock %}
+
+{% block content %}
+<h1>Teams</h1>
+
+<!-- チーム一覧 -->
+<h2>チームリスト</h2>
+{% if teams %}
+  <table>
+    <thead>
+      <tr>
+        <th>チーム</th>
+        <th>リーダー</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for team in teams %}
+        <tr>
+          <td>
+            <a href="?team_id={{ team.id }}">{{ team.name }}</a>
+          </td>
+          <td>{{ team.leader_user.name }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>チームがまだありません</p>
+{% endif %}
+
+<hr>
+
+<!-- チームメンバー一覧 -->
+{% if selected_team %}
+  <h2>{{ selected_team.name }}</h2>
+  {% if team_members %}
+    <table>
+      <thead>
+        <tr>
+          <th>名前</th>
+          <th>社員ID</th>
+          <th>価値観ページ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for member in team_members %}
+          <tr>
+            <td>{{ member.user.name }}</td> <!--ユーザー名（名前）-->
+            <td>{{ member.user.employee_id }}</td>  <!--社員ID-->
+            <td>
+              <a href="#">ページを見る</a>  <!-- 仮リンク。後で実際のURLに置き換え -->
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>メンバーがまだいません</p>
+  {% endif %}
+{% else %}
+  <p>チームが選択されていません</p>
+{% endif %}
+
+{% endblock %}

@@ -29,8 +29,8 @@
               <label class="block font-medium mb-2">リーダー</label>
               <details id="leader-details" class="group border border-gray-400 rounded-lg overflow-hidden">
                 <summary class="flex justify-between items-center py-3 px-3 cursor-pointer bg-white hover:bg-gray-50">
-                  <span id="selected-leader-name" class="{% if selected_team.leader %}text-gray-900 font-bold{% else %}text-gray-500{% endif %}">
-                    {{ selected_team.leader.user_name|default:"リーダーを選択してください" }}
+                  <span id="selected-leader-name" class="{% if selected_team.leader_user %}text-gray-900 font-bold{% else %}text-gray-500{% endif %}">
+                    {{ selected_team.leader_user.name|default:"リーダーを選択してください" }}
                   </span>
                   <svg class="ml-1 w-4 h-4 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -40,9 +40,9 @@
                 <div class="p-3 border-t border-gray-100 max-h-40 overflow-y-auto space-y-2">
                   {% for member in team_members %}
                   <label class="flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50 transition-colors">
-                  <input type="radio" name="leader_id" value="{{ member.id }}" class="leader-radio w-5 h-5 border border-gray-400 appearance-none rounded-full checked:bg-teamy-orange cursor-pointer"
-                    {% if member.id == selected_team.leader.id %}checked{% endif %} required>
-                    <span class="text-gray-700">{{ member.user_name }}</span>
+                  <input type="radio" name="leader_id" value="{{ member.user.id }}" class="leader-radio w-5 h-5 border border-gray-400 appearance-none rounded-full checked:bg-teamy-orange cursor-pointer"
+                    {% if member.user.id == selected_team.leader_user.id %}checked{% endif %} required>
+                    <span class="text-gray-700">{{ member.user.name }}</span>
                   </label>
                   {% empty %}
                   <div class="p-2 text-gray-400 text-center">メンバーがいません</div>
@@ -58,7 +58,8 @@
                 name="team_description" 
                 maxlength="30"
                 class="w-full border border-gray-400 rounded-lg p-3 min-h-36 resize-none"
-              >{{ selected_team.description }}</textarea>
+              >{# {{ selected_team.description }} #}</textarea>
+              <!-- ↑models追加後にコメントアウト外す -->
             </div>
             
             <!-- 作成ボタン -->
