@@ -31,8 +31,9 @@
         </thead>
         <tbody class="text-xl">
           <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors cursor-pointer bg-gray-50"
-              hx-get="{% url 'team_detail_inner' 1 %}"
+              hx-get="?team_id=1"
               hx-target="#team-detail-inner"
+              hx-select="#team-detail-inner"
               hx-swap="outerHTML">
             <td class="py-4 px-2">Aチーム</td>
             <td class="py-4 px-2">山田 太郎</td>
@@ -50,8 +51,9 @@
           </tr>
 
           <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
-              hx-get="{% url 'team_detail_inner' 2 %}"
+              hx-get="?team_id=1"
               hx-target="#team-detail-inner"
+              hx-select="#team-detail-inner"
               hx-swap="outerHTML">
             <td class="py-4 px-2">Bチーム</td>
             <td class="py-4 px-2">鈴木 一郎</td>
@@ -69,8 +71,9 @@
           </tr>
 
           <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
-              hx-get="{% url 'team_detail_inner' 3 %}"
+              hx-get="?team_id=1"
               hx-target="#team-detail-inner"
+              hx-select="#team-detail-inner"
               hx-swap="outerHTML">
             <td class="py-4 px-2">Cチーム</td>
             <td class="py-4 px-2">小林 健太</td>
@@ -93,10 +96,87 @@
     <!-- ================= 右：チーム詳細 ================= -->
     <div id="team-detail" class="w-[52%] bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
       <div id="team-detail-inner">
-        {% include "teams/modals/team_detail_inner.html" %}
+
+        <div class="flex items-center justify-between mb-8">
+          <div class="flex items-baseline gap-6">
+            <h2 class="text-3xl font-bold text-teamy-navy">Aチーム</h2>
+            <p class="text-gray-500 text-lg">Aチームに関する説明文です。</p>
+          </div>
+          <button type="button" id="openAddMember"
+            class="bg-teamy-teal hover:bg-teamy-tealDark text-white px-6 py-2 rounded-full text-base font-bold transition-all hover:scale-[1.03]">
+            ＋ メンバーを追加
+          </button>
+        </div>
+
+        <table class="w-full text-left table-fixed">
+          <thead>
+            <tr class="text-teamy-grayText border-b-2 border-gray-200">
+              <th class="py-4 px-2 font-medium text-xl w-[40%]">名前</th>
+              <th class="py-4 px-2 font-medium text-xl w-[30%]">社員ID</th>
+              <th class="py-4 px-2 font-medium text-xl w-[25%] text-center">価値観ページ</th>
+              <th class="py-4 w-[10%]"></th>
+            </tr>
+          </thead>
+
+          <tbody class="text-xl">
+            <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+              <td class="py-4 px-2">
+                <div class="flex items-center gap-2">
+                  <img src="{% static 'accounts/imgs/leader.png' %}" class="w-8 h-8" alt="leader">
+                  <span class="text-gray-900">山田 太郎</span>
+                </div>
+              </td>
+              <td class="py-4 px-2 text-gray-700">12345</td>
+              <td class="py-4 px-2 text-center">
+                <button class="border border-teamy-teal text-teamy-teal text-base px-4 py-1 rounded-full hover:bg-cyan-50 transition-colors font-medium">
+                  ページをみる
+                </button>
+              </td>
+              <td class="py-4 text-right">
+                <button type="button" class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
+                        data-member-id="12345" data-member-name="山田 太郎">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+                </button>
+              </td>
+            </tr>
+
+            <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+              <td class="py-4 px-2">
+                <div class="pl-10 text-gray-900">田中</div>
+              </td>
+              <td class="py-4 px-2 text-gray-700">23456</td>
+              <td class="py-4 px-2 text-center">
+                <button class="border border-teamy-teal text-teamy-teal text-base px-4 py-1 rounded-full hover:bg-cyan-50 transition-colors font-medium">
+                  ページをみる
+                </button>
+              </td>
+              <td class="py-4 text-right">
+                <button type="button" class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
+                        data-member-id="23456" data-member-name="田中">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+                </button>
+              </td>
+            </tr>
+
+            <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+              <td class="py-4 px-2">
+                <div class="pl-10 text-gray-900">鈴木</div>
+              </td>
+              <td class="py-4 px-2 text-gray-700">34567</td>
+              <td class="py-4 px-2 text-center">
+                </td>
+              <td class="py-4 text-right">
+                <button type="button" class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
+                        data-member-id="34567" data-member-name="鈴木">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
       </div>
     </div>
-
   </div>
 </div>
 
@@ -154,10 +234,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn.classList.contains('btn-delete-member')) {
       e.preventDefault();
       e.stopPropagation();
+
+      const memberName = btn.dataset.memberName;
+      const memberId   = btn.dataset.memberId;
+
       const modal = document.getElementById('deleteMemberModal');
       if (modal) {
-        document.getElementById('memberDeleteTargetText').textContent = btn.dataset.memberName;
-        document.getElementById('memberDeleteTargetId').value = btn.dataset.memberId;
+        document.getElementById('memberDeleteTargetText').textContent = memberName;
+        document.getElementById('memberDeleteTargetId').value = memberId;
+        document.getElementById('memberDeleteTargetIdDisplay').textContent = memberId;
         modal.classList.remove('hidden');
       }
       return;
@@ -181,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-  }, true); // useCapture: true
+  }, true); 
 
   // ----- ヘルプボタン -----
   document.addEventListener('click', (e) => {

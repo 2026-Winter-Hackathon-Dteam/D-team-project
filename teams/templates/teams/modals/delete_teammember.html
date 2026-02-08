@@ -12,38 +12,56 @@
       <button type="button"
         class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">×</button>
 
-        <!-- ======== 本体 ======== -->
-        <form method="POST" action="">
-          {% csrf_token %}
-          <div class="flex flex-col items-center w-full p-10 gap-10">
-            <span class="text-2xl font-medium flex text-center">このメンバーを<br>チームから削除しますか？</span>
-            <div class="flex justify-center bg-teamy-grayLight rounded-md shadow-md w-full p-10">
-              <span id="memberDeleteTargetText" class="font-bold text-teamy-navy">---</span>
-              
-              <input type="hidden" name="member_id" id="memberDeleteTargetId">
-              
-              <input type="hidden" name="team_id" value="{{ selected_team.id }}">
-            </div>
+      <!-- ======== 本体 ======== -->
+      <form method="POST" action="">
+        {% csrf_token %}
+
+        <div class="flex flex-col items-center w-full p-10 gap-10">
+          <span class="text-2xl font-medium text-center">
+            このメンバーを<br>チームから削除しますか？
+          </span>
+
+          <!-- 対象メンバー表示 -->
+          <div class="flex flex-col items-center justify-center
+                      bg-teamy-grayLight rounded-md shadow-md
+                      w-full p-10 gap-2">
+
+            <!-- 名前 -->
+            <span id="memberDeleteTargetText"
+                  class="font-bold text-teamy-navy text-2xl">
+              ---
+            </span>
+
+            <!-- member-id -->
+            <span id="memberDeleteTargetIdDisplay"
+                  class="text-gray-600 text-xl">
+              ---
+            </span>
+
+            <!-- hidden -->
+            <input type="hidden" name="member_id" id="memberDeleteTargetId">
+            <input type="hidden" name="team_id" value="{{ selected_team.id }}">
           </div>
+        </div>
 
-            <!-- 削除ボタン -->
-            <div class="flex justify-center pt-6 gap-8">
-              <button type="submit"
-                class="bg-teamy-orange hover:bg-teamy-orangeDark text-white font-medium
-                      py-3 px-12 rounded-full transition-transform shadow-md 
-                      hover:scale-[1.03] active:scale-[0.98]">
-                削除
-              </button>
+        <!-- ボタン -->
+        <div class="flex justify-center pt-6 gap-8">
+          <button type="submit"
+            class="bg-teamy-orange hover:bg-teamy-orangeDark text-white font-medium
+                   py-3 px-12 rounded-full transition-transform shadow-md 
+                   hover:scale-[1.03] active:scale-[0.98]">
+            削除
+          </button>
 
-            <!-- キャンセルボタン -->
-            <button type="button"
-              class="modal-close border border-teamy-orangeDark text-teamy-orangeDark font-medium
-                    py-3 px-4 rounded-full transition-transform shadow-md 
-                    hover:scale-[1.03] active:scale-[0.98]">
-              キャンセル
-              </button>
-            </div>
+          <button type="button"
+            class="modal-close border border-teamy-orangeDark text-teamy-orangeDark font-medium
+                   py-3 px-4 rounded-full transition-transform shadow-md 
+                   hover:scale-[1.03] active:scale-[0.98]">
+            キャンセル
+          </button>
+        </div>
       </form>
+
     </div>
   </div>
 </div>
