@@ -16,8 +16,12 @@
   {% if is_team_leader %}
     <!-- グラフ表示 -->
     <div id="chart-container">
-      <!-- HTMLとCSSでグラフを実装 -->
-      {{ graph_data }}
+        <!-- HTMLとCSSでグラフを実装 -->
+        {{ team_graph_data }}
+    </div>
+    <div>
+      <!-- アドバイス表示 -->
+      {{ team_advice_data }}
     </div>
   {% else %}
     <p>このページはチームリーダーのみ閲覧できます。</p>
@@ -27,8 +31,10 @@
 <!-- グラフデータをJSON形式で埋め込み -->
 <script>
   const TEAM_ID = "{{ team_id }}";
-  const graphData = {{ graph_data|safe }};
+  const graphData = {{ team_graph_data|safe }};
+  const teamAdviceData = {{ team_advice_data|safe }};
   console.log("Team graph data:", graphData);
+  console.log("Team advice data:", teamAdviceData);
 </script>
 
 {% endblock %}

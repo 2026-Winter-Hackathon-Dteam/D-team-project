@@ -9,7 +9,7 @@ from django.db.models import (
 from .models import TeamValueScore, UserAdvice, TeamAdvice
 
 
-#　アドバイス表示（ユーザー）
+#　アドバイス取得（ユーザー）
 # チーム比較込みのアドバイスデータを作成
 def _get_user_advices_with_team(user, team_id):
     # value_key_id ごとに最新のIDを取得
@@ -75,6 +75,7 @@ def _get_user_advices_with_team(user, team_id):
 
     return list(results_data.values())
 
+#　アドバイス結果表示（ユーザー）
 #@login_required
 @require_http_methods(["GET", "POST"])
 def get_user_advice(request):
@@ -101,7 +102,35 @@ def get_user_advice(request):
     )
 
 
-# アドバイス表示（チーム）
+#　結果表示/アドバイス取得（チーム）
+#@login_required
+@require_http_methods(["GET","POST"])
+def get_team_advice(request, team_id):
+    
+    # これは必要ないかも
+    # user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
+    # user = request.user # 本番用
+    
+    team_id = request.GET.get("team_id")
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body.decode("utf-8"))
+            team_id = data.get("team_id") or team_id
+        except Exception:
+            pass
+    if not team_id:
+        team_id = "aaa11111-1111-1111-1111-111111111111"  # テスト用チームID
+        #return JsonResponse({"error":"team_id required"}, status=400) # 本番用
+    
+    team_advices = _get_team_advices(team_id)
+    
+    return JsonResponse(
+        {"team_advices": team_advices},
+        json_dumps_params={'ensure_ascii': False}
+    )
+
+
+# アドバイス取得（チーム）
 def _get_team_advices(team_id):
     # チームの最新スコアを取得
     latest_ids = (
@@ -160,9 +189,3 @@ def _get_team_advices(team_id):
 
     return list(results_data.values())
 
-
-#　結果表示/アドバイス取得（チーム）
-#@login_required
-@require_http_methods(["GET"])
-def get_team_advice(request, team_id):
-    return print("チームのアドバイスです")

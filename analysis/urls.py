@@ -13,4 +13,6 @@ urlpatterns = [
     path("graphs/team/", views.get_team_graph, name="get_team_graph"),
     path("personal_analysis/", views.personal_analysis, name="personal_analysis"),
     path("advices/me/", views.get_user_advice, name="get_user_advice"),
+    path("advices/team/", views.get_team_advice, name="get_team_advice"),
+    path("teams/", views.managers_page, name="managers_page"),
 ]
