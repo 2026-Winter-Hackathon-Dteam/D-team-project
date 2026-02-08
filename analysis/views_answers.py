@@ -8,8 +8,8 @@ from accounts.models import CustomUser
 from teams.models import Team_Users, Teams
 from .models import UserValueScore, Question
 from .services import recalc_team_scores
-from .views_graph import _get_user_scores_only, _get_user_scores_with_team
-from .views_advices import _get_user_advices_with_team
+from .views_graph import _get_user_scores_only, _get_user_scores_with_team, _get_team_scores
+from .views_advices import _get_user_advices_with_team, _get_team_advices
 
 
 # 回答保存　submit_answersを1回実行すると、SQLへのクエリは3+N回（Nはユーザーが所属するチーム数）
@@ -116,6 +116,7 @@ def submit_answers(request):
     return JsonResponse({"redirect_url": "/analysis/personal_analysis/"})
 
 
+# members_pageビュー
 #@login_required
 @require_http_methods(["GET", "POST"])
 def members_page(request):
@@ -167,6 +168,7 @@ def members_page(request):
     return render(request, "analysis/members_page.html", context)
 
 
+# personal_analysisビュー
 #@login_required
 @require_http_methods(["GET"])
 def personal_analysis(request):
@@ -210,3 +212,36 @@ def personal_analysis(request):
     }
     print(f"[DEBUG] Rendering personal_analysis with context: {context}")
     return render(request, "analysis/personal_analysis.html", context)
+
+
+# managers_pageビュー
+#@login_required
+@require_http_methods(["GET", "POST"])
+def managers_page(request):
+    """チームマネージャー向けページ表示"""
+    team_id = request.GET.get("team_id", "")
+
+    # ログインユーザー取得（未ログイン時はテスト用ユーザー）
+    if getattr(request, "user", None) and request.user.is_authenticated: #本番では、getattr(・・・None)は外しても良い 
+        current_user = request.user
+    else:
+        current_user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
+        #return redirect("analysis:login")  # 未ログインならログインページへ（本番用）
+
+    team = get_object_or_404(Teams, pk=team_id)
+    is_team_leader = team.leader_user_id == current_user.id
+
+    team_scores = _get_team_scores(team_id=team_id) if is_team_leader else []
+    team_advice = _get_team_advices(team_id=team_id) if is_team_leader else []
+    
+    print(f"[DEBUG] Team graph data: {team_scores}")  # デバッグ用出力
+    print(f"[DEBUG] Team advice data: {team_advice}")  # デバッグ用出力
+
+    context = {
+        "team_id": team_id,
+        "team_graph_data": team_scores,
+        "team_advice_data": team_advice,
+        "is_team_leader": is_team_leader,
+    }
+
+    return render(request, "analysis/managers_page.html", context)

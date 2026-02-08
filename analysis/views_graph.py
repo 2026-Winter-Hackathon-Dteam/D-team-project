@@ -146,11 +146,11 @@ def _get_team_scores(team_id):
     return list(results_data.values())
 
 
-# グラフ表示データ取得（チーム）
+# マトリクスグラフ表示データ取得（チーム）
 #@login_required
 @require_http_methods(["GET", "POST"])
 def get_team_graph(request):
-    """チームのグラフデータを取得してページに表示する"""
+    """チームのグラフデータを取得する（API用）"""
     
     # チームを指定（必須）
     team_id = request.GET.get("team_id")
@@ -174,13 +174,9 @@ def get_team_graph(request):
     is_team_leader = team.leader_user_id == current_user.id
 
     diffs = _get_team_scores(team_id=team_id) if is_team_leader else []
-    
+
     print(f"[DEBUG] Team graph data: {diffs}")  # デバッグ用出力
 
-    context = {
-        "team_id": team_id,
-        "graph_data": diffs,
-        "is_team_leader": is_team_leader,
-    }
+    return JsonResponse({"results": diffs})
 
-    return render(request, "analysis/managers_page.html", context)
+# 散布図グラフ表示データ取得（チーム分析）

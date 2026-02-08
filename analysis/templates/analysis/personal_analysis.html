@@ -37,7 +37,7 @@
   <!-- チーム分析選択（リーダーのみボタン表示＆リーダーのみ閲覧可能） -->
   <div class="team-analysis-link">
     {% if is_team_leader %}
-      <a href="{% url 'analysis:get_team_graph' %}?team_id={{ team_id }}">チーム分析結果を見る</a>
+      <a href="{% url 'analysis:managers_page' %}?team_id={{ team_id }}">チーム分析結果を見る</a>
     {% endif %}
   </div>
 </div>
