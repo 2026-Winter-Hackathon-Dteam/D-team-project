@@ -6,7 +6,7 @@ from accounts.models import CustomUser
 from .models import UserValueScore
 from django.db.models import (
     OuterRef, Subquery)
-from .models import TeamValueScore, UserAdvice
+from .models import TeamValueScore, UserAdvice, TeamAdvice
 
 
 #　アドバイス表示（ユーザー）
@@ -91,6 +91,7 @@ def get_user_advice(request):
             pass
     if not team_id:
         team_id = "aaa11111-1111-1111-1111-111111111111"  # テスト用チームID
+        #return JsonResponse({"error":"team_id required"}, status=400) # 本番用 
     
     user_advices = _get_user_advices_with_team(user, team_id)
 
@@ -98,6 +99,66 @@ def get_user_advice(request):
         {"user_advices": user_advices},
         json_dumps_params={'ensure_ascii': False}
     )
+
+
+# アドバイス表示（チーム）
+def _get_team_advices(team_id):
+    # チームの最新スコアを取得
+    latest_ids = (
+        TeamValueScore.objects
+        .filter(team_id=team_id)
+        .values('value_key_id')
+        .annotate(latest_id=Subquery(
+            TeamValueScore.objects
+            .filter(
+                team_id=OuterRef('team_id'),
+                value_key_id=OuterRef('value_key_id')
+            )
+            .order_by('-created_at', '-id')
+            .values('id')[:1]
+        ))
+    )
+
+    latest_team_scores = TeamValueScore.objects.filter(
+        id__in=[s['latest_id'] for s in latest_ids]
+    ).select_related('value_key', 'team')
+
+    # データをメモリで処理
+    results_data = {}
+    for score in latest_team_scores:
+        value_key_id = score.value_key_id
+
+        std_dev = score.std
+        max_diff = score.max_diff
+
+        # それぞれのvalue_keyごとにcodeを判定
+        if std_dev < 3 and max_diff < 6:
+            code = "Q1_stable_harmony"
+        elif std_dev >= 3 and max_diff < 6:
+            code = "Q2_deep_focus"
+        elif std_dev < 3 and max_diff >= 6:
+            code = "Q3_partial_diversity"
+        else:
+            code = "Q4_wide_diversity"
+
+        # アドバイスを取得
+        advice = TeamAdvice.objects.filter(
+            value_key_id=value_key_id,
+            code=code
+        ).first()
+
+        results_data[str(value_key_id)] = {
+            "value_key_id": str(value_key_id),
+            "value_key_name": score.value_key.value_key,
+            "max_diff": max_diff,
+            "std": std_dev,
+            "code": code,
+            "situation_text": advice.situation_text if advice else "",
+            "summary_text": advice.summary_text if advice else "",
+            "detail_text": advice.detail_text if advice else "",
+        }
+
+    return list(results_data.values())
 
 
 #　結果表示/アドバイス取得（チーム）
