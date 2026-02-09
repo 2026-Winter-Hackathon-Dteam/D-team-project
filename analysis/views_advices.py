@@ -42,7 +42,7 @@ def _get_user_advices_with_team(user, team_id):
 
         if team_score:
             team_mean = team_score.mean
-            diff = score.personal_score - team_mean
+            diff = abs(score.personal_score - team_mean)
 
             # importanceを判定
             if diff >= 6:
@@ -158,7 +158,7 @@ def _get_team_advices(team_id):
         value_key_id = score.value_key_id
 
         std_dev = score.std
-        max_diff = score.max_diff
+        max_diff = abs(score.max_diff)
 
         # それぞれのvalue_keyごとにcodeを判定
         if std_dev < 3 and max_diff < 6:

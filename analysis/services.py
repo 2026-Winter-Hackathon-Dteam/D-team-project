@@ -22,7 +22,7 @@ def recalc_team_scores(team_id):
     for value_key, values in grouped.items():
 
         mean = sum(values) / len(values)
-        max_diff = max(values) - min(values)
+        max_diff = abs(max(values) - min(values))
         std = pstdev(values) if len(values) > 1 else 0 # データが1つしかない場合、標準偏差は0とする
 
         team_objs.append(
