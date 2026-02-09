@@ -8,6 +8,8 @@
 
     <!-- ================= 左：チームリスト ================= -->
     <div class="w-[48%] bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+      
+      <!-- ===== 上部ヘッダ ===== -->
       <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-bold text-teamy-navy">チームリスト</h1>
         {% if user.is_admin %}
@@ -25,6 +27,7 @@
         {% endif %}
       </div>
 
+      <!-- ===== チーム一覧===== -->
       <table class="w-full text-left">
         <thead>
           <tr class="text-teamy-grayText border-b-2 border-gray-200">
@@ -74,7 +77,7 @@
       </table>
     </div>
 
-    <!-- ================= 右：チーム詳細 ================= -->
+    <!-- ================= 右：チームメンバー一覧 ================= -->
     <div id="team-detail" class="w-[52%] bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
 
       <!-- ===== 上部ヘッダ ===== -->
