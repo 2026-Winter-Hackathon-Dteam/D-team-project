@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- モーダル内の入力内容をリセットする関数 ---
   const resetModalForm = (modal) => {
-    // フォームのリセット
+    // モーダルを閉じたらフォーム入力内容をリセットする
     const forms = modal.querySelectorAll('form');
     forms.forEach(form => form.reset());
     // フォーム外のinput（検索窓など）をクリア
