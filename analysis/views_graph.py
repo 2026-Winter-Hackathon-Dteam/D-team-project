@@ -75,7 +75,7 @@ def _get_user_scores_with_team(user, team_id):
 
         if team_score:
             team_mean = team_score.mean
-            diff = score.personal_score - team_mean
+            diff = abs(score.personal_score - team_mean)
             results_data[str(value_key_id)] = {
                 "value_key_id": str(value_key_id),
                 "value_key_name": score.value_key.value_key,
