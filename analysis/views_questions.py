@@ -10,7 +10,7 @@ from .models import Question
 #テスト用
 def index(request):
     # return HttpResponse("INDEX OK")
-    return render(request, "analysis/managers_page.html")
+    return render(request, "analysis/questions-fe.html")
 
 QUESTIONS_PER_PAGE = 6  # ページ数は自由に設定可
 
@@ -62,4 +62,4 @@ def question_page(request, page):
         "total_pages": paginator.num_pages,
     }
 
-    return render(request, "analysis/questions.html", context)
+    return render(request, "analysis/questions-fe.html", context)
