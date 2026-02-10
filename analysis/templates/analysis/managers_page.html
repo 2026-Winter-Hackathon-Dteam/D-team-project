@@ -31,12 +31,15 @@
   {% endif %}
 </div>
 
+{{ team_graph_data|json_script:"team-graph-data" }}
+{{ team_advice_data|json_script:"team-advice-data" }}
+{{ team_matrix_data|json_script:"team-matrix-data" }}
 <!-- グラフデータをJSON形式で埋め込み -->
 <script>
   const TEAM_ID = "{{ team_id }}";
-  const graphData = {{ team_graph_data|safe }};
-  const teamAdviceData = {{ team_advice_data|safe }};
-  const teamMatrixData = {{ team_matrix_data|safe }};
+  const teamAdviceData = JSON.parse(document.getElementById("team-advice-data").textContent);
+  const graphData = JSON.parse(document.getElementById("team-graph-data").textContent);
+  const teamMatrixData = JSON.parse(document.getElementById("team-matrix-data").textContent);
   console.log("Team graph data:", graphData);
   console.log("Team advice data:", teamAdviceData);
   console.log("Team matrix data:", teamMatrixData);

@@ -8,7 +8,7 @@ from accounts.models import CustomUser
 from teams.models import Team_Users, Teams
 from .models import UserValueScore, Question
 from .services import recalc_team_scores
-from .views_graph import _get_user_scores_only, _get_user_scores_with_team, _get_team_scores, _get_team_scatter_data #get_team_matrixgraph
+from .views_graph import _get_user_scores_only, _get_user_scores_with_team, _get_team_scores, _get_team_scatter_data
 from .views_advices import _get_user_advices_with_team, _get_team_advices
 
 
