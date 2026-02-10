@@ -36,8 +36,10 @@
   const TEAM_ID = "{{ team_id }}";
   const graphData = {{ team_graph_data|safe }};
   const teamAdviceData = {{ team_advice_data|safe }};
+  const teamMatrixData = {{ team_matrix_data|safe }};
   console.log("Team graph data:", graphData);
   console.log("Team advice data:", teamAdviceData);
+  console.log("Team matrix data:", teamMatrixData);
 </script>
 
 {% endblock %}
