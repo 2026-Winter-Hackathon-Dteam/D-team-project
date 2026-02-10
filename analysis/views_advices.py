@@ -1,8 +1,3 @@
-from django.shortcuts import get_object_or_404
-from django.views.decorators.http import require_http_methods
-import json
-from django.http import JsonResponse
-from accounts.models import CustomUser
 from .models import UserValueScore
 from django.db.models import (
     OuterRef, Subquery)
@@ -74,61 +69,6 @@ def _get_user_advices_with_team(user, team_id):
             }
 
     return list(results_data.values())
-
-#　アドバイス結果表示（ユーザー）
-#@login_required
-@require_http_methods(["GET", "POST"])
-def get_user_advice(request):
-
-    user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
-    #user = request.user # 本番用
-
-    team_id = request.GET.get("team_id")
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body.decode("utf-8"))
-            team_id = data.get("team_id") or team_id
-        except Exception:
-            pass
-    if not team_id:
-        team_id = "aaa11111-1111-1111-1111-111111111111"  # テスト用チームID
-        #return JsonResponse({"error":"team_id required"}, status=400) # 本番用 
-    
-    user_advices = _get_user_advices_with_team(user, team_id)
-
-    return JsonResponse(
-        {"user_advices": user_advices},
-        json_dumps_params={'ensure_ascii': False}
-    )
-
-
-#　結果表示/アドバイス取得（チーム）
-#@login_required
-@require_http_methods(["GET","POST"])
-def get_team_advice(request, team_id):
-    
-    # これは必要ないかも
-    # user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
-    # user = request.user # 本番用
-    
-    team_id = request.GET.get("team_id")
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body.decode("utf-8"))
-            team_id = data.get("team_id") or team_id
-        except Exception:
-            pass
-    if not team_id:
-        team_id = "aaa11111-1111-1111-1111-111111111111"  # テスト用チームID
-        #return JsonResponse({"error":"team_id required"}, status=400) # 本番用
-    
-    team_advices = _get_team_advices(team_id)
-    
-    return JsonResponse(
-        {"team_advices": team_advices},
-        json_dumps_params={'ensure_ascii': False}
-    )
-
 
 # アドバイス取得（チーム）
 def _get_team_advices(team_id):

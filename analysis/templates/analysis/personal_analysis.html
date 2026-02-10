@@ -44,10 +44,13 @@
   </div>
 </div>
 
+{{ graph_data|json_script:"personal-graph-data" }}
+{{ advice_data|json_script:"personal-advice-data" }}
+
 <script>
   const TEAM_ID = "{{ team_id }}";
-  const graphData = {{ graph_data|safe }};
-  const adviceData = {{ advice_data|safe }};
+  const graphData = JSON.parse(document.getElementById("personal-graph-data").textContent);
+  const adviceData = JSON.parse(document.getElementById("personal-advice-data").textContent);
   console.log("Graph data:", graphData);
   console.log("Advice data:", adviceData);
 
