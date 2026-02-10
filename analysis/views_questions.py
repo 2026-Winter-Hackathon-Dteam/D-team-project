@@ -9,8 +9,8 @@ from .models import Question
 
 #テスト用
 def index(request):
-    return HttpResponse("INDEX OK")
-
+    # return HttpResponse("INDEX OK")
+    return render(request, "analysis/managers_page.html")
 
 QUESTIONS_PER_PAGE = 6  # ページ数は自由に設定可
 

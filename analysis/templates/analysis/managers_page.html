@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Analysis{% endblock %}
+
+{% block content %}
+<div class="block w-full py-10">
+
+  <!-- ======== マトリクス部分 ======== -->
+  <div id="matrix-container" 
+         class="relative mx-auto w-[500px] h-[500px] bg-white shrink-0">
+
+         <!-- ======== 4つのエリア ======== -->
+        <div class="absolute inset-0 w-full h-full flex flex-wrap">
+            
+            <div class="w-1/2 h-1/2 bg-[#EFEAEA] flex justify-center items-start pt-[10px] text-teamy-grayText text-[14px]">
+                安定調和型
+            </div>
+            
+            <div class="w-1/2 h-1/2 bg-[#939191] flex justify-center items-start pt-[10px] text-white text-[14px]">
+                視点深化型
+            </div>
+            
+            <div class="w-1/2 h-1/2 bg-[#D3CECE] flex justify-center items-start pt-[10px] text-teamy-grayText text-[14px]">
+                部分多様型
+            </div>
+            
+            <div class="w-1/2 h-1/2 bg-[#A7A3A3] flex justify-center items-start pt-[10px] text-white text-[14px]">
+                広範多様型
+            </div>
+        </div>
+
+         <!-- ======== ドット描画レイヤー ======== -->
+        <div id="plotArea" class="absolute inset-0 z-10 w-full h-full"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // BEから受け取った数値 x,y（0〜100）を%として使用（座標への変換計算の方法は要調整）
+    const data = [
+        { id: 1, x: 70, y: 55 }, 
+        { id: 2, x: 38, y: 80 }, 
+        { id: 3, x: 45, y: 65 },
+        { id: 4, x: 75, y: 40 }, 
+        { id: 5, x: 28, y: 30 }, 
+        { id: 6, x: 28, y: 78 },
+        { id: 7, x: 42, y: 26 },
+        { id: 8, x: 92, y: 15 }
+    ];
+
+    const plotArea = document.getElementById('plotArea');
+
+    // 各idと座標をマトリクスに重ねたレイヤーにドット描画
+    data.forEach(item => {
+        const dot = document.createElement('div');
+        
+        // ドットのスタイルをクラスにする（SVGのほうがいい？要検討）
+        dot.className = "absolute w-[32px] h-[32px] bg-[#4db6ac] rounded-full flex items-center justify-center text-white text-[14px] font-font-semibold shadow-md pointer-events-auto transition-transform hover:scale-125 z-[100]";
+        
+        // 座標と中心補正
+        dot.style.left = item.x + "%";
+        dot.style.bottom = item.y + "%";
+        dot.style.transform = "translate(-50%, 50%)";
+        
+        dot.innerText = item.id;
+        plotArea.appendChild(dot);
+    });
+</script>
+{% endblock %}
