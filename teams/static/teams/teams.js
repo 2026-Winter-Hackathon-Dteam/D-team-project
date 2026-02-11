@@ -83,6 +83,30 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // リーダー設定
+    if (btn.classList.contains('btn-set-leader')) {
+      e.preventDefault();
+
+      const memberId = btn.dataset.memberId;
+      const memberName = btn.dataset.memberName;
+
+      if (!confirm(memberName + ' ' + memberId + 'をリーダーにしますか？')) return;
+
+      fetch('/teams/set-leader/', {
+        // POST先URLを仮設定 要BEすり合わせ
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+        body: JSON.stringify({ member_id: memberId })
+        // DjangoルールのJSON形式宣言とCSRFトークン
+      })
+      .then(() => location.reload());
+
+      return;
+    }
+
     //  ヘルプボタン
     if (btn.classList.contains('btn-help')) {
       if (typeof openTutorial === 'function') {

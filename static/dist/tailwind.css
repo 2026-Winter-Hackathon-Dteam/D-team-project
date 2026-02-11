@@ -3114,6 +3114,11 @@ video {
   color: rgb(209 213 219 / var(--tw-text-opacity, 1));
 }
 
+.text-teamy-pinkRed {
+  --tw-text-opacity: 1;
+  color: rgb(255 113 115 / var(--tw-text-opacity, 1));
+}
+
 .underline {
   text-decoration-line: underline;
 }

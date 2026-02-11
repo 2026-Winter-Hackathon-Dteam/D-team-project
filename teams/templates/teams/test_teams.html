@@ -4,7 +4,9 @@
 
 {% block content %}
 
-<!-- デザイン調整用のダミーデータ入りhtmlです -->
+<!-- ========== デザイン調整用のダミーデータ入りhtmlです　後に削除します ========== -->
+
+
 <div class="max-w-[1800px] mx-auto px-8 py-10">
   <div class="flex flex-row gap-12 items-start">
 
@@ -77,13 +79,13 @@
             </td>
           </tr>
 
-          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors bg-gray-50">
+          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors">
             <td class="py-4 px-2">
               <a href="?team_id=3" class="block w-full">
                 Cチーム
               </a>
             </td>
-            <td class="py-4 px-2">小林</td>
+            <td class="py-4 px-2 text-teamy-pinkRed text-lg font-medium">リーダーを決めてください</td>
             <td class="py-4 px-2 text-right">
               <div class="flex gap-4 justify-end">
                 <button type="button" class="btn-edit-team p-2 -m-2 transition-transform hover:scale-125">
@@ -144,8 +146,8 @@
         <thead>
           <tr class="text-teamy-grayText border-b-2 border-gray-200">
             <th class="py-4 px-2 font-medium text-xl w-[40%]">名前</th>
-            <th class="py-4 px-2 font-medium text-xl w-[30%]">社員ID</th>
-            <th class="py-4 px-2 font-medium text-xl w-[25%] text-center">価値観ページ</th>
+            <th class="py-4 px-2 font-medium text-xl w-[20%]">社員ID</th>
+            <th class="py-4 px-2 font-medium text-xl w-[30%] text-center">価値観ページ</th>
             <th class="py-4 w-[10%]"></th>
           </tr>
         </thead>
@@ -165,12 +167,14 @@
               </button>
             </td>
             <td class="py-4 text-right">
-              <button type="button"
-                      class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
-                      data-member-id="12345"
-                      data-member-name="山田 太郎">
-                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
-              </button>
+              <div class="flex items-center justify-end gap-4">
+                <button type="button"
+                        class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
+                        data-member-id="12345"
+                        data-member-name="山田 太郎">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+                </button>
+              </div>
             </td>
           </tr>
 
@@ -182,12 +186,20 @@
             <td class="py-4 px-2 text-center">
             </td>
             <td class="py-4 text-right">
-              <button type="button"
-                      class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
-                      data-member-id="23456"
-                      data-member-name="田中">
-                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
-              </button>
+              <div class="flex items-center justify-end gap-4">
+                <button type="button"
+                        class="btn-set-leader p-2 -m-2 transition-transform hover:scale-125"
+                        data-member-id="23456"
+                        data-member-name="田中">
+                  <img src="{% static 'teams/imgs/leader_gray.png' %}" class="w-7 h-7" alt="leader">
+                </button>
+                <button type="button"
+                        class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
+                        data-member-id="23456"
+                        data-member-name="田中">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+                </button>
+              </div>
             </td>
           </tr>
 
@@ -202,12 +214,20 @@
               </button>
             </td>
             <td class="py-4 text-right">
-              <button type="button"
-                      class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
-                      data-member-id="34567"
-                      data-member-name="鈴木">
-                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
-              </button>
+              <div class="flex items-center justify-end gap-4">
+                <button type="button"
+                        class="btn-set-leader p-2 -m-2 transition-transform hover:scale-125"
+                        data-member-id="34567"
+                        data-member-name="鈴木">
+                  <img src="{% static 'teams/imgs/leader_gray.png' %}" class="w-7 h-7" alt="leader">
+                </button>
+                <button type="button"
+                        class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
+                        data-member-id="34567"
+                        data-member-name="鈴木">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+                </button>
+              </div>
             </td>
           </tr>
 
@@ -219,12 +239,20 @@
             <td class="py-4 px-2 text-center">
             </td>
             <td class="py-4 text-right">
-              <button type="button"
-                      class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
-                      data-member-id="45678"
-                      data-member-name="内田">
-                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
-              </button>
+              <div class="flex items-center justify-end gap-4">
+                <button type="button"
+                        class="btn-set-leader p-2 -m-2 transition-transform hover:scale-125"
+                        data-member-id="45678"
+                        data-member-name="内田">
+                  <img src="{% static 'teams/imgs/leader_gray.png' %}" class="w-7 h-7" alt="leader">
+                </button>
+                <button type="button"
+                        class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
+                        data-member-id="45678"
+                        data-member-name="内田">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+                </button>
+              </div>
             </td>
           </tr>
 
@@ -236,14 +264,23 @@
             <td class="py-4 px-2 text-center">
             </td>
             <td class="py-4 text-right">
-              <button type="button"
-                      class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
-                      data-member-id="56789"
-                      data-member-name="加藤">
-                <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
-              </button>
+              <div class="flex items-center justify-end gap-4">
+                <button type="button"
+                        class="btn-set-leader p-2 -m-2 transition-transform hover:scale-125"
+                        data-member-id="56789"
+                        data-member-name="加藤">
+                  <img src="{% static 'teams/imgs/leader_gray.png' %}" class="w-7 h-7" alt="leader">
+                </button>
+                <button type="button"
+                        class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
+                        data-member-id="56789"
+                        data-member-name="加藤">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+                </button>
+              </div>
             </td>
           </tr>
+
         </tbody>
       </table>
 

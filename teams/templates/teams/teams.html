@@ -47,7 +47,13 @@
               </a>
             </td>
             <td class="py-4 px-2">
-              {{ team.leader_user.name }}
+              {% if team.leader_user %}
+                {{ team.leader_user.name }}
+              {% else %}
+                <span class="text-teamy-pinkRed font-medium">
+                  リーダーを決めてください
+                </span>
+              {% endif %}
             </td>
             <td class="py-4 px-2 text-right">
               <div class="flex gap-4 justify-end">
@@ -108,8 +114,8 @@
         <thead>
           <tr class="text-teamy-grayText border-b-2 border-gray-200">
             <th class="py-4 px-2 font-medium text-xl w-[40%]">名前</th>
-            <th class="py-4 px-2 font-medium text-xl w-[30%]">社員ID</th>
-            <th class="py-4 px-2 font-medium text-xl w-[25%] text-center">価値観ページ</th>
+            <th class="py-4 px-2 font-medium text-xl w-[20%]">社員ID</th>
+            <th class="py-4 px-2 font-medium text-xl w-[30%] text-center">価値観ページ</th>
             <th class="py-4 w-[10%]"></th>
           </tr>
         </thead>
@@ -145,13 +151,29 @@
 
               <td class="py-4 text-right">
                 {% if user.is_admin %}
-                <button
-                  type="button"
-                  class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
-                  data-member-id="{{ member.user.id }}"
-                  data-member-name="{{ member.user.name }}">
-                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
-                </button>
+                <div class="flex items-center justify-end gap-4">
+
+                  {% if member.user.id != selected_team.leader_user.id %}
+                  <!-- リーダー設定ボタン（リーダー本人は非表示） -->
+                  <button
+                    type="button"
+                    class="btn-set-leader p-2 -m-2 transition-transform hover:scale-125"
+                    data-member-id="{{ member.user.id }}"
+                    data-member-name="{{ member.user.name }}">
+                    <img src="{% static 'teams/imgs/leader_gray.png' %}" class="w-7 h-7" alt="leader">
+                  </button>
+                  {% endif %}
+
+                  <!-- 削除ボタン -->
+                  <button
+                    type="button"
+                    class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
+                    data-member-id="{{ member.user.id }}"
+                    data-member-name="{{ member.user.name }}">
+                    <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+                  </button>
+
+                </div>
                 {% endif %}
               </td>
             </tr>
