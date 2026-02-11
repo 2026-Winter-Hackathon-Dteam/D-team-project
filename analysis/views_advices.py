@@ -61,14 +61,14 @@ def _get_user_advices_with_team(user, team_id):
 
             results_data[str(value_key_id)] = {
                 "value_key_id": str(value_key_id),
-                "personal_score": score.personal_score,
-                "team_mean": team_mean,
-                "diff": diff,
                 "importance": importance,
                 "advice_text": advice_text
             }
+            order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
+            order_index = {key: index for index, key in enumerate(order)}
+            sorted_list = sorted(results_data.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
 
-    return list(results_data.values())
+    return list(sorted_list)
 
 # アドバイス取得（チーム）
 def _get_team_advices(team_id):
@@ -118,14 +118,14 @@ def _get_team_advices(team_id):
 
         results_data[str(value_key_id)] = {
             "value_key_id": str(value_key_id),
-            "value_key_name": score.value_key.value_key,
-            "max_diff": max_diff,
-            "std": std_dev,
             "code": code,
             "situation_text": advice.situation_text if advice else "",
             "summary_text": advice.summary_text if advice else "",
             "detail_text": advice.detail_text if advice else "",
         }
+        order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
+        order_index = {key: index for index, key in enumerate(order)}
+        sorted_list = sorted(results_data.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
 
-    return list(results_data.values())
 
+    return list(sorted_list)

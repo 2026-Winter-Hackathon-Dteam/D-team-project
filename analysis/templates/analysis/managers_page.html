@@ -13,11 +13,6 @@
   <p>所属しているチームのマネージャー向けの分析結果です</p>
 
   {% if is_team_leader %}
-    <!-- グラフ表示 -->
-    <div id="chart-container">
-        <!-- HTMLとCSSでグラフを実装 -->
-        {{ team_graph_data }}
-    </div>
     <div id="chart-container">
         <!-- マトリクス図 -->
         {{ team_matrix_data }}
@@ -35,18 +30,19 @@
   {% endif %}
 </div>
 
-{{ team_graph_data|json_script:"team-graph-data" }}
-{{ team_advice_data|json_script:"team-advice-data" }}
 {{ team_matrix_data|json_script:"team-matrix-data" }}
+{{ team_advice_data|json_script:"team-advice-data" }}
+{{ team_scatter_data|json_script:"team-scatter-data" }}
+
 <!-- グラフデータをJSON形式で埋め込み -->
 <script>
   const TEAM_ID = "{{ team_id }}";
-  const teamAdviceData = JSON.parse(document.getElementById("team-advice-data").textContent);
-  const graphData = JSON.parse(document.getElementById("team-graph-data").textContent);
   const teamMatrixData = JSON.parse(document.getElementById("team-matrix-data").textContent);
-  console.log("Team graph data:", graphData);
-  console.log("Team advice data:", teamAdviceData);
+  const teamAdviceData = JSON.parse(document.getElementById("team-advice-data").textContent);
+  const teamScatterData = JSON.parse(document.getElementById("team-scatter-data").textContent);
   console.log("Team matrix data:", teamMatrixData);
+  console.log("Team advice data:", teamAdviceData);
+  console.log("Team scatter data:", teamScatterData);
 </script>
 
 {% endblock %}

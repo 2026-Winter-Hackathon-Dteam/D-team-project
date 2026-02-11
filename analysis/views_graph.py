@@ -29,12 +29,14 @@ def _get_user_scores_only(user):
         value_key_id = score.value_key_id
         results_data[str(value_key_id)] = {
             "value_key_id": str(value_key_id),
-            "value_key_name": score.value_key.value_key,
             "personal_score": score.personal_score
         }
+        
+    order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
+    order_index = {key: index for index, key in enumerate(order)}
+    sorted_list = sorted(results_data.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
 
-    return list(results_data.values())
-
+    return list(sorted_list)
 
 # ユーザースコア取得（チーム比較込み）
 def _get_user_scores_with_team(user, team_id):
@@ -72,14 +74,16 @@ def _get_user_scores_with_team(user, team_id):
             diff = abs(score.personal_score - team_mean)
             results_data[str(value_key_id)] = {
                 "value_key_id": str(value_key_id),
-                "value_key_name": score.value_key.value_key,
                 "personal_score": score.personal_score,
                 "team_mean": team_mean,
-                "diff": diff
             }
-        print(f"[DEBUG] UserValueScore: {score}, TeamValueScore: {team_score}")
-    return list(results_data.values())
+            
+        order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
+        order_index = {key: index for index, key in enumerate(order)}
+        sorted_list = sorted(results_data.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
 
+        print(f"[DEBUG] UserValueScore: {score}, TeamValueScore: {team_score}")
+    return list(sorted_list)
 
 # チームスコア取得
 def _get_team_scores(team_id):
@@ -111,8 +115,11 @@ def _get_team_scores(team_id):
             "std": score.std,
         }
 
-    return list(results_data.values())
+    order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
+    order_index = {key: index for index, key in enumerate(order)}
+    sorted_list = sorted(results_data.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
 
+    return list(sorted_list)
 
 # 散布図グラフデータ取得（チーム）
 def _get_team_scatter_data(team_id):
@@ -155,10 +162,20 @@ def _get_team_scatter_data(team_id):
                 }
                 value_buckets[value_key_id] = bucket
 
+            team_mean = team_mean_map.get(value_key_id)
+            diff = None
+            if team_mean is not None:
+                diff = abs(score["personal_score"] - team_mean)
+
             bucket["users"].append({
                 "user_id": str(user.id),
                 "user_name": user.name,
                 "personal_score": score["personal_score"],
+                "diff": diff,
             })
+            
+            order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
+            order_index = {key: index for index, key in enumerate(order)}
+            sorted_list = sorted(value_buckets.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
 
-    return list(value_buckets.values())
+    return list(sorted_list)

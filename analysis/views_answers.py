@@ -250,10 +250,11 @@ def managers_page(request):
         [
             {
                 "value_key_id": d.get("value_key_id"),
-                "x": d.get("personal_score"),
-                "y": d.get("team_mean"),
+                "x": user.get("diff"),
+                "y": user.get("personal_score"),
             }
-            for d in team_scatter_data # TODO 確認
+            for d in team_scatter_data
+            for user in d.get("users", [])
         ]
         if is_team_leader
         else []
@@ -266,7 +267,6 @@ def managers_page(request):
 
     context = {
         "team_id": team_id,
-        "team_graph_data": team_scores,
         "team_advice_data": team_advice,
         "team_scatter_data": l_team_scatter_data,
         "is_team_leader": is_team_leader,
