@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="min-h-screen">
-  <form id="question-form"
+  <form id="question-form" method="POST" action="#"
         class="max-w-4xl mx-auto p-8 space-y-16 pt-[10vh] pb-[30vh]">
     {% csrf_token %}
 
@@ -112,8 +112,7 @@
             分析結果をチームメンバーに公開する
           </label>
 
-          <button type="button"
-                  onclick="submitAll()"
+          <button type="submit"
                   class="bg-teamy-orange text-white px-12 py-3 rounded-full font-medium hover:opacity-90">
             回答を終了する
           </button>

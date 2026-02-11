@@ -29,7 +29,7 @@ radios.forEach(radio => {
 
     const hr = current.nextElementSibling;
     if (!hr) return;
-    // 現質問ブロックの次の<hr>区切り線を取得 なければ終了
+    // 現質問ブロックの次の<hr>区切り線までを取得 なければ終了
 
     const next = hr.nextElementSibling;
     if (!next) return;   
@@ -78,4 +78,26 @@ function nextPage(pageNumber) {
   window.location.href = `/analysis/questions/${pageNumber}/`;
 }
 
+// ===== 回答を送信＆未回答バリデーション =====
+const form = document.getElementById('question-form');
 
+form.addEventListener('submit', (e) => {
+  const blocks = document.querySelectorAll('.question-block');
+  let allAnswered = true;
+  // submitイベント時にすべてのquestion-blockを取得しtrueと仮定
+
+  blocks.forEach(block => {
+    const checked = block.querySelector('input[type="radio"]:checked');
+    if (!checked) {
+      allAnswered = false;
+    }
+  });
+  // 1つずつ回答をチェックし未回答ならfalseにする
+
+  if (!allAnswered) {
+    e.preventDefault(); // ← falseなら送信を止める
+    alert('未回答の質問があります');
+    return;
+  }
+
+});
