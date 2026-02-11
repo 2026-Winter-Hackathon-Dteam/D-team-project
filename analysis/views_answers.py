@@ -246,17 +246,29 @@ def managers_page(request):
         else []
     )
     team_scatter_data = _get_team_scatter_data(team_id=team_id) if is_team_leader else []
+    l_team_scatter_data = (
+        [
+            {
+                "value_key_id": d.get("value_key_id"),
+                "x": d.get("personal_score"),
+                "y": d.get("team_mean"),
+            }
+            for d in team_scatter_data # TODO 確認
+        ]
+        if is_team_leader
+        else []
+    )
     
     print(f"[DEBUG] Team graph data: {team_scores}")  # デバッグ用出力
     print(f"[DEBUG] Team advice data: {team_advice}")  # デバッグ用出力
-    print(f"[DEBUG] Team scatter data: {team_scatter_data}")  # デバッグ用出力
+    print(f"[DEBUG] Team scatter data: {l_team_scatter_data}")  # デバッグ用出力
     print(f"[DEBUG] Team matrix data: {team_matrixdata}")  # デバッグ用出力
 
     context = {
         "team_id": team_id,
         "team_graph_data": team_scores,
         "team_advice_data": team_advice,
-        "team_scatter_data": team_scatter_data,
+        "team_scatter_data": l_team_scatter_data,
         "is_team_leader": is_team_leader,
         "team_matrix_data": team_matrixdata,
     }
