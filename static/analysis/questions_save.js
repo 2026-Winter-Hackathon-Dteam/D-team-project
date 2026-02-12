@@ -43,8 +43,8 @@ async function submitAll() {
     if (res.ok) {
       const data = await res.json()
       localStorage.removeItem(STORAGE_KEY)
-      // members_pageにリダイレクト
-      window.location.href = data.redirect_url || "/analysis/members_page/"
+      // personal_analysisにリダイレクト
+      window.location.href = data.redirect_url || "/analysis/personal_analysis/"
     } else {
       alert(`エラーが発生しました: ${res.status}`)
     }

@@ -2,32 +2,18 @@
 
 {% load static %}
 
-{% block title %}診断結果{% endblock %}
+{% block title %}メンバーの価値観公開{% endblock %}
 
 {% block content %}
 
 <div class="results-container">
-  <h1>診断完了</h1>
-  <p>ご回答ありがとうございました。</p>
-  <p>あなたの回答がUser_Value_ScoresとTeam_Value_Scoresに保存されました。</p>
+  <h1>{{ target_user_name }}さんの価値観</h1>
+  <p>価値観公開している{{ target_user_name }}さんの価値観です</p>
   
   <!-- グラフ表示 -->
   <div id="chart-container">
     <!-- HTMLとCSSでグラフを実装 -->
     {{ graph_data }}
-    {{ teams }}
-  </div>
-
-  <!-- チーム選択 -->
-  <div class="team-select">
-    <label for="team-select">チームを選択：</label>
-    <select id="team-select">
-      <option value="">選択してください</option>
-      {% for team in teams %}
-        <option value="{{ team.id }}">{{ team.name }}</option>
-      {% endfor %}
-    </select>
-    <button id="team-submit" type="button">チーム比較を表示</button>
   </div>
   
   <div class="results-links">
@@ -39,16 +25,6 @@
 <script>
   const graphData = {{ graph_data|safe }};
   console.log("Graph data:", graphData);
-
-  const teamSubmit = document.getElementById("team-submit");
-  teamSubmit?.addEventListener("click", () => {
-    const teamId = document.getElementById("team-select")?.value;
-    if (!teamId) {
-      alert("チームを選択してください");
-      return;
-    }
-    window.location.href = `/analysis/personal_analysis/?team_id=${teamId}`;
-  });
 </script>
 
 {% endblock %}
