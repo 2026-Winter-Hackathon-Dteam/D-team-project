@@ -2,32 +2,72 @@
 
 {% load static %}
 
-{% block title %}チーム比較結果{% endblock %}
+{% block title %}個人分析結果{% endblock %}
 
 {% block content %}
 
 <div class="results-container">
-  <h1>チーム比較結果</h1>
+  <h1>個人分析結果</h1>
   <p>選択したチームの平均との差とアドバイスを表示します。</p>
+  <p>あなたの回答がUser_Value_ScoresとTeam_Value_Scoresに保存されました。</p>
+
 
   <div id="graph-container">
     <!-- チーム比較グラフ（後で実装） -->
+    <p>チーム比較グラフ</p>
     {{ graph_data }}
   </div>
 
   <div id="advice-container">
     <!-- アドバイス表示（後で実装） -->
+    <p>アドバイス</p>
     {{ advice_data }}
   </div>
+
+  <!-- チーム選択 -->
+  <div class="team-select">
+    <label for="team-select">チームを選択：</label>
+    <select id="team-select">
+      <option value="">選択してください</option>
+      {% for team in teams %}
+        <option value="{{ team.id }}" {% if team.id == team_id %}selected{% endif %}>{{ team.name }}</option>
+      {% endfor %}
+    </select>
+    <button id="team-submit" type="button">チーム比較を表示</button>
+  </div>
+
+  <!-- チーム分析選択（リーダーのみボタン表示＆リーダーのみ閲覧可能） -->
+  <div class="team-analysis-link">
+    {% if is_team_leader %}
+      <a href="{% url 'analysis:managers_page' %}?team_id={{ team_id }}">チーム分析結果を見る</a>
+    {% endif %}
+  </div>
 </div>
+{{ graph_data|json_script:"personal-graph-data" }}
+
+{{ advice_data|json_script:"personal-advice-data" }}
 
 <script>
   const TEAM_ID = "{{ team_id }}";
-  const graphData = {{ graph_data|safe }};
-  const adviceData = {{ advice_data|safe }};
+  const graphData = JSON.parse(document.getElementById("personal-graph-data").textContent);
+  const adviceData = JSON.parse(document.getElementById("personal-advice-data").textContent);
   console.log("Graph data:", graphData);
   console.log("Advice data:", adviceData);
+
+  const teamSubmit = document.getElementById("team-submit");
+  teamSubmit?.addEventListener("click", () => {
+    const teamId = document.getElementById("team-select")?.value;
+    if (!teamId) {
+      alert("チームを選択してください");
+      return;
+    }
+    window.location.href = `/analysis/personal_analysis/?team_id=${teamId}`;
+  });
 </script>
+
+<div class="results-links">
+  <a href="{% url 'analysis:question_page' 1 %}">もう一度診断する</a>
+</div>
 
 {% endblock %}
 
