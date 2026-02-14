@@ -57,8 +57,9 @@
                transition-all duration-200 z-[100]">
 
         {% if teams %}
+        <!-- 切り替え操作されたチームIDと現URLをnextパラメータとして渡す・nextへリダイレクトすることで現ページが選択チーム内容となる想定 -->
           {% for team in teams %}
-            <a href="{% url 'set_current_team' team.id %}"
+            <a href="{% url 'set_current_team' team.id %}?next={{ request.path }}"
                class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50 transition-colors">
               {{ team.name }}
             </a>

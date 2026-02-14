@@ -1,74 +1,110 @@
 {% extends "base.html" %}
-
 {% load static %}
 
-{% block title %}個人分析結果{% endblock %}
+{% block title %}Analysis{% endblock %}
 
 {% block content %}
 
-<div class="results-container">
-  <h1>個人分析結果</h1>
-  <p>選択したチームの平均との差とアドバイスを表示します。</p>
-  <p>あなたの回答がUser_Value_ScoresとTeam_Value_Scoresに保存されました。</p>
-
-
-  <div id="graph-container">
-    <!-- チーム比較グラフ（後で実装） -->
-    <p>チーム比較グラフ</p>
-    {{ graph_data }}
-  </div>
-
-  <div id="advice-container">
-    <!-- アドバイス表示（後で実装） -->
-    <p>アドバイス</p>
-    {{ advice_data }}
-  </div>
-
-  <!-- チーム選択 -->
-  <div class="team-select">
-    <label for="team-select">チームを選択：</label>
-    <select id="team-select">
-      <option value="">選択してください</option>
-      {% for team in teams %}
-        <option value="{{ team.id }}" {% if team.id == team_id %}selected{% endif %}>{{ team.name }}</option>
-      {% endfor %}
-    </select>
-    <button id="team-submit" type="button">チーム比較を表示</button>
-  </div>
-
-  <!-- チーム分析選択（リーダーのみボタン表示＆リーダーのみ閲覧可能） -->
-  <div class="team-analysis-link">
-    {% if is_team_leader %}
-      <a href="{% url 'analysis:managers_page' %}?team_id={{ team_id }}">チーム分析結果を見る</a>
-    {% endif %}
-  </div>
+<!-- ツールチップ  -left-fullで初期は画面外に出しておく -->
+<div id="hover-tooltip" class="fixed -left-full pointer-events-none transition-opacity duration-200 z-50 bg-gray-800 text-white text-[10px] py-1.5 px-3 rounded shadow-xl whitespace-nowrap">
+  💡 クリックでアドバイスを表示
 </div>
+
+<div class="min-h-screen py-10 px-4 space-y-6">
+  <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
+    
+    <div class="bg-teamy-navy px-6 py-1 flex justify-between items-center">
+      <h1 class="text-white text-xl font-bold tracking-wider">{{ user_name }} さんと {{ team_name }} の価値観</h1>
+      <div class="flex flex-col items-center gap-2 m-2">
+
+        {% if is_team_leader %}
+        <a href="{% url 'analysis:managers_page' %}?team_id={{ team_id }}" class="self-center inline-block bg-teamy-teal hover:bg-teamy-tealDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-semibold px-6 py-2 rounded-full shadow-md text-sm">
+          マネージャー向け分析へ
+        </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div class="flex border-b border-gray-100 mb-8 gap-8">
+        <button id="tab-me-btn" class="px-6 py-2 text-gray-400 font-bold">あなたの価値観</button>
+        <button id="tab-team-btn" class="px-6 py-2 text-teamy-teal font-bold border-b-2 border-teamy-teal -mb-[1px]">チームとの比較</button>
+      </div>
+
+      <!-- あなたの価値観 -->
+      <div id="content-me">
+          {% include "analysis/includes/personal_me.html" %}
+      </div>
+      <!-- チームとの比較 -->
+      <div id="content-team" class="hidden">
+          {% include "analysis/includes/personal_team.html" %}
+      </div>
+    </div>
+</div>
+
+<!-- データ受け渡し用スクリプト -->
 {{ graph_data|json_script:"personal-graph-data" }}
-
 {{ advice_data|json_script:"personal-advice-data" }}
-
-<script>
-  const TEAM_ID = "{{ team_id }}";
-  const graphData = JSON.parse(document.getElementById("personal-graph-data").textContent);
-  const adviceData = JSON.parse(document.getElementById("personal-advice-data").textContent);
-  console.log("Graph data:", graphData);
-  console.log("Advice data:", adviceData);
-
-  const teamSubmit = document.getElementById("team-submit");
-  teamSubmit?.addEventListener("click", () => {
-    const teamId = document.getElementById("team-select")?.value;
-    if (!teamId) {
-      alert("チームを選択してください");
-      return;
-    }
-    window.location.href = `/analysis/personal_analysis/?team_id=${teamId}`;
-  });
-</script>
-
-<div class="results-links">
-  <a href="{% url 'analysis:question_page' 1 %}">もう一度診断する</a>
-</div>
 
 {% endblock %}
 
-{% block extra_js %}{% endblock %}
+{% block extra_js %}
+<script src="{% static 'analysis/personal_analysis.js' %}"></script>
+
+<script>
+window.addEventListener('load', () => {
+    // --- テストデータの定義 ---
+    const testData = {
+        userScore: 20,
+        teamScore: 85,
+        importance: 'high', // 'high', 'middle', 'low' で切り替え
+        advice: "この価値観は、あなたが意識的に歩み寄らないと摩擦が起きやすい状況です。\n相手の発言を「事実」ではなく「意図」だと仮定して聞きましょう。\nすぐ結論を出さず、「それって、どういう意味？」「一番伝えたいのはどこ？」と確認の質問を増やしてみましょう。\n自分の発言量を少し減らし、相手の話を最後まで聞く表情・間・声のトーンなど、言葉以外の情報を意識的に拾いましょう。\nポイント：「相手は不親切なのではなく、前提を共有して話しているだけ」と考えましょう。"
+    };
+
+    // --- 1行目（最初の analysis-row）を取得 ---
+    const firstRow = document.querySelector('.analysis-row');
+    if (firstRow) {
+        // --- ピンの位置を上書き ---
+        const userPin = firstRow.querySelector('.user-pin');
+        const teamPin = firstRow.querySelector('.team-pin');
+        if (userPin) {
+            userPin.style.left = testData.userScore + '%';
+            userPin.style.transform = "translateX(-50%)";
+        }
+        if (teamPin) {
+            teamPin.style.left = testData.teamScore + '%';
+            teamPin.style.transform = "translateX(-50%)";
+        }
+
+        // --- 重要度バッジ（色と文字）を上書き ---
+        const badge = firstRow.querySelector('.w-10.h-10');
+        if (badge) {
+            // クラスを一度リセット
+            badge.classList.remove('bg-teamy-pinkRed', 'bg-teamy-teal', 'bg-teamy-navy');
+            
+            if (testData.importance === 'high') {
+                badge.classList.add('bg-teamy-pinkRed');
+                badge.innerText = '高';
+            } else if (testData.importance === 'middle') {
+                badge.classList.add('bg-teamy-teal');
+                badge.innerText = '中';
+            } else {
+                badge.classList.add('bg-teamy-navy');
+                badge.innerText = '低';
+            }
+        }
+
+        // --- アドバイス本文を上書き ---
+        // detailsタグの中にある、本文が入るdivを探す
+        const details = firstRow.closest('details');
+        const adviceBox = details.querySelector('.mt-4.p-4');
+        if (adviceBox) {
+            adviceBox.innerText = testData.advice;
+        }
+
+        console.log("Full Test Data Applied!");
+    }
+});
+</script>
+
+{% endblock %}
