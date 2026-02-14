@@ -19,6 +19,8 @@ from .views_advices import _get_user_advices_with_team, _get_team_advices
 def submit_answers(request):
 
     print(f"[DEBUG] submit_answers called - Method: {request.method}")
+    print(f"[DEBUG] Content-Type: {request.content_type}")
+    print(f"[DEBUG] request.body: {request.body[:200]}")  # 先頭200文字を確認
 
     # 回答受け取る
     try:
@@ -27,6 +29,7 @@ def submit_answers(request):
         print(f"[DEBUG] Parsed answers: {answers}")
     except Exception as e:
         print(f"[DEBUG] JSON parsing error: {e}")
+        print(f"[DEBUG] request.POST: {request.POST}")  # フォームデータを確認
         return JsonResponse({"error": "invalid json"}, status=400)
 
     print("ANSWERS:", answers) # saveAnswers()動いているか確認用

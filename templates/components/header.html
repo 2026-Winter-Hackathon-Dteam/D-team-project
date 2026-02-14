@@ -20,8 +20,8 @@
         Analysis
       </a>
 
-      <a href="/questions/"
-        class="hover:opacity-70 {% if '/analysis/questions/' in request.path %}text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
+      <a href="{% url 'analysis:questions_start' %}"
+        class="hover:opacity-70 {% if request.path == '/analysis/questions_start/' %}text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
         Questions
       </a>
 
