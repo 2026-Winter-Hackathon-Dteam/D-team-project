@@ -4,127 +4,261 @@
 {% block title %}Analysis{% endblock %}
 
 {% block content %}
-<div class="min-h-screen py-10 px-4 space-y-6 bg-gray-50">
 
-    <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
-        <div class="bg-teamy-navy px-6 py-1 flex justify-between items-center">
-            <h1 class="text-white text-xl font-bold tracking-wider">{{ user_name }} さんと {{ team_name }} チームの価値観</h1>
-            <div class="flex flex-col items-center gap-2 m-3">
-                <a href="#" class="add-account self-center inline-block bg-teamy-teal hover:bg-teamy-tealDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-medium px-6 py-2 rounded-full shadow-md text-sm">
-                    マネージャー向け分析へ
-                </a>
-            </div>
-        </div>
+<!-- デザイン調整中ダミーデータで作成・追って変数化 -->
 
-        <div class="p-8">
-            <div class="flex border-b border-gray-100 mb-8 gap-8">
-                <button class="px-6 py-2 text-gray-400 font-bold">あなたの価値観</button>
-                <button class="px-6 py-2 text-teamy-teal font-bold border-b-2 border-teamy-teal -mb-[1px]">チームとの比較</button>
-            </div>
-
-            <div class="flex justify-start mb-12">
-                <div class="flex items-center gap-1">
-                    <span class="text-xs text-gray-400 mr-2">重要度...</span>
-                    <span class="bg-teamy-pinkRed w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">高</span>
-                    <span class="bg-teamy-teal w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">中</span>
-                    <span class="bg-teamy-navy w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">低</span>
-                </div>
-            </div>
-
-            <div class="space-y-12 pb-12">
-                
-                <div class="flex items-center">
-                    <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
-                        <h3 class="text-sm font-bold text-gray-800 mb-2 whitespace-nowrap text-center">コミュニケーションの文脈</h3>
-                        <div class="w-10 h-10 bg-teamy-teal text-white flex items-center justify-center font-bold shadow-sm">中</div>
-                    </div>
-
-                    <div class="flex-1 ml-16 mr-12 relative pt-12 pb-2">
-                        <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
-                            <span class="text-xs text-teamy-grayText font-bold">ローコンテクスト型</span>
-                            <div class="flex-grow"></div>
-                            <span class="text-xs text-teamy-grayText font-bold">ハイコンテクスト型</span>
-
-                            <div class="absolute left-[45%] -translate-x-1/2 -top-11 z-20 flex flex-col items-center pointer-events-none">
-                                <div class="relative w-12 h-12">
-                                    <img src="{% static 'analysis/imgs/pin_me.svg' %}" alt="あなた" class="w-full h-full drop-shadow-md">
-                                </div>
-                            </div>
-
-                            <div class="absolute left-[75%] -translate-x-1/2 -top-11 z-10 flex flex-col items-center pointer-events-none">
-                                <div class="relative w-12 h-12">
-                                    <img src="{% static 'analysis/imgs/pin_team.svg' %}" alt="チーム" class="w-full h-full drop-shadow-md">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-center">
-                    <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
-                        <h3 class="text-sm font-bold text-gray-800 mb-2 whitespace-nowrap text-center">相手への批判の伝え方</h3>
-                        <div class="w-10 h-10 bg-teamy-pinkRed text-white flex items-center justify-center font-bold shadow-sm">高</div>
-                    </div>
-                    <div class="flex-1 ml-16 mr-12 relative pt-12 pb-2">
-                        <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
-                            <span class="text-xs text-teamy-grayText font-bold">間接的</span>
-                            <div class="flex-grow"></div>
-                            <span class="text-xs text-teamy-grayText font-bold">直接的</span>
-
-                            <div class="absolute left-[20%] -translate-x-1/2 -top-11 z-20 flex flex-col items-center pointer-events-none">
-                                <div class="relative w-12 h-12">
-                                    <img src="{% static 'analysis/imgs/pin_me.svg' %}" alt="あなた" class="w-full h-full drop-shadow-md">
-                                </div>
-                            </div>
-                            <div class="absolute left-[85%] -translate-x-1/2 -top-11 z-10 flex flex-col items-center pointer-events-none">
-                                <div class="relative w-12 h-12">
-                                    <img src="{% static 'analysis/imgs/pin_team.svg' %}" alt="チーム" class="w-full h-full drop-shadow-md">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="flex items-center">
-                    <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
-                        <h3 class="text-sm font-bold text-gray-800 mb-2 whitespace-nowrap text-center">相手を説得する方法</h3>
-                        <div class="w-10 h-10 bg-teamy-navy text-white flex items-center justify-center font-bold shadow-sm">低</div>
-                    </div>
-                    <div class="flex-1 ml-16 mr-12 relative pt-12 pb-2">
-                        <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
-                            <span class="text-xs text-teamy-grayText font-bold">応用</span>
-                            <div class="flex-grow"></div>
-                            <span class="text-xs text-teamy-grayText font-bold">原理</span>
-
-                            <div class="absolute left-[55%] -translate-x-1/2 -top-11 z-20 flex flex-col items-center pointer-events-none">
-                                <div class="relative w-12 h-12">
-                                    <img src="{% static 'analysis/imgs/pin_me.svg' %}" alt="あなた" class="w-full h-full drop-shadow-md">
-                                </div>
-                            </div>
-                            <div class="absolute left-[70%] -translate-x-1/2 -top-11 z-10 flex flex-col items-center pointer-events-none">
-                                <div class="relative w-12 h-12">
-                                    <img src="{% static 'analysis/imgs/pin_team.svg' %}" alt="チーム" class="w-full h-full drop-shadow-md">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-
-    <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
-        <div class="bg-teamy-navy px-6 py-1 flex justify-between items-center min-h-[76px]">
-            <h2 class="text-white text-xl font-bold tracking-wider">{{ user_name }} さんへのアドバイス</h2>
-            <div class="m-3 py-2 opacity-0">
-                <span class="px-6">spacer</span>
-            </div>
-        </div>
-        <div class="h-48 flex items-center justify-center bg-white border-b border-gray-100">
-            <p class="text-gray-400">価値観分析 48パターン</p>
-        </div>
-    </div>
-
+<!-- ツールチップ  -left-fullで初期は画面外に出しておく -->
+<div id="hover-tooltip" class="fixed -left-full pointer-events-none transition-opacity duration-200 z-50 bg-gray-800 text-white text-[10px] py-1.5 px-3 rounded shadow-xl whitespace-nowrap">
+  💡 クリックでアドバイスを表示
 </div>
+
+<div class="min-h-screen py-10 px-4 space-y-6">
+  <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
+    
+    <div class="bg-teamy-navy px-6 py-1 flex justify-between items-center">
+      <h1 class="text-white text-xl font-bold tracking-wider">{{ user_name }} さんと {{ team_name }} の価値観</h1>
+      <div class="flex flex-col items-center gap-2 m-2">
+        <a href="#" class="add-account self-center inline-block bg-teamy-teal hover:bg-teamy-tealDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-medium px-6 py-2 rounded-full shadow-md text-sm">
+          マネージャー向け分析へ
+        </a>
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div class="flex border-b border-gray-100 mb-8 gap-8">
+        <button class="px-6 py-2 text-gray-400 font-bold">あなたの価値観</button>
+        <button class="px-6 py-2 text-teamy-teal font-bold border-b-2 border-teamy-teal -mb-[1px]">チームとの比較</button>
+      </div>
+
+      <div class="flex justify-start mb-8">
+        <div class="flex items-center gap-1">
+          <span class="self-end text-xs text-gray-400 mr-2">重要度...</span>
+          <span class="bg-teamy-pinkRed w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">高</span>
+          <span class="bg-teamy-teal w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">中</span>
+          <span class="bg-teamy-navy w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">低</span>
+        </div>
+      </div>
+
+      <div class="space-y-10 pb-12">
+        
+        <details class="group">
+          <summary class="analysis-row cursor-pointer rounded-xl transition-colors py-4 list-none [&::-webkit-details-marker]:hidden hover:bg-gray-100 outline-none">
+            <div class="flex items-center">
+              <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
+                <h3 class="text-sm font-bold text-gray-800 mb-2">コミュニケーションの文脈</h3>
+                <div class="w-10 h-10 bg-teamy-teal text-white flex items-center justify-center font-bold shadow-sm">中</div>
+              </div>
+              <div class="flex-1 ml-16 mr-12 relative pt-12 pb-2">
+                <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
+                  <span class="text-xs text-teamy-grayText font-bold">ローコンテクスト型</span>
+                  <div class="flex-grow"></div>
+                  <span class="text-xs text-teamy-grayText font-bold">ハイコンテクスト型</span>
+                  <div class="absolute left-[45%] -translate-x-1/2 -top-12 z-20"><img src="{% static 'analysis/imgs/pin_me.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                  <div class="absolute left-[75%] -translate-x-1/2 -top-12 z-10"><img src="{% static 'analysis/imgs/pin_team.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                </div>
+              </div>
+            </div>
+          </summary>
+          <div class="mt-4 ml-64 mr-12 p-4 bg-gray-100 rounded text-sm text-gray-700 leading-relaxed">
+            重要な話題だけ、「念のため聞くけど、〇〇って認識で合ってる？」のように、一回確認を入れましょう。雑談や軽い会話では、そこまで深読みしなくて大丈夫です。
+          </div>
+        </details>
+
+        <details class="group">
+          <summary class="analysis-row cursor-pointer rounded-xl transition-colors py-4 list-none [&::-webkit-details-marker]:hidden hover:bg-gray-100 outline-none">
+            <div class="flex items-center">
+              <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
+                <h3 class="text-sm font-bold text-gray-800 mb-2">相手への批判の伝え方</h3>
+                <div class="w-10 h-10 bg-teamy-pinkRed text-white flex items-center justify-center font-bold shadow-sm">高</div>
+              </div>
+              <div class="flex-1 ml-16 mr-12 relative pt-12 pb-2">
+                <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
+                  <span class="text-xs text-teamy-grayText font-bold">間接的</span>
+                  <div class="flex-grow"></div>
+                  <span class="text-xs text-teamy-grayText font-bold">直接的</span>
+                  <div class="absolute left-[20%] -translate-x-1/2 -top-12 z-20"><img src="{% static 'analysis/imgs/pin_me.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                  <div class="absolute left-[85%] -translate-x-1/2 -top-12 z-10"><img src="{% static 'analysis/imgs/pin_team.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                </div>
+              </div>
+            </div>
+          </summary>
+          <div class="mt-4 ml-64 mr-12 p-4 bg-gray-100 rounded text-sm text-gray-700 leading-relaxed">
+            あなたは柔軟に動くタイプですが、チームは「時間＝約束」と強く捉えています。意識したい行動は、開始・締切時刻は守るなど、少し行動を調整するだけで信頼が高まります。
+          </div>
+        </details>
+
+        <details class="group">
+          <summary class="analysis-row cursor-pointer rounded-xl transition-colors py-4 list-none [&::-webkit-details-marker]:hidden hover:bg-gray-100 outline-none">
+            <div class="flex items-center">
+              <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
+                <h3 class="text-sm font-bold text-gray-800 mb-2">相手を説得する方法</h3>
+                <div class="w-10 h-10 bg-teamy-navy text-white flex items-center justify-center font-bold shadow-sm">低</div>
+              </div>
+              <div class="flex-1 ml-16 mr-12 relative pt-12 pb-2">
+                <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
+                  <span class="text-xs text-teamy-grayText font-bold">応用</span>
+                  <div class="flex-grow"></div>
+                  <span class="text-xs text-teamy-grayText font-bold">原理</span>
+                  <div class="absolute left-[55%] -translate-x-1/2 -top-12 z-20"><img src="{% static 'analysis/imgs/pin_me.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                  <div class="absolute left-[70%] -translate-x-1/2 -top-12 z-10"><img src="{% static 'analysis/imgs/pin_team.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                </div>
+              </div>
+            </div>
+          </summary>
+          <div class="mt-4 ml-64 mr-12 p-4 bg-gray-100 rounded text-sm text-gray-700 leading-relaxed">
+            アドバイス内容をここに記載します。
+          </div>
+        </details>
+
+        <details class="group">
+          <summary class="analysis-row cursor-pointer rounded-xl transition-colors py-4 list-none [&::-webkit-details-marker]:hidden hover:bg-gray-100 outline-none">
+            <div class="flex items-center">
+              <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
+                <h3 class="text-sm font-bold text-gray-800 mb-2">上司と部下の関係</h3>
+                <div class="w-10 h-10 bg-teamy-navy text-white flex items-center justify-center font-bold shadow-sm">低</div>
+              </div>
+              <div class="flex-1 ml-16 mr-12 relative pt-12 pb-2">
+                <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
+                  <span class="text-xs text-teamy-grayText font-bold">平等</span>
+                  <div class="flex-grow"></div>
+                  <span class="text-xs text-teamy-grayText font-bold">階層</span>
+                  <div class="absolute left-[30%] -translate-x-1/2 -top-12 z-20"><img src="{% static 'analysis/imgs/pin_me.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                  <div class="absolute left-[65%] -translate-x-1/2 -top-12 z-10"><img src="{% static 'analysis/imgs/pin_team.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                </div>
+              </div>
+            </div>
+          </summary>
+          <div class="mt-4 ml-64 mr-12 p-4 bg-gray-100 rounded text-sm text-gray-700 leading-relaxed">
+            アドバイス内容をここに記載します。
+          </div>
+        </details>
+
+        <details class="group">
+          <summary class="analysis-row cursor-pointer rounded-xl transition-colors py-4 list-none [&::-webkit-details-marker]:hidden hover:bg-gray-100 outline-none">
+            <div class="flex items-center">
+              <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
+                <h3 class="text-sm font-bold text-gray-800 mb-2">意思決定の方法</h3>
+                <div class="w-10 h-10 bg-teamy-navy text-white flex items-center justify-center font-bold shadow-sm">低</div>
+              </div>
+              <div class="flex-1 ml-16 mr-12 relative pt-12 pb-2">
+                <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
+                  <span class="text-xs text-teamy-grayText font-bold">合意</span>
+                  <div class="flex-grow"></div>
+                  <span class="text-xs text-teamy-grayText font-bold">トップダウン</span>
+                  <div class="absolute left-[50%] -translate-x-1/2 -top-12 z-20"><img src="{% static 'analysis/imgs/pin_me.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                  <div class="absolute left-[40%] -translate-x-1/2 -top-12 z-10"><img src="{% static 'analysis/imgs/pin_team.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                </div>
+              </div>
+            </div>
+          </summary>
+          <div class="mt-4 ml-64 mr-12 p-4 bg-gray-100 rounded text-sm text-gray-700 leading-relaxed">
+            アドバイス内容をここに記載します。
+          </div>
+        </details>
+
+        <details class="group">
+          <summary class="analysis-row cursor-pointer rounded-xl transition-colors py-4 list-none [&::-webkit-details-marker]:hidden hover:bg-gray-100 outline-none">
+            <div class="flex items-center">
+              <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
+                <h3 class="text-sm font-bold text-gray-800 mb-2">信頼する方法</h3>
+                <div class="w-10 h-10 bg-teamy-pinkRed text-white flex items-center justify-center font-bold shadow-sm">高</div>
+              </div>
+              <div class="flex-1 ml-16 mr-12 relative pt-12 pb-2">
+                <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
+                  <span class="text-xs text-teamy-grayText font-bold">タスクベース</span>
+                  <div class="flex-grow"></div>
+                  <span class="text-xs text-teamy-grayText font-bold">人間関係ベース</span>
+                  <div class="absolute left-[25%] -translate-x-1/2 -top-12 z-20"><img src="{% static 'analysis/imgs/pin_me.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                  <div class="absolute left-[80%] -translate-x-1/2 -top-12 z-10"><img src="{% static 'analysis/imgs/pin_team.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                </div>
+              </div>
+            </div>
+          </summary>
+          <div class="mt-4 ml-64 mr-12 p-4 bg-gray-100 rounded text-sm text-gray-700 leading-relaxed">
+            アドバイス内容をここに記載します。
+          </div>
+        </details>
+
+        <details class="group">
+          <summary class="analysis-row cursor-pointer rounded-xl transition-colors py-4 list-none [&::-webkit-details-marker]:hidden hover:bg-gray-100 outline-none">
+            <div class="flex items-center">
+              <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
+                <h3 class="text-sm font-bold text-gray-800 mb-2">見解の相違があった場合</h3>
+                <div class="w-10 h-10 bg-teamy-navy text-white flex items-center justify-center font-bold shadow-sm">低</div>
+              </div>
+              <div class="flex-1 ml-16 mr-12 relative pt-12 pb-2">
+                <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
+                  <span class="text-xs text-teamy-grayText font-bold">対立を厭わない</span>
+                  <div class="flex-grow"></div>
+                  <span class="text-xs text-teamy-grayText font-bold">対立を避ける</span>
+                  <div class="absolute left-[15%] -translate-x-1/2 -top-12 z-20"><img src="{% static 'analysis/imgs/pin_me.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                  <div class="absolute left-[60%] -translate-x-1/2 -top-12 z-10"><img src="{% static 'analysis/imgs/pin_team.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                </div>
+              </div>
+            </div>
+          </summary>
+          <div class="mt-4 ml-64 mr-12 p-4 bg-gray-100 rounded text-sm text-gray-700 leading-relaxed">
+            アドバイス内容をここに記載します。
+          </div>
+        </details>
+
+        <details class="group">
+          <summary class="analysis-row cursor-pointer rounded-xl transition-colors py-4 list-none [&::-webkit-details-marker]:hidden hover:bg-gray-100 outline-none">
+            <div class="flex items-center">
+              <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
+                <h3 class="text-sm font-bold text-gray-800 mb-2">効率的なスケジューリングの方法</h3>
+                <div class="w-10 h-10 bg-teamy-teal text-white flex items-center justify-center font-bold shadow-sm">中</div>
+              </div>
+              <div class="flex-1 ml-16 mr-12 relative pt-12 pb-2">
+                <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
+                  <span class="text-xs text-teamy-grayText font-bold">直線的</span>
+                  <div class="flex-grow"></div>
+                  <span class="text-xs text-teamy-grayText font-bold">柔軟的</span>
+                  <div class="absolute left-[40%] -translate-x-1/2 -top-12 z-20"><img src="{% static 'analysis/imgs/pin_me.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                  <div class="absolute left-[70%] -translate-x-1/2 -top-12 z-10"><img src="{% static 'analysis/imgs/pin_team.svg' %}" class="w-12 h-12 drop-shadow-md"></div>
+                </div>
+              </div>
+            </div>
+          </summary>
+          <div class="mt-4 ml-64 mr-12 p-4 bg-gray-100 rounded text-sm text-gray-700 leading-relaxed">
+            あなたは柔軟に動くタイプですが、チームは「時間＝約束」と強く捉えています。意識したい行動は、開始・締切時刻は守るなど、少し行動を調整するだけで信頼が高まります。
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const tip = document.getElementById('hover-tooltip');
+  const allRows = document.querySelectorAll('.analysis-row');
+
+  // 全ての「行」クラスに対してループ
+  allRows.forEach(row => {
+
+    // ホバー時：表示（不透明度80％）
+    row.onmouseenter = () => {
+      tip.style.opacity = "0.8";
+    };
+
+    // マウスが離れた時：非表示
+    row.onmouseleave = () => {
+      tip.style.opacity = "0";
+    };
+
+    // チップをマウスに追従
+    row.onmousemove = (e) => {
+      // clientX, clientY は画面上のポインタの座標
+      // +15 でポインタの少し右下に表示
+      tip.style.left = (e.clientX + 15) + 'px';
+      tip.style.top = (e.clientY + 15) + 'px';
+    };
+
+    // クリックしたらメッセージを消す
+    row.onclick = () => {
+      tip.style.opacity = "0";
+    };
+  });
+</script>
 {% endblock %}

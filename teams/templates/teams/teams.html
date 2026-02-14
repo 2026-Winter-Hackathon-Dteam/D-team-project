@@ -28,12 +28,12 @@
       </div>
 
       <!-- ===== チーム一覧===== -->
-      <table class="w-full text-left">
+      <table class="w-full text-left table-fixed">
         <thead>
           <tr class="text-teamy-grayText border-b-2 border-gray-200">
-            <th class="py-4 px-2 font-medium text-xl w-1/3">チーム</th>
-            <th class="py-4 px-2 font-medium text-xl w-1/3">リーダー</th>
-            <th class="py-4 px-2 w-1/3"></th>
+            <th class="py-4 px-2 font-medium text-xl w-[45%]">チーム</th>
+            <th class="py-4 px-2 font-medium text-xl w-[40%]">リーダー</th>
+            <th class="py-4 px-2 w-[100px]"></th>
           </tr>
         </thead>
 
@@ -55,19 +55,19 @@
                 </span>
               {% endif %}
             </td>
-            <td class="py-4 px-2 text-right">
-              <div class="flex gap-4 justify-end">
+            <td class="py-4 px-2 text-right w-[100px]">
+              <div class="flex gap-4 justify-end items-center">
                 <button
                   type="button"
-                  class="btn-edit-team p-2 -m-2 transition-transform hover:scale-125">
-                  <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-7 h-7">
+                  class="btn-edit-team p-2 -m-2 transition-transform hover:scale-125 shrink-0">
+                  <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-7 h-7 shrink-0">
                 </button>
                 <button
                   type="button"
-                  class="btn-delete-team p-2 -m-2 transition-transform hover:scale-125"
+                  class="btn-delete-team p-2 -m-2 transition-transform hover:scale-125 shrink-0"
                   data-team-id="{{ team.id }}"
                   data-team-name="{{ team.name }}">
-                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7 shrink-0">
                 </button>
               </div>
             </td>
@@ -110,13 +110,13 @@
       {% endif %}
 
       <!-- ===== メンバー一覧 ===== -->
-      <table class="w-full text-left table-fixed">
+      <table class="w-full text-left">
         <thead>
           <tr class="text-teamy-grayText border-b-2 border-gray-200">
             <th class="py-4 px-2 font-medium text-xl w-[40%]">名前</th>
             <th class="py-4 px-2 font-medium text-xl w-[20%]">社員ID</th>
             <th class="py-4 px-2 font-medium text-xl w-[30%] text-center">価値観ページ</th>
-            <th class="py-4 w-[10%]"></th>
+            <th class="py-4 w-[100px]"></th>
           </tr>
         </thead>
 
@@ -127,7 +127,7 @@
               <td class="py-4 px-2">
                 {% if member.user.id == selected_team.leader_user.id %}
                 <div class="flex items-center gap-2">
-                  <img src="{% static 'accounts/imgs/leader.png' %}" class="w-8 h-8" alt="leader">
+                  <img src="{% static 'accounts/imgs/leader.png' %}" class="w-8 h-8 shrink-0" alt="leader">
                   <span class="text-gray-900">{{ member.user.name }}</span>
                 </div>
                 {% else %}
@@ -149,7 +149,7 @@
                 {% endif %}
               </td>
 
-              <td class="py-4 text-right">
+              <td class="py-4 text-right w-[100px]">
                 {% if user.is_admin %}
                 <div class="flex items-center justify-end gap-4">
 
@@ -157,20 +157,20 @@
                   <!-- リーダー設定ボタン（リーダー本人は非表示） -->
                   <button
                     type="button"
-                    class="btn-set-leader p-2 -m-2 transition-transform hover:scale-125"
+                    class="btn-set-leader p-2 -m-2 transition-transform hover:scale-125 shrink-0"
                     data-member-id="{{ member.user.id }}"
                     data-member-name="{{ member.user.name }}">
-                    <img src="{% static 'teams/imgs/leader_gray.png' %}" class="w-7 h-7" alt="leader">
+                    <img src="{% static 'teams/imgs/leader_gray.png' %}" class="w-7 h-7 shrink-0" alt="leader">
                   </button>
                   {% endif %}
 
                   <!-- 削除ボタン -->
                   <button
                     type="button"
-                    class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125"
+                    class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125 shrink-0"
                     data-member-id="{{ member.user.id }}"
                     data-member-name="{{ member.user.name }}">
-                    <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7">
+                    <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7 shrink-0">
                   </button>
 
                 </div>
