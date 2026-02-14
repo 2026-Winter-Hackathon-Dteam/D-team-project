@@ -1,0 +1,30 @@
+{% for member in team_members %}
+<div class="flex w-full items-center border-b border-gray-100 px-6 py-4 hover:bg-gray-50 transition-colors">
+
+  <!-- 名前 -->
+  <span class="w-1/3 text-center text-gray-900">
+    {{ member.user.name }}
+  </span>
+
+  <!-- ユーザーID（社員ID表示） -->
+  <span class="w-2/3 text-center text-gray-500">
+    {{ member.user.employee_id }}
+  </span>
+
+  <!-- 追加ボタン -->
+  <button
+    type="button"
+    class="ml-2 px-3 py-1 rounded text-sm font-bold whitespace-nowrap transition-transform active:scale-95"
+    style="background-color: #EFA07A; color: white;"
+    data-user-id="{{ member.user.id }}"
+    data-user-name="{{ member.user.name }}"
+  >
+    +追加
+  </button>
+</div>
+
+{% empty %}
+<div class="flex flex-col items-center justify-center p-10 text-gray-400">
+  <span class="text-base">ユーザーが見つかりません</span>
+</div>
+{% endfor %}
