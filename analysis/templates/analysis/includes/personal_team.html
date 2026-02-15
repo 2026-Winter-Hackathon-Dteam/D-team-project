@@ -1,17 +1,25 @@
 {% load static %}
 
-<!-- ======== 重要度ラベル説明 ======== -->
-<div class="flex justify-start mb-8">
-  <div class="flex items-center gap-1">
+<!-- ======== 重要度ラベル説明 ＆ 未回答メンバー表示 ======== -->
+<div class="flex justify-between items-center mb-4 px-4 py-4">
+  <!-- 重要度ラベル説明 -->
+  <div class="flex gap-1">
     <span class="self-end text-xs text-gray-400 mr-2">重要度...</span>
     <span class="bg-teamy-pinkRed w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">高</span>
     <span class="bg-teamy-teal w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">中</span>
     <span class="bg-teamy-navy w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">低</span>
   </div>
+
+  <!-- 未回答メンバー表示 -->
+  {% if not allmember_answered %}
+  <div class="flex justify-end items-start py-4 px-8 mr-8 rounded-md bg-teamy-pinkRed/10">
+    <span class="text-sm text-teamy-pinkRed"> ⚠️ 質問に未回答のチームメンバーがいます</span>
+   {% endif %}
+   </div>
 </div>
 
 <!-- ======== グラフ＆アドバイス部分 ======== -->
-<div class="space-y-10 pb-12">
+<div class="space-y-12 pb-12">
 
 
   {# テスト用 #}

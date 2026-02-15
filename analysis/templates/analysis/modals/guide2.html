@@ -1,0 +1,47 @@
+{% load static %}
+      <!-- ======== 全体レイアウト（3カラム） ======== -->
+      <div class="grid grid-cols-[60px_1fr_60px] items-center gap-6 w-full">
+
+        <!-- --- 左：戻るボタン枠 --- -->
+        <div class="flex justify-center">
+          <button type="button" class="btn-prev shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:-translate-x-1 transition">←</button>
+        </div>
+
+        <!-- --- 中央：本文 --- -->
+        <div>
+        <div class="space-y-8">
+          <h2 class="text-2xl font-bold">それぞれに<br>「正解・不正解」はありません</h2>
+          <p class="text-base leading-relaxed">
+          このアプリは<br>
+          「どちらが正しいか」を判断するものではありません。<br>
+          どの価値観にもメリットとデメリットがあります。<br>
+          <br>
+          問題が起きるのは<br>
+          自分の価値観が「相手にはどう見えているか」を<br>
+          知らないときです。<br>
+          </p>
+
+          <h2 class="text-2xl font-bold">2つの方向性</h2>
+          <p class="text-base leading-relaxed">
+          このアプリは、すべての価値観を<br>
+          2つの方向性のどちらかとして扱います。<br>
+          <br>
+          大事なのは、どちら側にいるかではなく<br>
+          どれくらい離れているかです。<br>
+          <br>
+          差が小さければ<br>
+          → 無理に変える必要はありません。<br>
+          <br>
+          差が大きければ<br>
+          → 行動を少し（または意識的に）変えることで<br>
+          誤解や衝突を減らせます。<br>
+          </p>
+
+        </div>
+        </div>
+
+        <!-- --- 右：次へ --- -->
+        <div class="flex justify-center">
+          <button type="button" class="btn-next shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:translate-x-1 transition">→</button>
+        </div>
+      </div>

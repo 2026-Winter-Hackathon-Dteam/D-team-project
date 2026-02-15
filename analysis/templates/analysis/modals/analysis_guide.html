@@ -1,0 +1,104 @@
+{% load static %}
+
+<!-- モーダル全体 -->
+<div id="analysis_guide" class="hidden fixed inset-0 z-50">
+<!-- <div id="analysis_guide" class="fixed inset-0 z-50"> -->
+
+  <!-- モーダル背景 -->
+  <div id="modal-bg" class="absolute inset-0 bg-black/50 flex items-center justify-center">
+
+    <!-- モーダル本体 -->
+    <div class="modal-content bg-white rounded-lg shadow-xl h-[800px] w-full max-w-[640px] relative overflow-hidden flex flex-col justify-center">
+     
+      <!-- 閉じるボタン -->
+      <button type="button" class="btn-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600 z-50">×</button>
+     
+      <!-- 各スライド -->
+      <div class="analysis_guide h-full overflow-y-auto" data-step="1">
+        <div class="flex items-center min-h-full px-6 py-8">
+          {% include "analysis/modals/guide1.html" %}
+        </div>
+      </div>
+
+      <div class="analysis_guide h-full overflow-y-auto" data-step="2">
+        <div class="flex items-center min-h-full px-6 py-8">
+          {% include "analysis/modals/guide2.html" %}
+        </div>
+      </div>
+      
+      <div class="analysis_guide h-full overflow-y-auto" data-step="3">
+        <div class="flex items-center min-h-full px-6 py-8">
+          {% include "analysis/modals/guide3.html" %}
+        </div>
+      </div>
+    </div>
+      
+    </div>
+  </div>
+</div>
+
+<script>
+//  ================ 表示切り替え処理 ================ 
+
+const slides = Array.from(document.querySelectorAll(".analysis_guide"));
+let currentStep = 1; 
+
+const showStep = (step) => {
+  slides.forEach(slide => {
+    const s = Number(slide.dataset.step);
+    slide.classList.toggle("hidden", s !== step);
+  });
+};
+
+//  ================ モーダル開閉をする関数 ================ 
+
+// オープン（hiddenを外す）
+function openGuide(startStep = 1) {
+  currentStep = startStep;
+  showStep(currentStep);
+  document.getElementById("analysis_guide").classList.remove("hidden");
+}
+
+// クローズ（hiddenをつける）
+function closeGuide() {
+  document.getElementById("analysis_guide").classList.add("hidden");
+}
+
+//  ================ クリックイベント処理 ================ 
+  document.addEventListener("click", (e) => {
+
+    // --- ？ボタン（btn-help） ---
+    if (e.target.closest(".btn-help")) {
+      openGuide();
+      return;
+    }
+    
+    // --- ×ボタン（btn-close） ---
+    if (e.target.closest(".btn-close")) {
+      closeGuide();
+      return;
+    }
+    
+    // --- モーダル背景クリックで閉じる ---
+    const bg = document.getElementById("modal-bg")
+    if (e.target === bg) {
+      closeGuide();
+      return;  
+    }  
+      // 背景部分のクリックのみ対象・モーダル本体のクリックは含まない
+    
+    // --- 次へボタン（btn-next） ---
+    if (e.target.closest(".btn-next")) {
+      if (currentStep < 3) currentStep++;
+      showStep(currentStep);
+    }
+    // --- 戻るボタン（btn-prev） ---
+    if (e.target.closest(".btn-prev")) {
+      if (currentStep > 1) currentStep--;
+      showStep(currentStep);
+    }
+  });
+
+  showStep(currentStep);
+    // 初期表示用（currentStep = 1）  
+</script>

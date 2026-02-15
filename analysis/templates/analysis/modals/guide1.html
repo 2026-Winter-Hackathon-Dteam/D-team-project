@@ -1,0 +1,34 @@
+{% load static %}
+      <!-- ======== 全体レイアウト（3カラム） ======== -->
+      <div class="grid grid-cols-[60px_1fr_60px] items-center gap-6 w-full">
+        <!-- --- 左：戻るボタン枠 （非表示）--- -->
+        <div class="flex justify-center">
+          <button type="button" class="btn-prev invisible shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:-translate-x-1 transition">←</button>
+        </div>
+
+        <!-- --- 中央：本文 --- -->
+        <div>
+        <div class="space-y-8">
+          <h2 class="text-2xl font-bold">このアプリが目指していること</h2>
+          <ul class="list-disc list-inside text-base leading-relaxed">
+            <li>人を変えることではありません</li>
+            <li>性格を否定することでもありません</li>
+          </ul>
+          <p class="text-base leading-relaxed">
+            「この相手・このチームでは、どう振る舞うと一番うまくいくか」を<br>
+            状況ごとにわかるようにすることです。<br>
+            <br>
+            あなたが悪いのではなく<br>
+            相手が悪いのでもなく<br>
+            価値観の距離を知らなかっただけ。<br>
+            <br>
+            このアプリは、その距離を教えてくれます。<br>
+          </p>
+        </div>
+        </div>
+
+        <!-- --- 右：次へ --- -->
+        <div class="flex justify-center">
+          <button type="button" class="btn-next shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:translate-x-1 transition">→</button>
+        </div>
+      </div>

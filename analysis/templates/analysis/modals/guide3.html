@@ -1,0 +1,66 @@
+{% load static %}
+      <!-- ======== 全体レイアウト（3カラム） ======== -->
+      <div class="grid grid-cols-[60px_1fr_60px] items-center gap-6 w-full">
+
+        <!-- --- 左：戻るボタン枠 --- -->
+        <div class="flex justify-center">
+          <button type="button" class="btn-prev shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:-translate-x-1 transition">←</button>
+        </div>
+
+        <!-- --- 中央：本文 --- -->
+        <div>
+        <div class="space-y-8">
+          <h2 class="text-2xl font-bold">8つの価値観とは？</h2>
+          <p class="text-base leading-relaxed">
+            人のコミュニケーションには、主に次の8つの軸があります。
+          </p>
+          <ol class="list-decimal list-outside text-base leading-relaxed pl-6">
+            <li>
+              <p>コミュニケーションの文脈</p>
+              <p>ローコンテクスト ↔ ハイコンテクスト<br>
+              （はっきり言うか、行間を読むか）</p>
+            </li>
+            <li>
+              <p>相手への批判の伝え方</p>
+              <p>直接的 ↔ 間接的なネガティブ・フィードバック<br>
+              （率直に批判するか、柔らかく伝えるか）</p>
+            </li>
+            <li>
+              <p>相手を説得する方法</p>
+              <p>原理優先 ↔ 応用優先<br>
+              （なぜ？から話すか、どうやって？から話すか）</p>
+            </li>
+            <li>
+              <p>上司と部下の関係</p>
+              <p>平等主義 ↔ 階層主義<br>
+              （フラットか、上下関係を重視するか）</p>
+            </li>
+            <li>
+              <p>意思決定の方法</p>
+              <p>合意志向 ↔ トップダウン<br>
+              （全員で決めるか、誰かが決めるか）</p>
+            </li>
+            <li>
+              <p>信頼する方法</p>
+              <p>タスクベース ↔ 関係ベース<br>
+              （仕事で信頼するか、人間関係で信頼するか）</p>
+            </li>
+            <li>
+              <p>見解の相違があった場合</p>
+              <p>対立型 ↔ 対立回避型<br>
+              （議論を歓迎するか、避けたいか）</p>
+            </li>
+            <li>
+              <p>効率的なスケジューリングの方法</p>
+              <p>直線的な時間 ↔ 柔軟な時間<br>
+              （計画重視か、状況対応重視か）</p>
+            </li>
+          </ol>
+        </div>
+        </div>
+
+        <!-- --- 右：次へ（非表示） --- -->
+        <div class="flex justify-center">
+          <button type="button" class="btn-next invisible shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:translate-x-1 transition">→</button>
+        </div>
+      </div>

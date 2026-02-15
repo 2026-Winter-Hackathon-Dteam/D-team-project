@@ -10,32 +10,42 @@
   💡 クリックでアドバイスを表示
 </div>
 
+<!-- ボックス全体 -->
 <div class="min-h-screen py-10 px-4 space-y-6">
   <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
     
+    <!-- ヘッダー帯 -->
     <div class="bg-teamy-navy px-6 py-1 flex justify-between items-center">
-      <h1 class="text-white text-xl font-bold tracking-wider">{{ user_name }} さんと {{ team_name }} の価値観</h1>
-      <div class="flex flex-col items-center gap-2 m-2">
+      <div class="flex items-center gap-3 m-2">
+        <h1 class="text-white text-xl font-bold tracking-wider">{{ user_name }} さんと {{ team_name }} の価値観</h1>
 
+        <!-- [？]ヘルプリンク -->
+        <button type="button" class="btn-help h-6 w-6">
+          <img src="{% static 'imgs/help.png' %}" alt="へルプを表示">
+        </button>
+      </div>
+
+        <!-- マネージャー分析ボタン -->
         {% if is_team_leader %}
-        <a href="{% url 'analysis:managers_page' %}?team_id={{ team_id }}" class="self-center inline-block bg-teamy-teal hover:bg-teamy-tealDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-semibold px-6 py-2 rounded-full shadow-md text-sm">
+        <a href="{% url 'analysis:managers_page' %}?team_id={{ team_id }}" 
+          class="self-center inline-block bg-teamy-teal hover:bg-teamy-tealDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-semibold px-6 py-2 rounded-full shadow-md text-sm">
           マネージャー向け分析へ
         </a>
-        {% endif %}
-      </div>
+       {% endif %}
     </div>
 
+    <!-- タブ切り替え -->
     <div class="p-8">
-      <div class="flex border-b border-gray-100 mb-8 gap-8">
+      <div class="flex border-b border-gray-100 mb-4 gap-8">
         <button id="tab-me-btn" class="px-6 py-2 text-gray-400 font-bold">あなたの価値観</button>
         <button id="tab-team-btn" class="px-6 py-2 text-teamy-teal font-bold border-b-2 border-teamy-teal -mb-[1px]">チームとの比較</button>
       </div>
 
-      <!-- あなたの価値観 -->
+      <!-- あなたの価値観ページ -->
       <div id="content-me">
           {% include "analysis/includes/personal_me.html" %}
       </div>
-      <!-- チームとの比較 -->
+      <!-- チームとの比較ページ -->
       <div id="content-team" class="hidden">
           {% include "analysis/includes/personal_team.html" %}
       </div>
@@ -46,11 +56,14 @@
 {{ graph_data|json_script:"personal-graph-data" }}
 {{ advice_data|json_script:"personal-advice-data" }}
 
+<!-- モーダル -->
+{% include "analysis/modals/analysis_guide.html" %}
 {% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'analysis/personal_analysis.js' %}"></script>
 
+<!-- 以下テスト用コード 削除予定 -->
 <script>
 window.addEventListener('load', () => {
     // --- テストデータの定義 ---
