@@ -21,7 +21,7 @@ async function submitAll() {
 
     if (res.ok) {
       const data = await res.json()
-      localStorage.removeItem(STORAGE_KEY)
+      sessionStorage.removeItem(STORAGE_KEY)
       // personal_analysisにリダイレクト
       window.location.href = data.redirect_url || "/analysis/personal_analysis/"
     } else {
