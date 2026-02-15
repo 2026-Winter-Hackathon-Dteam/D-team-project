@@ -57,3 +57,13 @@ def team_index(request):
         "team_members": team_members,
     }
     return render(request, "teams/teams.html", context)
+
+
+#@login_required
+def set_current_team(request, team_id):
+    """現在のチームをセッションに保存"""
+    # ユーザーが所属しているか確認
+    if Team_Users.objects.filter(user=request.user, team_id=team_id).exists():
+        request.session['current_team_id'] = str(team_id)
+    # 元のページにリダイレクト
+    return redirect(request.META.get('HTTP_REFERER', '/'))

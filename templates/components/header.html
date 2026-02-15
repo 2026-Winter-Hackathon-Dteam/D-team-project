@@ -58,7 +58,7 @@
 
         {% if teams %}
           {% for team in teams %}
-            <a href="{% url 'set_current_team' team.id %}"
+            <a href="{% url 'teams:set_current_team' team.id %}"
                class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50 transition-colors">
               {{ team.name }}
             </a>
