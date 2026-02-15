@@ -5,12 +5,6 @@ function getAnswers() {
   return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "{}")
 }
 
-/* 次ページ */
-function nextPage(page) {
-  saveAnswers()
-  window.location.href = `/analysis/questions/${page}/`
-}
-
 /* 最終送信 */
 async function submitAll() {
   const answers = getAnswers()
