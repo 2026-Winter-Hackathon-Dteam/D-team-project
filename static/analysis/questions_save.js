@@ -1,21 +1,8 @@
-const STORAGE_KEY = "analysis_answers"
+const STORAGE_KEY = "answers"
 
 /* 取得 */
 function getAnswers() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")
-}
-
-/* 保存 */
-function saveAnswers() {
-  const answers = getAnswers()
-
-  document.querySelectorAll(".answer").forEach(el => {
-    if (el.value !== "") {
-      answers[el.dataset.qid] = el.value
-    }
-  })
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(answers))
+  return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "{}")
 }
 
 /* 次ページ */
@@ -26,8 +13,6 @@ function nextPage(page) {
 
 /* 最終送信 */
 async function submitAll() {
-  saveAnswers()
-
   const answers = getAnswers()
 
   try {
