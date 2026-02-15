@@ -26,7 +26,9 @@ def submit_answers(request):
     try:
         data = json.loads(request.body.decode("utf-8"))
         answers = data.get("answers", {})
+        is_profile_public = data.get("is_profile_public", False)  # 公開設定を取得
         print(f"[DEBUG] Parsed answers: {answers}")
+        print(f"[DEBUG] is_profile_public: {is_profile_public}")
     except Exception as e:
         print(f"[DEBUG] JSON parsing error: {e}")
         print(f"[DEBUG] request.POST: {request.POST}")  # フォームデータを確認
@@ -102,6 +104,11 @@ def submit_answers(request):
         print(f"[ERROR] bulk_create failed: {e}")
         return JsonResponse({"error": f"DB save failed: {e}"}, status=500)
 
+    # ユーザーの公開設定を保存
+    user.is_profile_public = is_profile_public
+    user.save(update_fields=["is_profile_public"])
+    print(f"[DEBUG] User is_profile_public updated to: {is_profile_public}")
+
     # チームスコア再計算
     team_ids = Team_Users.objects.filter(
         user=user
@@ -139,11 +146,12 @@ def members_page(request):
     if not target_user_id or str(current_user.id) == target_user_id:
         return redirect("analysis:personal_analysis")
 
-    # 同一スペースの他ユーザーのみ表示可能
+    # 同一スペースの他ユーザーで、かつ is_profile_public=True のユーザーのみ表示可能
     user = get_object_or_404(
         CustomUser,
         pk=target_user_id,
         space_id=current_user.space_id,
+        is_profile_public=True,  # 公開設定がTrueのユーザーのみ
     )
 
     # target_user_idのユーザー名取得

@@ -59,11 +59,18 @@ def team_index(request):
     return render(request, "teams/teams.html", context)
 
 
-#@login_required
+#コンテキストプロセッサで現在のチームを取得しているため、ここではセッションに保存するだけ（今後残すか検討）
+@login_required
 def set_current_team(request, team_id):
     """現在のチームをセッションに保存"""
+    # ログインユーザー取得（未ログイン時はテスト用ユーザー）
+    if getattr(request, "user", None) and request.user.is_authenticated:
+        current_user = request.user
+    else:
+        current_user = get_object_or_404(User, pk="11111111-1111-1111-1111-222222222001")  # テスト用ユーザー
+    
     # ユーザーが所属しているか確認
-    if Team_Users.objects.filter(user=request.user, team_id=team_id).exists():
+    if Team_Users.objects.filter(user=current_user, team_id=team_id).exists():
         request.session['current_team_id'] = str(team_id)
     # 元のページにリダイレクト
     return redirect(request.META.get('HTTP_REFERER', '/'))

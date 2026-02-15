@@ -8,6 +8,10 @@ function getAnswers() {
 /* 最終送信 */
 async function submitAll() {
   const answers = getAnswers()
+  
+  // is_profile_public の値を取得（チェックされていればtrue、なければfalse）
+  const isProfilePublicCheckbox = document.querySelector('input[name="is_profile_public"]')
+  const isProfilePublic = isProfilePublicCheckbox ? isProfilePublicCheckbox.checked : false
 
   try {
     const res = await fetch("/analysis/answers/", {
@@ -16,7 +20,10 @@ async function submitAll() {
         "Content-Type": "application/json",
         "X-CSRFToken": getCookie("csrftoken"),
       },
-      body: JSON.stringify({ answers })
+      body: JSON.stringify({ 
+        answers,
+        is_profile_public: isProfilePublic
+      })
     })
 
     if (res.ok) {

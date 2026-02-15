@@ -1,5 +1,6 @@
 from teams.models import Team_Users
 
+# 全ページでチーム情報を使えるようにするためのコンテキストプロセッサ（今後残すか検討）
 def team_context(request):
     """全ページでチーム情報を使えるようにする"""
     if not request.user.is_authenticated:
