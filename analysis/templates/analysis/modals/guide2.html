@@ -1,47 +1,48 @@
 {% load static %}
-      <!-- ======== 全体レイアウト（3カラム） ======== -->
-      <div class="grid grid-cols-[60px_1fr_60px] items-center gap-6 w-full">
+<!-- ======== 全体レイアウト（3カラム） ======== -->
+<div class="grid grid-cols-[60px_1fr_60px] items-center gap-6 w-full">
 
-        <!-- --- 左：戻るボタン枠 --- -->
-        <div class="flex justify-center">
-          <button type="button" class="btn-prev shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:-translate-x-1 transition">←</button>
-        </div>
+  <!-- --- 左：戻るボタン枠 --- -->
+  <div class="flex justify-center">
+    <button type="button" class="btn-prev shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:-translate-x-1 transition">←</button>
+  </div>
 
-        <!-- --- 中央：本文 --- -->
-        <div>
-        <div class="space-y-8">
-          <h2 class="text-2xl font-bold">それぞれに<br>「正解・不正解」はありません</h2>
-          <p class="text-base leading-relaxed">
-          このアプリは<br>
-          「どちらが正しいか」を判断するものではありません。<br>
-          どの価値観にもメリットとデメリットがあります。<br>
-          <br>
-          問題が起きるのは<br>
-          自分の価値観が「相手にはどう見えているか」を<br>
-          知らないときです。<br>
-          </p>
+  <!-- --- 中央：本文 --- -->
+  <div class="space-y-10 py-4">
+    <section>
+      <h2 class="text-2xl font-bold border-l-4 border-teamy-teal pl-4">それぞれに<br>「正解・不正解」はありません</h2>
+      <p class="text-base leading-relaxed pt-4">
+        このアプリは「どちらが正しいか」を判断するものではありません。<br>
+        どの価値観にも<span class="font-bold">メリット</span>と<span class="font-bold">デメリット</span>があります。
+      </p>
+      <p class="mt-4 p-4 bg-gray-50 rounded ">
+        問題が起きるのは<br>自分の価値観が「相手にはどう見えているか」を<br>
+        知らないときです。
+      </p>
+    </section>
 
-          <h2 class="text-2xl font-bold">2つの方向性</h2>
-          <p class="text-base leading-relaxed">
-          このアプリは、すべての価値観を<br>
-          2つの方向性のどちらかとして扱います。<br>
-          <br>
+    <section>
+      <h2 class="text-2xl font-bold border-l-4 border-teamy-teal pl-4"> 2つの方向性</h2>
+      <div class="space-y-6">
+        <p class="text-base leading-relaxed pt-4">
           大事なのは、どちら側にいるかではなく<br>
-          どれくらい離れているかです。<br>
-          <br>
-          差が小さければ<br>
-          → 無理に変える必要はありません。<br>
-          <br>
-          差が大きければ<br>
-          → 行動を少し（または意識的に）変えることで<br>
-          誤解や衝突を減らせます。<br>
+          <span class="text-teamy-navy font-bold">どれくらい離れているか</span>です。
+        </p>
+        
+        <div class="text-base leading-relaxed pt-4 gap-4">
+          <p>
+          <span class="font-bold border-b-2 border-teamy-teal/40">差が小さければ</span><br>無理に変える必要はありません。
           </p>
-
-        </div>
-        </div>
-
-        <!-- --- 右：次へ --- -->
-        <div class="flex justify-center">
-          <button type="button" class="btn-next shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:translate-x-1 transition">→</button>
-        </div>
+          <br>
+          <p>
+          <span class="font-bold border-b-2 border-teamy-teal/40">差が大きければ</span><br>行動を少し（または意識的に）変えることで<br>誤解や衝突を減らせます。
+          </p>
+        </ul>
       </div>
+    </section>
+  </div>
+  <!-- --- 右：次へ --- -->
+  <div class="flex justify-center">
+    <button type="button" class="btn-next shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:translate-x-1 transition">→</button>
+  </div>
+  </div>

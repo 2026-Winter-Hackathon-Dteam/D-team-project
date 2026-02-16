@@ -12,12 +12,32 @@
 
 <!-- ボックス全体 -->
 <div class="min-h-screen py-10 px-4 space-y-6">
-  <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
+  <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg">
     
     <!-- ヘッダー帯 -->
-    <div class="bg-teamy-navy px-6 py-1 flex justify-between items-center">
+    <div class="bg-teamy-navy px-6 py-1 rounded-t-lg flex justify-between items-center">
       <div class="flex items-center gap-3 m-2">
-        <h1 class="text-white text-xl font-bold tracking-wider">{{ user_name }} さんと {{ team_name }} の価値観</h1>
+
+        <!-- チーム選択とユーザー名表示 -->
+        <h1 class="text-white text-xl font-bold tracking-wider flex items-center gap-2">
+        <div class="relative">
+            <select id="team-select" class="bg-white/10 text-white text-2xl rounded px-3 py-1 pr-8 appearance-none cursor-pointer hover:bg-white/20 transition-all focus:outline-none">
+            <option value="" class="text-teamy-grayDark">チームを選択</option>
+            {% for team in teams %}
+                <option value="{{ team.id }}" class="text-gray-800" {% if team.id == team_id %}selected{% endif %}>
+                {{ team.name }}
+                </option>
+            {% endfor %}
+            </select>
+            
+            <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center text-white/70">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+            </svg>
+            </div>
+        </div>
+        <span>と {{ user_name }} さんの価値観</span>
+        </h1>
 
         <!-- [？]ヘルプリンク -->
         <button type="button" class="btn-help h-6 w-6">
@@ -46,10 +66,25 @@
           {% include "analysis/includes/personal_me.html" %}
       </div>
       <!-- チームとの比較ページ -->
-      <div id="content-team" class="hidden">
+      <div id="content-team" class="hidden relative min-h-[400px]">
+        {% if teams %}
           {% include "analysis/includes/personal_team.html" %}
+        {% else %}
+        <div class="absolute inset-0 z-30 bg-teamy-grayDark/60 rounded-xl flex justify-center items-center">
+          <div class="text-center p-8 bg-teamy-grayLight rounded-2xl -translate-y-48">
+            <p class="text-teamy-grayText leading-relaxed">
+              チームに所属することで<br>
+              結果が表示されます。
+            </p>
+          </div>
+        </div>
+          <div class="opacity-20 grayscale pointer-events-none">
+            {% include "analysis/includes/personal_team.html" %}
+          </div>
+        {% endif %}
       </div>
     </div>
+  </div>
 </div>
 
 <!-- データ受け渡し用スクリプト -->
@@ -68,8 +103,8 @@
 window.addEventListener('load', () => {
     // --- テストデータの定義 ---
     const testData = {
-        userScore: 20,
-        teamScore: 85,
+        personalScore: 20,
+        teamMean: 85,
         importance: 'high', // 'high', 'middle', 'low' で切り替え
         advice: "この価値観は、あなたが意識的に歩み寄らないと摩擦が起きやすい状況です。\n相手の発言を「事実」ではなく「意図」だと仮定して聞きましょう。\nすぐ結論を出さず、「それって、どういう意味？」「一番伝えたいのはどこ？」と確認の質問を増やしてみましょう。\n自分の発言量を少し減らし、相手の話を最後まで聞く表情・間・声のトーンなど、言葉以外の情報を意識的に拾いましょう。\nポイント：「相手は不親切なのではなく、前提を共有して話しているだけ」と考えましょう。"
     };
@@ -81,11 +116,11 @@ window.addEventListener('load', () => {
         const userPin = firstRow.querySelector('.user-pin');
         const teamPin = firstRow.querySelector('.team-pin');
         if (userPin) {
-            userPin.style.left = testData.userScore + '%';
+            userPin.style.left = testData.personalScore + '%';
             userPin.style.transform = "translateX(-50%)";
         }
         if (teamPin) {
-            teamPin.style.left = testData.teamScore + '%';
+            teamPin.style.left = testData.teamMean + '%';
             teamPin.style.transform = "translateX(-50%)";
         }
 

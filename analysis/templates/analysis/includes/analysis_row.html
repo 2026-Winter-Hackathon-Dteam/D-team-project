@@ -1,44 +1,50 @@
-{% load static %}
-
+  {% load static %}
 <!-- バーグラフ -->
-<details>
-  <summary class="analysis-row cursor-pointer rounded-xl transition-colors py-4 list-none [&::-webkit-details-marker]:hidden hover:bg-gray-100 outline-none">
-    <!-- 項目名と重要度ラベル -->
-    <div class="flex items-center">
-      <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
-        <h3 class="text-sm font-bold text-gray-800 mb-2">{{ title }}</h3>
-        <div class="w-10 h-10 text-white flex items-center justify-center font-bold shadow-sm 
-          {% if item.importance == 'high' %}bg-teamy-pinkRed
-          {% elif item.importance == 'middle' %}bg-teamy-teal
-          {% else %}bg-teamy-navy{% endif %}">
-          {% if item.importance == 'high' %}高
-          {% elif item.importance == 'middle' %}中
-          {% else %}低{% endif %}
-        </div>
-      </div>
-
-      <!-- バー部分 -->
-      <div class="flex-1 ml-16 mr-12 relative pt-12">
-        <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
-          <span class="text-xs text-teamy-grayText font-bold">{{ left }}</span>
-          <div class="flex-grow"></div>
-          <span class="text-xs text-teamy-grayText font-bold">{{ right }}</span>
-          
-          <!-- ピン -->
-          <div class="user-pin absolute -top-12 z-20" data-score="{{ item.user_score }}">
-            <img src="{% static 'analysis/imgs/pin_me.svg' %}" class="w-12 h-12 drop-shadow-md">
+  <details data-key="{{ key }}">
+    <summary class="analysis-row cursor-pointer rounded-xl transition-colors py-4 list-none [&::-webkit-details-marker]:hidden hover:bg-gray-100 outline-none">
+      <div class="flex items-center"> 
+        <div class="w-48 flex flex-col items-center flex-shrink-0 text-center px-2">
+        <!-- 項目名と重要度ラベル -->
+        <div class="relative mb-2">
+            <h3 class="group text-sm font-bold text-gray-800 cursor-pointer border-gray-300 w-fit mx-auto">
+              {{ title }}
+              <div class="invisible group-hover:visible pointer-events-none absolute top-full left-0 mt-3 z-[999] w-[400px] p-6 bg-white rounded-xl shadow-2xl border border-gray-100 text-left transition-all duration-200">
+                {% include "analysis/includes/category_descriptions.html" with key=key %}
+              </div>
+            </h3>
           </div>
-          <div class="team-pin absolute -top-12 z-10" data-score="{{ item.team_score }}">
-            <img src="{% static 'analysis/imgs/pin_team.svg' %}" class="w-12 h-12 drop-shadow-md">
-          </div>
-          <!-- data属性はカスタムで任意の情報を埋め込むことができるので、JSへ渡すスコア値を埋め込み -->
-        </div>
+        <div class="importance-badge w-10 h-10 text-white flex items-center justify-center font-bold shadow-sm 
+        {% if item.importance == 'high' %}bg-teamy-pinkRed
+        {% elif item.importance == 'middle' %}bg-teamy-teal
+        {% else %}bg-teamy-navy{% endif %}">
+        {% if item.importance == 'high' %}高{% elif item.importance == 'middle' %}中{% else %}低{% endif %}
       </div>
     </div>
-  </summary>
+    
+    <!-- バー部分 -->
+
+    <div class="flex-1 ml-16 mr-12 relative pt-12">
+      <div class="relative h-5 bg-teamy-gray rounded-full flex items-center px-4">
+        <span class="text-xs text-teamy-grayText font-bold">{{ left }}</span>
+        <div class="flex-grow"></div>
+        <span class="text-xs text-teamy-grayText font-bold">{{ right }}</span>
+        
+        <!-- ピン -->
+        <div class="user-pin absolute -top-12 z-20 transition-all duration-700 -translate-x-1/2" data-score="{{ item.personal_score }}">
+          <img src="{% static 'analysis/imgs/pin_me.svg' %}" class="w-12 h-12 drop-shadow-md">
+        </div>
+        <div class="team-pin absolute -top-12 z-10 transition-all duration-700 -translate-x-1/2" data-score="{{ item.team_mean }}">
+          <img src="{% static 'analysis/imgs/pin_team.svg' %}" class="w-12 h-12 drop-shadow-md">
+        </div>
+        <!-- data属性はカスタムで任意の情報を埋め込むことができるので、JSへ渡すスコア値を埋め込み -->
+         <!-- transition-all duration-700（0.7秒） でチーム変更時にピンをスライドする動きをつける -->
+      </div>
+    </div>
+  </div> 
+</summary>
   
   <!-- アドバイス内容 JSONの改行タグ \n に対応 -->
-  <div class="mt-4 ml-64 mr-12 p-4 bg-teamy-teal/10 rounded text-gray-700 leading-relaxed whitespace-pre-wrap">
+  <div class="advice-text-area mt-4 ml-64 mr-12 p-4 bg-teamy-teal/10 rounded text-gray-700 leading-relaxed whitespace-pre-wrap">
     {{ item.advice_text }}
   </div>
 </details>

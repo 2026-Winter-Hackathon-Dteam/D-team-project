@@ -12,58 +12,59 @@
 
   <!-- 未回答メンバー表示 -->
   {% if not allmember_answered %}
-  <div class="flex justify-end items-start py-4 px-8 mr-8 rounded-md bg-teamy-pinkRed/10">
-    <span class="text-sm text-teamy-pinkRed"> ⚠️ 質問に未回答のチームメンバーがいます</span>
-   {% endif %}
-   </div>
+    <div class="flex justify-end items-start py-4 px-8 mr-8 rounded-md bg-teamy-pinkRed/10">
+      <span class="text-sm text-teamy-pinkRed"> ⚠️ 質問に未回答のチームメンバーがいます</span>
+    </div>
+      {% else %}
+    <div></div> 
+    {% endif %}
 </div>
 
 <!-- ======== グラフ＆アドバイス部分 ======== -->
 <div class="space-y-12 pb-12">
 
-
-  {# テスト用 #}
-  {% with item=test_data title="コミュニケーションの文脈" left="ローコンテクスト" right="ハイコンテクスト" %}
+  {# テスト用：key="context" を追加 #}
+  {% with item=test_data key="context" title="コミュニケーションの文脈" left="ローコンテクスト" right="ハイコンテクスト" %}
     {% include "analysis/includes/analysis_row.html" %}
   {% endwith %}
   
-  {# 1. コミュニケーションの文脈 テスト中につきコメントアウト #}
-  {# {% with item=advice_data.context title="コミュニケーションの文脈" left="ローコンテクスト" right="ハイコンテクスト" %} #}
+  {# 1. コミュニケーションの文脈 #}
+  {# {% with item=advice_data.context key="context" title="コミュニケーションの文脈" left="ローコンテクスト" right="ハイコンテクスト" %} #}
     {# {% include "analysis/includes/analysis_row.html" %} #}
   {# {% endwith %} #}
 
   {# 2. 相手への批判の伝え方 #}
-  {% with item=advice_data.feedback title="相手への批判の伝え方" left="直接的" right="間接的" %}
+  {% with item=advice_data.feedback key="feedback" title="相手への批判の伝え方" left="直接的" right="間接的" %}
     {% include "analysis/includes/analysis_row.html" %}
   {% endwith %}
 
   {# 3. 説得の組み立て方 #}
-  {% with item=advice_data.persuasion title="説得の組み立て方" left="原理優先" right="応用優先" %}
+  {% with item=advice_data.persuasion key="persuasion" title="説得の組み立て方" left="原理優先" right="応用優先" %}
     {% include "analysis/includes/analysis_row.html" %}
   {% endwith %}
 
   {# 4. 権威との距離感 #}
-  {% with item=advice_data.hierarchy title="権威との距離感" left="平等主義" right="階層主義" %}
+  {% with item=advice_data.hierarchy key="hierarchy" title="権威との距離感" left="平等主義" right="階層主義" %}
     {% include "analysis/includes/analysis_row.html" %}
   {% endwith %}
 
   {# 5. 意思決定の進め方 #}
-  {% with item=advice_data.decision title="意思決定の進め方" left="合意重視" right="トップダウン" %}
+  {% with item=advice_data.decision key="decision" title="意思決定の進め方" left="合意重視" right="トップダウン" %}
     {% include "analysis/includes/analysis_row.html" %}
   {% endwith %}
 
   {# 6. 信頼の築き方 #}
-  {% with item=advice_data.trust title="信頼の築き方" left="タスク重視" right="関係重視" %}
+  {% with item=advice_data.trust key="trust" title="信頼の築き方" left="タスク重視" right="関係重視" %}
     {% include "analysis/includes/analysis_row.html" %}
   {% endwith %}
 
   {# 7. 議論のスタイル #}
-  {% with item=advice_data.conflict title="議論のスタイル" left="対立回避" right="対立歓迎" %}
+  {% with item=advice_data.conflict key="conflict" title="議論のスタイル" left="対立回避" right="対立歓迎" %}
     {% include "analysis/includes/analysis_row.html" %}
   {% endwith %}
 
   {# 8. スケジュールへの考え方 #}
-  {% with item=advice_data.time title="スケジュールへの考え方" left="直線的" right="柔軟" %}
+  {% with item=advice_data.time key="time" title="スケジュールへの考え方" left="直線的" right="柔軟" %}
     {% include "analysis/includes/analysis_row.html" %}
   {% endwith %}
 
