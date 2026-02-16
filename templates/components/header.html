@@ -38,7 +38,10 @@
       {# {% endif %} #}
     </nav>
 
-    <!-- ===== チーム切替 ===== -->
+    {% comment %}
+    ===== チーム切替 ===== 
+    現在未使用：各ページで独立してチーム選択するため
+    
     <div class="relative group flex items-center">
       <button
         class="flex items-center text-[#0E1336] group-hover:opacity-70 transition-opacity font-medium focus:outline-none">
@@ -70,6 +73,7 @@
         {% endif %}
       </div>
     </div>
+    {% endcomment %}
 
     <!-- ===== ユーザーメニュー ===== -->
     <div class="relative group flex items-center">
