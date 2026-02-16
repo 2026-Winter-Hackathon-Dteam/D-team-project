@@ -160,11 +160,11 @@ def members_page(request):
     # グラフデータ取得
     scores = _get_user_scores_only(user)
     
-    # value_key_id と personal_score のみにフィルタリング
+    # value_key_id と personal_score_normalized のみにフィルタリング
     graph_data = [
         {
             "value_key_id": item["value_key_id"],
-            "personal_score": item["personal_score"]
+            "personal_score_normalized": item["personal_score_normalized"]
         }
         for item in scores
     ]
@@ -212,6 +212,15 @@ def personal_analysis(request):
         if not is_member:
             return redirect("analysis:personal_analysis")
         graph_data = _get_user_scores_with_team(user, team_id=team_id)
+        # value_key_id,personal_score_normalized,team_mean_normalizedにフィルタリング
+        graph_data = [
+            {
+                "value_key_id": item["value_key_id"],
+                "personal_score_normalized": item["personal_score_normalized"],
+                "team_mean_normalized": item.get("team_mean_normalized")
+            }
+            for item in graph_data
+        ]
         advice_data = _get_user_advices_with_team(user, team_id=team_id)
         is_team_leader = Teams.objects.filter(id=team_id, leader_user_id=user.id).exists()
     context = {

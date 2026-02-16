@@ -2,6 +2,12 @@ from django.db.models import OuterRef, Subquery
 from .models import UserValueScore, TeamValueScore
 from teams.models import Team_Users
 
+THEORETICAL_MIN = -12
+THEORETICAL_MAX = 12
+RANGE = THEORETICAL_MAX - THEORETICAL_MIN
+
+def normalize_score(score):
+    return (score - THEORETICAL_MIN) / RANGE * 100
 
 # ユーザースコア取得（ユーザースコアのみ）
 def _get_user_scores_only(user):
@@ -27,9 +33,11 @@ def _get_user_scores_only(user):
     results_data = {}
     for score in latest_user_scores:
         value_key_id = score.value_key_id
+        raw_score = score.personal_score
         results_data[str(value_key_id)] = {
             "value_key_id": str(value_key_id),
-            "personal_score": score.personal_score
+            "personal_score": raw_score, 
+            "personal_score_normalized": normalize_score(raw_score),
         }
         
     order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
@@ -72,10 +80,12 @@ def _get_user_scores_with_team(user, team_id):
         if team_score:
             team_mean = team_score.mean
             diff = abs(score.personal_score - team_mean)
+            raw_score = score.personal_score
             results_data[str(value_key_id)] = {
                 "value_key_id": str(value_key_id),
-                "personal_score": score.personal_score,
+                "personal_score_normalized": normalize_score(raw_score),
                 "team_mean": team_mean,
+                "team_mean_normalized": normalize_score(team_mean),
             }
             
         order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
