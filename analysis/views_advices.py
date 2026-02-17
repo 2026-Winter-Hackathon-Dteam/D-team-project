@@ -103,9 +103,9 @@ def _get_team_advices(team_id):
         # それぞれのvalue_keyごとにcodeを判定
         if std_dev < 3 and max_diff < 6:
             code = "Q1_stable_harmony"
-        elif std_dev >= 3 and max_diff < 6:
-            code = "Q2_deep_focus"
         elif std_dev < 3 and max_diff >= 6:
+            code = "Q2_deep_focus"
+        elif std_dev >= 3 and max_diff < 6:
             code = "Q3_partial_diversity"
         else:
             code = "Q4_wide_diversity"

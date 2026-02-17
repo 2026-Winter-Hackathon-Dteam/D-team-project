@@ -257,8 +257,8 @@ def managers_page(request):
         [
             {
                 "value_key_id": d.get("value_key_id"),
-                "x": d.get("max_diff"),
-                "y": d.get("std"),
+                "x": d.get("max_diff_normalized"),
+                "y": d.get("std_normalized"),
             }
             for d in team_scores
         ]
@@ -270,8 +270,8 @@ def managers_page(request):
         [
             {
                 "value_key_id": d.get("value_key_id"),
-                "x": user.get("diff"),
-                "y": user.get("personal_score"),
+                "x": user.get("diff_normalized"),
+                "y": user.get("personal_score_normalized"),
             }
             for d in team_scatter_data
             for user in d.get("users", [])

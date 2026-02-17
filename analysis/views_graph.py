@@ -5,9 +5,20 @@ from teams.models import Team_Users
 THEORETICAL_MIN = -12
 THEORETICAL_MAX = 12
 RANGE = THEORETICAL_MAX - THEORETICAL_MIN
+MAX_DIFF_THEORETICAL_MAX = 24
 
+# スコアを0-100に正規化
 def normalize_score(score):
     return (score - THEORETICAL_MIN) / RANGE * 100
+
+# 標準偏差を0-100に正規化(0<=std<=12の想定)
+def normalize_std(std_value):
+    return std_value / THEORETICAL_MAX * 100
+
+# 最大差を0-100に正規化（0<=max_diff<=24の想定）
+def normalize_max_diff(diff):
+    return diff / MAX_DIFF_THEORETICAL_MAX * 100
+
 
 # ユーザースコア取得（ユーザースコアのみ）
 def _get_user_scores_only(user):
@@ -117,12 +128,14 @@ def _get_team_scores(team_id):
     results_data = {}
     for score in latest_team_scores:
         value_key_id = score.value_key_id
+        max_diff_normalized = normalize_max_diff(score.max_diff)
+        std_normalized = normalize_std(score.std)
         results_data[str(value_key_id)] = {
             "value_key_id": str(value_key_id),
             "value_key_name": score.value_key.value_key,
             "mean": score.mean,
-            "max_diff": score.max_diff,
-            "std": score.std,
+            "max_diff_normalized": max_diff_normalized,
+            "std_normalized": std_normalized,
         }
 
     order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
@@ -152,6 +165,7 @@ def _get_team_scatter_data(team_id):
             "value_key_id": value_key_id,
             "value_key_name": value_key_name_map.get(value_key_id),
             "team_mean": team_mean_map.get(value_key_id),
+            "team_mean_raw": team_mean_map.get(value_key_id),  # 生のスコアを追加
             "users": [],
         }
         for value_key_id in team_mean_map.keys()
@@ -168,20 +182,24 @@ def _get_team_scatter_data(team_id):
                     "value_key_id": value_key_id,
                     "value_key_name": score.get("value_key_name"),
                     "team_mean": team_mean_map.get(value_key_id),
+                    "team_mean_raw": team_mean_map.get(value_key_id),  # ここにも追加
                     "users": [],
                 }
                 value_buckets[value_key_id] = bucket
 
+            raw_score = score["personal_score"]
+            team_mean_raw = bucket["team_mean_raw"]
+
             team_mean = team_mean_map.get(value_key_id)
             diff = None
             if team_mean is not None:
-                diff = abs(score["personal_score"] - team_mean)
-
+                diff = abs(raw_score - team_mean_raw)
+            
             bucket["users"].append({
                 "user_id": str(user.id),
                 "user_name": user.name,
-                "personal_score": score["personal_score"],
-                "diff": diff,
+                "personal_score_normalized": normalize_score(raw_score),
+                "diff_normalized": normalize_score(diff) if diff is not None else None,
             })
             
             order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
