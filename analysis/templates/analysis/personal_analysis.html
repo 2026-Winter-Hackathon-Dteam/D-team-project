@@ -99,60 +99,26 @@
 <script src="{% static 'analysis/personal_analysis.js' %}"></script>
 
 <!-- 以下テスト用コード 削除予定 -->
-<script>
-window.addEventListener('load', () => {
-    // --- テストデータの定義 ---
-    const testData = {
-        personalScore: 20,
-        teamMean: 85,
-        importance: 'high', // 'high', 'middle', 'low' で切り替え
-        advice: "この価値観は、あなたが意識的に歩み寄らないと摩擦が起きやすい状況です。\n相手の発言を「事実」ではなく「意図」だと仮定して聞きましょう。\nすぐ結論を出さず、「それって、どういう意味？」「一番伝えたいのはどこ？」と確認の質問を増やしてみましょう。\n自分の発言量を少し減らし、相手の話を最後まで聞く表情・間・声のトーンなど、言葉以外の情報を意識的に拾いましょう。\nポイント：「相手は不親切なのではなく、前提を共有して話しているだけ」と考えましょう。"
-    };
-
-    // --- 1行目（最初の analysis-row）を取得 ---
-    const firstRow = document.querySelector('.analysis-row');
-    if (firstRow) {
-        // --- ピンの位置を上書き ---
-        const userPin = firstRow.querySelector('.user-pin');
-        const teamPin = firstRow.querySelector('.team-pin');
-        if (userPin) {
-            userPin.style.left = testData.personalScore + '%';
-            userPin.style.transform = "translateX(-50%)";
-        }
-        if (teamPin) {
-            teamPin.style.left = testData.teamMean + '%';
-            teamPin.style.transform = "translateX(-50%)";
-        }
-
-        // --- 重要度バッジ（色と文字）を上書き ---
-        const badge = firstRow.querySelector('.w-10.h-10');
-        if (badge) {
-            // クラスを一度リセット
-            badge.classList.remove('bg-teamy-pinkRed', 'bg-teamy-teal', 'bg-teamy-navy');
-            
-            if (testData.importance === 'high') {
-                badge.classList.add('bg-teamy-pinkRed');
-                badge.innerText = '高';
-            } else if (testData.importance === 'middle') {
-                badge.classList.add('bg-teamy-teal');
-                badge.innerText = '中';
-            } else {
-                badge.classList.add('bg-teamy-navy');
-                badge.innerText = '低';
-            }
-        }
-
-        // --- アドバイス本文を上書き ---
-        // detailsタグの中にある、本文が入るdivを探す
-        const details = firstRow.closest('details');
-        const adviceBox = details.querySelector('.mt-4.p-4');
-        if (adviceBox) {
-            adviceBox.innerText = testData.advice;
-        }
-
-        console.log("Full Test Data Applied!");
-    }
-});
+<script id="personal-graph-data" type="application/json">
+  [
+    { "value_key_id": "context", "personal_score": 20, "team_mean": 80 },
+    { "value_key_id": "collaboration", "personal_score": 50, "team_mean": 50 },
+    { "value_key_id": "ideation", "personal_score": 90, "team_mean": 10 }
+  ]
 </script>
 
+<script id="personal-advice-data" type="application/json">
+  [
+    {
+      "value_key_id": "context",
+      "importance": "high",
+      "advice_text": "【テスト表示中】あなたは文脈を重視しますが、チームはそうでもないようです。言葉の定義を合わせることから始めましょう。"
+    },
+    {
+      "value_key_id": "ideation",
+      "importance": "low",
+      "advice_text": "【テスト表示中】アイデア出しについては、チームと大きく異なりますが、今はあまり気にしなくて良さそうです。"
+    }
+  ]
+</script>
 {% endblock %}
