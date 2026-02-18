@@ -1,6 +1,17 @@
 {% load static %}
 
-<div class="max-w-5xl mx-auto py-12 space-y-12">
+<div class="max-w-5xl mx-auto pb-12 space-y-12">
+
+  <!-- ======== 重要度ラベル説明 ======== -->
+  <div class="flex justify-between items-center pt-4 px-4">
+    <!-- 重要度ラベル説明 -->
+    <div class="flex gap-1">
+      <span class="self-end text-xs text-gray-400 mr-2">重要度...</span>
+      <span class="bg-teamy-pinkRed w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">高</span>
+      <span class="bg-teamy-teal w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">中</span>
+      <span class="bg-teamy-navy w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">低</span>
+    </div>
+  </div>
 
   {# 1. コミュニケーションの文脈 (context) #}
   {% with item=advice_data.context score_item=graph_data.0 key="context" title="コミュニケーションの文脈" left="ローコンテクスト" right="ハイコンテクスト" %}

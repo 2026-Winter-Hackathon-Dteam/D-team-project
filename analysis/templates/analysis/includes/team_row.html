@@ -1,4 +1,4 @@
-  {% load static %}
+{% load static %}
 <!-- バーグラフ -->
   <details data-key="{{ key }}">
     <summary class="analysis-row cursor-pointer rounded-xl transition-colors py-4 list-none [&::-webkit-details-marker]:hidden hover:bg-gray-100 outline-none">
@@ -30,11 +30,11 @@
         <span class="text-xs text-teamy-grayText font-bold">{{ right }}</span>
         
         <!-- ピン -->
-        <div class="user-pin absolute -top-12 z-20 transition-[left] duration-[600ms] ease-out" 
+        <div class="user-pin absolute -top-12 z-20 transition-[left] duration-500 ease-out" 
         data-score="{{ score_item.personal_score_normalized }}">
           <img src="{% static 'analysis/imgs/pin_me.svg' %}" class="w-12 h-12 drop-shadow-md">
         </div>
-        <div class="team-pin absolute -top-12 z-10 transition-[left] duration-[600ms] ease-out" 
+        <div class="team-pin absolute -top-12 z-10 transition-[left] duration-500 ease-out" 
         data-score="{{ score_item.team_mean_normalized }}">
           <img src="{% static 'analysis/imgs/pin_team.svg' %}" class="w-12 h-12 drop-shadow-md">
         </div>

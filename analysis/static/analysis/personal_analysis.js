@@ -11,10 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const contentTeam = document.getElementById('content-team');
   const tip = document.getElementById('hover-tooltip');
   const allRows = document.querySelectorAll('.analysis-row');
-  
-  // 追加：ヘッダー帯の操作用要素
   const headerTitleText = document.getElementById('header-title-text');
   const teamSelectContainer = document.getElementById('team-select-container');
+  const managerBtn = document.getElementById('manager-btn'); // 追加：マネージャーボタン
 
   // HTMLのdata属性から名前を取得。
   // もし属性が空なら、HTMLに最初から書かれている文字を「バックアップ」として使う
@@ -27,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
       targetUserName = headerTitleText.textContent.replace('と ', '').replace(' さんの価値観', '').trim();
     }
   }
-  console.log("確定したユーザー名:", targetUserName);
 
   // ===== ピンの配置 =====
   const positionPins = () => {
@@ -61,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     entries.forEach(data => {
       // value_key_id（'context'など）を元に、書き換えるべき行（details）を探す
-      // team_row.htmlのdetailsの data-key="${data.value_key_id}" を
       const row = document.querySelector(`details[data-key="${data.value_key_id}"]`);
       if (!row) return;
 
@@ -69,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const badge = row.querySelector('.importance-badge');
       if (badge) {
         badge.textContent = data.importance === 'high' ? '高' : data.importance === 'middle' ? '中' : '低';
-        // 一旦すべての色クラスを削除してから、BEの値に合わせて付け直す
         badge.classList.remove('bg-teamy-pinkRed', 'bg-teamy-teal', 'bg-teamy-navy');
         if (data.importance === 'high') {
           badge.classList.add('bg-teamy-pinkRed');
@@ -96,13 +92,15 @@ document.addEventListener('DOMContentLoaded', () => {
       // team選択時にhiddenの付け外し
       btnTeam.className = "px-6 py-2 text-teamy-teal text-lg font-bold border-b-2 border-teamy-teal -mb-[1px]";
       btnMe.className = "px-6 py-2 text-gray-400 text-lg font-bold";
-      // 選択タブ/非選択タブのデザイン切り替え
 
-      // チームと比較：セレクトボックスを表示し、「と 名前」にする
+      // チームと比較：プルダウンを表示し、「と 名前」にする
       if (teamSelectContainer) teamSelectContainer.classList.remove('hidden');
       if (headerTitleText && targetUserName) {
           headerTitleText.textContent = `と ${targetUserName} さんの価値観`;
       }
+      
+      // チームと比較時のみマネージャーボタンを表示（存在する場合のみ）
+      if (managerBtn) managerBtn.classList.remove('hidden');
 
       // タブ表示された瞬間にピンを再配置
       positionPins();
@@ -112,13 +110,15 @@ document.addEventListener('DOMContentLoaded', () => {
       // me選択時にhiddenの付け外し
       btnMe.className = "px-6 py-2 text-teamy-teal text-lg font-bold border-b-2 border-teamy-teal -mb-[1px]";
       btnTeam.className = "px-6 py-2 text-gray-400 text-lg font-bold";
-      // 選択タブ/非選択タブのデザイン切り替え
 
-      // 自分専用：セレクトボックスを隠し、「名前」だけにする（「と」を消す）
+      // 自分専用：プルダウンを隠し、「名前」だけにする（「と」を消す）
       if (teamSelectContainer) teamSelectContainer.classList.add('hidden');
       if (headerTitleText && targetUserName) {
           headerTitleText.textContent = `${targetUserName} さんの価値観`;
       }
+
+      // 自分専用時はマネージャーボタンを隠す（存在する場合のみ）
+      if (managerBtn) managerBtn.classList.add('hidden');
 
       // meタブ表示時もピンを再配置
       positionPins();
@@ -127,26 +127,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== ツールチップ =====
   allRows.forEach(row => {
-    // ホバー時：表示
-    row.onmouseenter = () => {
-      tip.style.opacity = "0.8";
-    };
-    // マウスが離れた時：非表示
+    row.onmouseenter = () => { tip.style.opacity = "0.8"; };
     row.onmouseleave = () => {
       tip.style.opacity = "0";
-      tip.style.left = "-1000px"; // 念のため画面外へ
+      tip.style.left = "-1000px";
     };
-    // チップをマウスに追従
     row.onmousemove = (e) => {
-      // clientX, clientY は画面上のポインタの座標
-      // +15 でポインタの少し右下に表示
       tip.style.left = (e.clientX + 15) + 'px';
       tip.style.top = (e.clientY + 15) + 'px';
     };
-    // クリックしたらメッセージを消す
-    row.onclick = () => {
-      tip.style.opacity = "0";
-    };
+    row.onclick = () => { tip.style.opacity = "0"; };
   });
 
   // ===== ページ遷移時の初期実行 =====
@@ -154,37 +144,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const firstTab = urlParams.get('tab');
   // URL末尾「?tab=team」があるかを確認し、あれば格納、なければfirstTabは空っぽ
   switchTab(firstTab === 'team' ? 'team' : 'me');
-  // 判定：teamだったらteamタブを開く ちがったらmeタブを開く（ ?：を使ったif文と同じ処理）
 
   btnMe.onclick = () => switchTab('me');
   btnTeam.onclick = () => switchTab('team');
-  // アロー関数によるクリック待ち
 
   // 0.1秒（100ms）待ってから実行
-  // これにより初期配置のアニメーションと、BEデータの流し込みを確実に行う
   setTimeout(() => {
     positionPins();
-    applyAdviceData(); // BEから届いたアドバイス文と重要度を反映
+    applyAdviceData(); 
   }, 100);
 
-  // ===== チーム切り替え処理 =====
+  /* ===== チーム切り替え処理（UI変更でaタグで遷移にしたため不要） =====
   const teamSelector = document.getElementById('team-select');
-  // 選択されたoptionのvalue（team.id）を取得
-
   if (teamSelector) {
     teamSelector.onchange = (e) => {
       const selectedId = e.target.value;
       if (!selectedId) return;
-      // onchangeによりプルダウン選択によりイベント発生し、team_idをURLパラメータとするため格納
-
       const url = new URL(window.location.href);
       url.searchParams.set('team_id', selectedId);
-      // window.location.hrefが現在のURLを取得し、team_idパラメータをurlにセット
       url.searchParams.set('tab', 'team');
-      // 切り替え後は「チームと比較」タブを開くよう指定
-
       window.location.href = url.toString();
-      // 加工したURLを文字列に戻し、ページをリロードしてアクセス
     };
   }
+  */
 });
