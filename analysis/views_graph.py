@@ -5,7 +5,7 @@ from teams.models import Team_Users
 THEORETICAL_MIN = -12
 THEORETICAL_MAX = 12
 RANGE = THEORETICAL_MAX - THEORETICAL_MIN
-MAX_DIFF_THEORETICAL_MAX = 24
+MAX_DIFF_THEORETICAL_MAX = RANGE  # 最大差の理論上の最大値（-12から12の範囲であれば最大差は24）
 
 # スコアを0-100に正規化
 def normalize_score(score):
