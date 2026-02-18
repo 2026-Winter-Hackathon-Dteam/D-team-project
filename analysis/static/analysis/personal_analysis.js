@@ -11,6 +11,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const contentTeam = document.getElementById('content-team');
   const tip = document.getElementById('hover-tooltip');
   const allRows = document.querySelectorAll('.analysis-row');
+  
+  // 追加：ヘッダー帯の操作用要素
+  const headerTitleText = document.getElementById('header-title-text');
+  const teamSelectContainer = document.getElementById('team-select-container');
+
+  // HTMLのdata属性から名前を取得。
+  // もし属性が空なら、HTMLに最初から書かれている文字を「バックアップ」として使う
+  let targetUserName = "";
+  if (headerTitleText) {
+    targetUserName = headerTitleText.getAttribute('data-user-name') || "";
+    
+    // もし属性から取れなかった場合、HTMLの既存テキストから名前部分を推測して保持
+    if (!targetUserName || targetUserName === "" || targetUserName === "None") {
+      targetUserName = headerTitleText.textContent.replace('と ', '').replace(' さんの価値観', '').trim();
+    }
+  }
+  console.log("確定したユーザー名:", targetUserName);
 
   // ===== ピンの配置 =====
   const positionPins = () => {
@@ -20,10 +37,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const score = pin.getAttribute('data-score');
       if (score !== null && score !== "") {
         // HTMLのdata-score属性から値を取り出す スコアが空ならスキップ
-        pin.style.left = `${score}%`;
+
+        // 初期位置を 0% に設定（アニメーション開始位置）
+        pin.style.left = "0%";
         pin.style.transform = "translateX(-50%)";
-        // スコア値をleft○％のスタイル指定することでピンを配置
-        // -50%でピン自身の半分の大きさだけ左に動かして真ん中補正
+
+        // 少し遅らせてから目的位置へ移動
+        setTimeout(() => {
+          pin.style.left = `${score}%`;
+          // スコア値をleft○％のスタイル指定することでピンを配置
+          // -50%でピン自身の半分の大きさだけ左に動かして真ん中補正
+        });
       }
     });
   };
@@ -32,9 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const applyAdviceData = () => {
     if (!adviceData) return;
 
-    adviceData.forEach(data => {
+    // adviceDataが配列かオブジェクトかによって処理を分岐（BEの辞書化対応）
+    const entries = Array.isArray(adviceData) ? adviceData : Object.values(adviceData);
+
+    entries.forEach(data => {
       // value_key_id（'context'など）を元に、書き換えるべき行（details）を探す
-      // analysis_row.htmlのdetailsの data-key="{{ key }}" を
+      // team_row.htmlのdetailsの data-key="${data.value_key_id}" を
       const row = document.querySelector(`details[data-key="${data.value_key_id}"]`);
       if (!row) return;
 
@@ -67,17 +94,34 @@ document.addEventListener('DOMContentLoaded', () => {
       contentMe.classList.add('hidden');
       contentTeam.classList.remove('hidden');
       // team選択時にhiddenの付け外し
-      btnTeam.className = "px-6 py-2 text-teamy-teal font-bold border-b-2 border-teamy-teal -mb-[1px]";
-      btnMe.className = "px-6 py-2 text-gray-400 font-bold";
+      btnTeam.className = "px-6 py-2 text-teamy-teal text-lg font-bold border-b-2 border-teamy-teal -mb-[1px]";
+      btnMe.className = "px-6 py-2 text-gray-400 text-lg font-bold";
       // 選択タブ/非選択タブのデザイン切り替え
+
+      // チームと比較：セレクトボックスを表示し、「と 名前」にする
+      if (teamSelectContainer) teamSelectContainer.classList.remove('hidden');
+      if (headerTitleText && targetUserName) {
+          headerTitleText.textContent = `と ${targetUserName} さんの価値観`;
+      }
 
       // タブ表示された瞬間にピンを再配置
       positionPins();
     } else {
       contentTeam.classList.add('hidden');
       contentMe.classList.remove('hidden');
-      btnMe.className = "px-6 py-2 text-teamy-teal font-bold border-b-2 border-teamy-teal -mb-[1px]";
-      btnTeam.className = "px-6 py-2 text-gray-400 font-bold";
+      // me選択時にhiddenの付け外し
+      btnMe.className = "px-6 py-2 text-teamy-teal text-lg font-bold border-b-2 border-teamy-teal -mb-[1px]";
+      btnTeam.className = "px-6 py-2 text-gray-400 text-lg font-bold";
+      // 選択タブ/非選択タブのデザイン切り替え
+
+      // 自分専用：セレクトボックスを隠し、「名前」だけにする（「と」を消す）
+      if (teamSelectContainer) teamSelectContainer.classList.add('hidden');
+      if (headerTitleText && targetUserName) {
+          headerTitleText.textContent = `${targetUserName} さんの価値観`;
+      }
+
+      // meタブ表示時もピンを再配置
+      positionPins();
     }
   };
 

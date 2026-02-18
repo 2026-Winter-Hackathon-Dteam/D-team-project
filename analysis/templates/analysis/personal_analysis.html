@@ -6,37 +6,46 @@
 {% block content %}
 
 <!-- ツールチップ  -left-fullで初期は画面外に出しておく -->
-<div id="hover-tooltip" class="fixed -left-full pointer-events-none transition-opacity duration-200 z-50 bg-gray-800 text-white text-[10px] py-1.5 px-3 rounded shadow-xl whitespace-nowrap">
+<div id="hover-tooltip"
+     class="fixed -left-full pointer-events-none transition-opacity duration-200 z-50 bg-gray-800 text-white text-[10px] py-1.5 px-3 rounded shadow-xl whitespace-nowrap">
   💡 クリックでアドバイスを表示
 </div>
 
 <!-- ボックス全体 -->
 <div class="min-h-screen py-10 px-4 space-y-6">
   <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg">
-    
+
     <!-- ヘッダー帯 -->
     <div class="bg-teamy-navy px-6 py-1 rounded-t-lg flex justify-between items-center">
       <div class="flex items-center gap-3 m-2">
 
         <!-- チーム選択とユーザー名表示 -->
-        <h1 class="text-white text-xl font-bold tracking-wider flex items-center gap-2">
-        <div class="relative">
-            <select id="team-select" class="bg-white/10 text-white text-2xl rounded px-3 py-1 pr-8 appearance-none cursor-pointer hover:bg-white/20 transition-all focus:outline-none">
-            <option value="" class="text-teamy-grayDark">チームを選択</option>
-            {% for team in teams %}
-                <option value="{{ team.id }}" class="text-gray-800" {% if team.id == team_id %}selected{% endif %}>
-                {{ team.name }}
+        <h1 class="text-white text-xl font-bold tracking-wider flex items-center gap-2 min-h-[44px]">
+
+          <div id="team-select-container" class="relative">
+            <select id="team-select"
+                    class="bg-white/10 text-white text-2xl rounded px-3 py-1 pr-8 appearance-none cursor-pointer hover:bg-white/20 transition-all focus:outline-none">
+              <option value="" class="text-teamy-grayDark">チームを選択</option>
+              {% for team in teams %}
+                <option value="{{ team.id }}"
+                        class="text-gray-800"
+                        {% if team.id == team_id %}selected{% endif %}>
+                  {{ team.name }}
                 </option>
-            {% endfor %}
+              {% endfor %}
             </select>
-            
+
             <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center text-white/70">
-            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
                 <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
-            </svg>
+              </svg>
             </div>
-        </div>
-        <span>と {{ user_name }} さんの価値観</span>
+          </div>
+
+          <span id="header-title-text"
+                data-user-name="{{ target_user.name }}">
+            と {{ target_user.name }} さんの価値観
+          </span>
         </h1>
 
         <!-- [？]ヘルプリンク -->
@@ -45,43 +54,54 @@
         </button>
       </div>
 
-        <!-- マネージャー分析ボタン -->
-        {% if is_team_leader %}
-        <a href="{% url 'analysis:managers_page' %}?team_id={{ team_id }}" 
-          class="self-center inline-block bg-teamy-teal hover:bg-teamy-tealDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-semibold px-6 py-2 rounded-full shadow-md text-sm">
-          マネージャー向け分析へ
-        </a>
-       {% endif %}
+      <!-- マネージャー分析ボタン -->
+      {% if is_team_leader %}
+      <a href="{% url 'analysis:managers_page' %}?team_id={{ team_id }}"
+         class="self-center inline-block bg-teamy-teal hover:bg-teamy-tealDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-semibold px-6 py-2 rounded-full shadow-md text-sm">
+        マネージャー向け分析へ
+      </a>
+      {% endif %}
     </div>
 
     <!-- タブ切り替え -->
     <div class="p-8">
       <div class="flex border-b border-gray-100 mb-4 gap-8">
-        <button id="tab-me-btn" class="px-6 py-2 text-gray-400 font-bold">あなたの価値観</button>
-        <button id="tab-team-btn" class="px-6 py-2 text-teamy-teal font-bold border-b-2 border-teamy-teal -mb-[1px]">チームとの比較</button>
+        <button id="tab-me-btn"
+                class="px-6 py-2 text-gray-400 text-lg font-bold">
+          あなたの価値観
+        </button>
+
+        <button id="tab-team-btn"
+                class="px-6 py-2 text-teamy-teal text-lg font-bold border-b-2 border-teamy-teal -mb-[1px]">
+          チームとの比較
+        </button>
       </div>
 
       <!-- あなたの価値観ページ -->
       <div id="content-me">
-          {% include "analysis/includes/personal_me.html" %}
+        {% include "analysis/includes/personal_me.html" %}
       </div>
+
       <!-- チームとの比較ページ -->
       <div id="content-team" class="hidden relative min-h-[400px]">
+
         {% if teams %}
           {% include "analysis/includes/personal_team.html" %}
         {% else %}
-        <div class="absolute inset-0 z-30 bg-teamy-grayDark/60 rounded-xl flex justify-center items-center">
-          <div class="text-center p-8 bg-teamy-grayLight rounded-2xl -translate-y-48">
-            <p class="text-teamy-grayText leading-relaxed">
-              チームに所属することで<br>
-              結果が表示されます。
-            </p>
+          <div class="absolute inset-0 z-30 bg-teamy-grayDark/60 rounded-xl flex justify-center items-center">
+            <div class="text-center p-8 bg-teamy-grayLight rounded-2xl -translate-y-48">
+              <p class="text-teamy-grayText leading-relaxed">
+                チームに所属することで<br>
+                結果が表示されます。
+              </p>
+            </div>
           </div>
-        </div>
+
           <div class="opacity-20 grayscale pointer-events-none">
             {% include "analysis/includes/personal_team.html" %}
           </div>
         {% endif %}
+
       </div>
     </div>
   </div>
@@ -93,32 +113,9 @@
 
 <!-- モーダル -->
 {% include "analysis/modals/analysis_guide.html" %}
+
 {% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'analysis/personal_analysis.js' %}"></script>
-
-<!-- 以下テスト用コード 削除予定 -->
-<script id="personal-graph-data" type="application/json">
-  [
-    { "value_key_id": "context", "personal_score": 20, "team_mean": 80 },
-    { "value_key_id": "collaboration", "personal_score": 50, "team_mean": 50 },
-    { "value_key_id": "ideation", "personal_score": 90, "team_mean": 10 }
-  ]
-</script>
-
-<script id="personal-advice-data" type="application/json">
-  [
-    {
-      "value_key_id": "context",
-      "importance": "high",
-      "advice_text": "【テスト表示中】あなたは文脈を重視しますが、チームはそうでもないようです。言葉の定義を合わせることから始めましょう。"
-    },
-    {
-      "value_key_id": "ideation",
-      "importance": "low",
-      "advice_text": "【テスト表示中】アイデア出しについては、チームと大きく異なりますが、今はあまり気にしなくて良さそうです。"
-    }
-  ]
-</script>
 {% endblock %}

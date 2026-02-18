@@ -1,71 +1,45 @@
 {% load static %}
 
-<!-- ======== 重要度ラベル説明 ＆ 未回答メンバー表示 ======== -->
-<div class="flex justify-between items-center mb-4 px-4 py-4">
-  <!-- 重要度ラベル説明 -->
-  <div class="flex gap-1">
-    <span class="self-end text-xs text-gray-400 mr-2">重要度...</span>
-    <span class="bg-teamy-pinkRed w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">高</span>
-    <span class="bg-teamy-teal w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">中</span>
-    <span class="bg-teamy-navy w-5 h-5 flex items-center justify-center text-[9px] text-white font-bold">低</span>
-  </div>
+<div class="max-w-5xl mx-auto py-12 space-y-12">
 
-  <!-- 未回答メンバー表示 -->
-  {% if not allmember_answered %}
-    <div class="flex justify-end items-start py-4 px-8 mr-8 rounded-md bg-teamy-pinkRed/10">
-      <span class="text-sm text-teamy-pinkRed"> ⚠️ 質問に未回答のチームメンバーがいます</span>
-    </div>
-      {% else %}
-    <div></div> 
-    {% endif %}
-</div>
-
-<!-- ======== グラフ＆アドバイス部分 ======== -->
-<div class="space-y-12 pb-12">
-
-  {# テスト用：key="context" を追加 #}
-  {% with item=test_data key="context" title="コミュニケーションの文脈" left="ローコンテクスト" right="ハイコンテクスト" %}
-    {% include "analysis/includes/analysis_row.html" %}
-  {% endwith %}
-  
-  {# 1. コミュニケーションの文脈 #}
-  {# {% with item=advice_data.context key="context" title="コミュニケーションの文脈" left="ローコンテクスト" right="ハイコンテクスト" %} #}
-    {# {% include "analysis/includes/analysis_row.html" %} #}
-  {# {% endwith %} #}
-
-  {# 2. 相手への批判の伝え方 #}
-  {% with item=advice_data.feedback key="feedback" title="相手への批判の伝え方" left="直接的" right="間接的" %}
-    {% include "analysis/includes/analysis_row.html" %}
+  {# 1. コミュニケーションの文脈 (context) #}
+  {% with item=advice_data.context score_item=graph_data.0 key="context" title="コミュニケーションの文脈" left="ローコンテクスト" right="ハイコンテクスト" %}
+    {% include "analysis/includes/team_row.html" %}
   {% endwith %}
 
-  {# 3. 説得の組み立て方 #}
-  {% with item=advice_data.persuasion key="persuasion" title="説得の組み立て方" left="原理優先" right="応用優先" %}
-    {% include "analysis/includes/analysis_row.html" %}
+  {# 2. 相手への批判の伝え方 (feedback) #}
+  {% with item=advice_data.feedback score_item=graph_data.1 key="feedback" title="相手への批判の伝え方" left="直接的" right="間接的" %}
+    {% include "analysis/includes/team_row.html" %}
   {% endwith %}
 
-  {# 4. 権威との距離感 #}
-  {% with item=advice_data.hierarchy key="hierarchy" title="権威との距離感" left="平等主義" right="階層主義" %}
-    {% include "analysis/includes/analysis_row.html" %}
+  {# 3. 説得の組み立て方 (persuasion) #}
+  {% with item=advice_data.persuasion score_item=graph_data.2 key="persuasion" title="説得の組み立て方" left="原理優先" right="応用優先" %}
+    {% include "analysis/includes/team_row.html" %}
   {% endwith %}
 
-  {# 5. 意思決定の進め方 #}
-  {% with item=advice_data.decision key="decision" title="意思決定の進め方" left="合意重視" right="トップダウン" %}
-    {% include "analysis/includes/analysis_row.html" %}
+  {# 4. 権威との距離感 (hierarchy) #}
+  {% with item=advice_data.hierarchy score_item=graph_data.3 key="hierarchy" title="権威との距離感" left="平等主義" right="階層主義" %}
+    {% include "analysis/includes/team_row.html" %}
   {% endwith %}
 
-  {# 6. 信頼の築き方 #}
-  {% with item=advice_data.trust key="trust" title="信頼の築き方" left="タスク重視" right="関係重視" %}
-    {% include "analysis/includes/analysis_row.html" %}
+  {# 5. 意思決定の進め方 (decision) #}
+  {% with item=advice_data.decision score_item=graph_data.4 key="decision" title="意思決定の進め方" left="合意重視" right="トップダウン" %}
+    {% include "analysis/includes/team_row.html" %}
   {% endwith %}
 
-  {# 7. 議論のスタイル #}
-  {% with item=advice_data.conflict key="conflict" title="議論のスタイル" left="対立回避" right="対立歓迎" %}
-    {% include "analysis/includes/analysis_row.html" %}
+  {# 6. 信頼の築き方 (trust) #}
+  {% with item=advice_data.trust score_item=graph_data.5 key="trust" title="信頼の築き方" left="タスク重視" right="関係重視" %}
+    {% include "analysis/includes/team_row.html" %}
   {% endwith %}
 
-  {# 8. スケジュールへの考え方 #}
-  {% with item=advice_data.time key="time" title="スケジュールへの考え方" left="直線的" right="柔軟" %}
-    {% include "analysis/includes/analysis_row.html" %}
+  {# 7. 議論のスタイル (conflict) #}
+  {% with item=advice_data.conflict score_item=graph_data.6 key="conflict" title="議論のスタイル" left="対立回避" right="対立歓迎" %}
+    {% include "analysis/includes/team_row.html" %}
+  {% endwith %}
+
+  {# 8. スケジュールへの考え方 (time) #}
+  {% with item=advice_data.time score_item=graph_data.7 key="time" title="スケジュールへの考え方" left="直線的" right="柔軟" %}
+    {% include "analysis/includes/team_row.html" %}
   {% endwith %}
 
 </div>

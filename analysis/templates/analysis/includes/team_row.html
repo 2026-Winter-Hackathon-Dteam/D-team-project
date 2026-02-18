@@ -30,14 +30,16 @@
         <span class="text-xs text-teamy-grayText font-bold">{{ right }}</span>
         
         <!-- ピン -->
-        <div class="user-pin absolute -top-12 z-20 transition-all duration-700 -translate-x-1/2" data-score="{{ item.personal_score }}">
+        <div class="user-pin absolute -top-12 z-20 transition-[left] duration-[600ms] ease-out" 
+        data-score="{{ score_item.personal_score_normalized }}">
           <img src="{% static 'analysis/imgs/pin_me.svg' %}" class="w-12 h-12 drop-shadow-md">
         </div>
-        <div class="team-pin absolute -top-12 z-10 transition-all duration-700 -translate-x-1/2" data-score="{{ item.team_mean }}">
+        <div class="team-pin absolute -top-12 z-10 transition-[left] duration-[600ms] ease-out" 
+        data-score="{{ score_item.team_mean_normalized }}">
           <img src="{% static 'analysis/imgs/pin_team.svg' %}" class="w-12 h-12 drop-shadow-md">
         </div>
         <!-- data属性はカスタムで任意の情報を埋め込むことができるので、JSへ渡すスコア値を埋め込み -->
-         <!-- transition-all duration-700（0.7秒） でチーム変更時にピンをスライドする動きをつける -->
+         <!-- transition-[left] duration-[600ms]（0.6秒） でチーム変更時にピンをスライドする動きをつける -->
       </div>
     </div>
   </div> 
