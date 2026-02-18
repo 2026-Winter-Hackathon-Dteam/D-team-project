@@ -20,6 +20,13 @@ def questions_index(request):
     return redirect('analysis:question_page', page=1)
 
 
+# questions_startは質問開始前のページ
+#login_required
+@require_http_methods(["GET"])
+def questions_start(request):
+    return render(request, "analysis/questions_start.html")
+
+
 # 質問取得
 #@login_required
 @require_http_methods(["GET"])
