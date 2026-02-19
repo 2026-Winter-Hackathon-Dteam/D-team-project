@@ -12,6 +12,7 @@
     <!-- ======== フォーム ======== -->
     <form method="post" class="flex flex-col p-4 h-full w-[90%] mx-auto">
       {% csrf_token %}
+      {{ form.as_p }}<!-- 確認用（後ほど削除） -->
 
       <!-- inputs -->
       <div class="flex flex-col gap-8 py-6 flex-grow justify-around">
