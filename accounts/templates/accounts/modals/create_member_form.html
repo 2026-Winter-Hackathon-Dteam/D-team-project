@@ -1,7 +1,7 @@
 {% load static %}
-
 <!-- モーダル全体 -->
 <div id="createMemberModal" class="fixed inset-0 z-50">
+  <!-- hiddenをつけない！1つ目のモーダルと入れ替え時に表示させるため -->
 
   <!-- 背景 -->
   <div class="modal-bg absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -20,15 +20,18 @@
         method="POST"
         hx-post="{% url 'accounts:create_member' %}"
         hx-target="#createMemberModal"
-        hx-swap="outerHTML">
-
+        hx-swap="outerHTML"
+        >
         {% csrf_token %}
+        <!-- hx-post(hx-get)：送信または取得先のURL（エンドポイント）を指定 -->
+        <!-- hx-target：renderされたHTMLを入れ替える場所を指定（外枠となるモーダル枠ID） -->
+        <!-- hx-swap="outerHTML"はターゲットを箱ごと入れ替える　innerHTMLで箱は残して中身だけ入れ替えも可能 -->
 
         <div class="space-y-8 pt-6">
 
           <!-- 名前 -->
           <div>
-            <label class="block font-medium mb-2">名前</label>
+            <label class="block font-medium mb-2">アカウント名</label>
             <input type="text"
               name="name"
               class="w-full border border-gray-400 rounded-lg p-3"
@@ -64,16 +67,18 @@
 
               <div class="p-3 border-t border-gray-100 max-h-40 overflow-y-auto space-y-2">
 
-                {% for team in team_list %}
-                <label class="flex items-center gap-2 p-2 rounded cursor-pointer">
-                  <input type="checkbox"
-                    name="teams"
-                    value="{{ team.id }}"
-                    class="w-5 h-5 border border-gray-400 appearance-none
-                           rounded-full checked:bg-teamy-orange cursor-pointer">
-                  <span>{{ team.name }}</span>
-                </label>
-                {% endfor %}
+                {% if teams %}
+                  {% for team in teams %}
+                  <label class="flex items-center gap-2 p-2 rounded cursor-pointer">
+                    <input type="checkbox"
+                      name="teams"
+                      value="{{ team.id }}"
+                      class="w-5 h-5 border border-gray-400 appearance-none
+                             rounded-full checked:bg-teamy-orange cursor-pointer">
+                    <span>{{ team.name }}</span>
+                  </label>
+                  {% endfor %}
+                {% endif %}
 
               </div>
             </details>
@@ -100,8 +105,9 @@
           <!-- 作成ボタン -->
           <div class="flex justify-center pt-6">
             <button type="submit"
-              class="bg-teamy-orange hover:bg-teamy-orangeDark text-white font-semibold
-                     py-3 px-16 rounded-full transition-all active:scale-95 shadow-md">
+            class="bg-teamy-orange hover:bg-teamy-orangeDark text-white font-medium
+                  py-3 px-16 rounded-full transition-transform shadow-md 
+                  hover:scale-[1.03] hover:shadow-md active:scale-[0.98]">
               作成
             </button>
           </div>

@@ -20,6 +20,9 @@
       <button
         type="button"
         id="openCreateMember"
+        hx-get="{% url 'accounts:create_member' %}"
+        hx-target="#createMemberModal"
+        hx-swap="outerHTML"
         class="btn-addmember inline-block bg-teamy-orange hover:bg-teamy-orangeDark
               hover:scale-[1.03] active:scale-[0.98] transition-transform
               text-white font-medium px-4 py-1.5 rounded-[36px]">
@@ -119,7 +122,7 @@
 
         {% comment %}
         変数ができたらこちらに差し替え
-        <tbody class="divide-y divide-gray-100">
+        <tbody class="divide-y divide-gray-100"> <!-- divideはtr間に線を入れてくれる -->
         {% for member in members %}
           <tr class="hover:bg-gray-50">
 
@@ -189,85 +192,15 @@
   </div>
 </div>
 
+<!-- ===== モーダル ===== -->
+<div id="modal-container">
 {% include "components/tutorial_modal.html" %}
-{% include "accounts/modals/create_member.html" %}
 {% include "accounts/modals/delete_member.html" %}
+  <div id="createMemberModal"></div>  <!-- createモーダル入れ替え用の空の箱 -->
+</div>
 {% endblock %}
 
-<!-- ======== JS ======== -->
 {% block extra_js %}
-
-<!-- ヘルプページ用 -->
 <script src="{% static 'js/tutorial.js' %}"></script>
-
-<script>
-  // -----　ヘルプボタン -----
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('.btn-help')) {
-      openTutorial(2);   //  スライド2から開く
-    }
-  });
-
-  // -----　メンバーを作成ボタン -----
-  const openBtn = document.getElementById('openCreateMember');
-  const modal = document.getElementById('createMemberModal');
-  const closeBtn = modal.querySelector('.modal-close');
-  const bg = modal.querySelector('.modal-bg');
-  
-  // 開く&パスワード生成
-  openBtn.addEventListener('click',() => {
-    modal.querySelector('form').reset(); // モーダル開閉で入力内容をリセット
-    generatePassword();
-    modal.classList.remove('hidden');
-  });
-  
-  // 閉じる(×ボタン)
-  closeBtn.addEventListener('click',() => {
-    modal.classList.add('hidden');
-  });
-  
-  // 閉じる(背景) ifにより背景以外のモーダル内クリック閉じを防ぐ
-  bg.addEventListener('click', (e) => {
-    if (e.target === bg) {
-      modal.classList.add('hidden');
-    }
-  });
-
-  // -----　メンバーを削除ボタン -----
-  const deleteModal = document.getElementById('deleteMemberModal');
-  const deleteText = document.getElementById('deleteTargetText');
-  const deleteIdInput = document.getElementById('deleteTargetId');
-  const deleteCloseBtn = deleteModal.querySelectorAll('.modal-close');
-  const deleteBg = deleteModal.querySelector('.modal-bg');
-
-  document.querySelectorAll('.btn-delete').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const name = btn.dataset.name;
-      const userId = btn.dataset.userId;
-
-      // 表示用テキスト
-      deleteText.textContent = `${name}：${userId}`;
-
-      // 削除用ID
-      deleteIdInput.value = userId;
-
-      // モーダル表示
-      deleteModal.classList.remove('hidden');
-    });
-  });
-
-  // 閉じる(×ボタン・キャンセル)
-  deleteCloseBtn.forEach(btn => {
-    btn.addEventListener('click', () => {
-      deleteModal.classList.add('hidden');
-    });
-  });
-
-  // 閉じる(背景)
-  deleteBg.addEventListener('click', (e) => {
-    if (e.target === deleteBg) {
-      deleteModal.classList.add('hidden');
-    }
-  });
-</script>
+<script src="{% static 'accounts/members.js' %}"></script>
 {% endblock %}
