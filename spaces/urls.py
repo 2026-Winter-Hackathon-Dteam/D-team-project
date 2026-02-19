@@ -1,11 +1,10 @@
 from django.urls import path
-from .views import sample, space_edit, space_delete
-from .forms import SpaceEditForm
+from .views import sample, space_edit_get, space_edit_post
 
 app_name = "spaces"
 
 urlpatterns = [
     path('sample/', sample),
-    path('edit/<uuid:space_id>/', space_edit, name='space_edit'),
-    path('delete/<uuid:space_id>/', space_delete, name='space_delete'),
+    path('edit/', space_edit_get, name='space_edit'),  # GET
+    path('edit/', space_edit_post),  # POST
 ]
