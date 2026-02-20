@@ -14,8 +14,9 @@
         class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">×</button>
 
         <!-- ======== フォーム ======== -->
-        <form method="POST" action="#">
+        <form method="POST" action="{% url 'edit_team' %}">
           {% csrf_token %}
+          <input type="hidden" name="team_id" id="editTargetId">
 
           <div class="space-y-8 pt-6">
           <!-- チーム名 -->
@@ -61,7 +62,7 @@
                 name="team_description" 
                 maxlength="30"
                 class="w-full border border-gray-400 rounded-lg p-3 min-h-36 resize-none"
-              >{# {{ selected_team.description }} #}</textarea>
+              >{{ selected_team.description }}</textarea>
               <!-- ↑models追加後にコメントアウト外す -->
             </div>
             

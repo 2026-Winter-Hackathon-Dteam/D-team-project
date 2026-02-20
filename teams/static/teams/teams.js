@@ -52,7 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
     //  チーム編集
     if (btn.classList.contains('btn-edit-team')) {
       e.preventDefault();
-      document.getElementById('editTeamModal')?.classList.remove('hidden');
+      const modal = document.getElementById('editTeamModal');
+      if (modal) {
+        document.getElementById('editTargetId').value = btn.dataset.teamId;
+        modal.classList.remove('hidden');
+      }
       return;
     }
 
@@ -75,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (modal) {
         document.getElementById('memberDeleteTargetText').textContent = btn.dataset.memberName;
         document.getElementById('memberDeleteTargetId').value = btn.dataset.memberId;
+        document.getElementById('memberDeleteTargetEmployeeId').textContent = btn.dataset.memberEmployeeId; // 社員ID表示用
         // display要素（ID）がある場合のみ代入
         const display = document.getElementById('memberDeleteTargetIdDisplay');
         if (display) display.textContent = btn.dataset.memberId;
@@ -89,8 +94,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const memberId = btn.dataset.memberId;
       const memberName = btn.dataset.memberName;
+      const employeeId = btn.dataset.memberEmployeeId;
+      const teamId = btn.dataset.teamId;
 
-      if (!confirm(memberName + ' ' + memberId + 'をリーダーにしますか？')) return;
+      const message = employeeId
+      ? `${memberName}（${employeeId}）をリーダーにしますか？`
+      : `${memberName}をリーダーにしますか？`;
+
+      if (!confirm(message)) return;
 
       fetch('/teams/set-leader/', {
         // POST先URLを仮設定 要BEすり合わせ
@@ -99,7 +110,10 @@ document.addEventListener('DOMContentLoaded', () => {
           'Content-Type': 'application/json',
           'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
         },
-        body: JSON.stringify({ member_id: memberId })
+        body: JSON.stringify({
+          team_id: teamId, 
+          member_id: memberId,
+         })
         // DjangoルールのJSON形式宣言とCSRFトークン
       })
       .then(() => location.reload());
@@ -116,4 +130,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
   }); 
+});
+
+// ===== HTMX用 CSRF自動付与 =====
+document.body.addEventListener('htmx:configRequest', function (event) {
+  const csrfToken = document.querySelector('meta[name="csrf-token"]');
+  if (csrfToken) {
+    event.detail.headers['X-CSRFToken'] = csrfToken.content;
+  }
+});
+
+// ===== HTMX後処理（delete member成功時にモーダルを閉じる） =====
+document.body.addEventListener('htmx:afterRequest', function (event) {
+
+  // deleteMemberForm からの通信だけ処理する
+  if (event.detail.elt.id !== 'deleteMemberForm') return;
+
+  // ステータスが成功時のみ
+  if (event.detail.xhr.status === 200) {
+    const modal = document.getElementById('deleteMemberModal');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  }
 });
