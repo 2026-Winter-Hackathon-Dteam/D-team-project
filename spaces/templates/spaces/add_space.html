@@ -24,11 +24,11 @@
         <span class="flex-[1] pt-3">オーナー変更</span>
 
         <div class="flex-[2]">
-          <details class="group border border-gray-400 rounded-lg overflow-hidden">
+          <details id="owner-details" class="group border border-gray-400 rounded-lg overflow-hidden">
             <summary
               class="flex justify-between items-center py-3 px-3 cursor-pointer
                     bg-white hover:bg-gray-50">
-              <span class="text-gray-500">オーナーを選択してください</span>
+              <span id="owner-summary" class="text-gray-500">オーナーを選択してください</span>
 
               <svg class="ml-1 w-4 h-4 transition-transform duration-200 group-open:rotate-180"
                   fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -44,6 +44,30 @@
           </details>
         </div>
       </div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const ownerDetails = document.getElementById('owner-details');
+          const ownerSummary = document.getElementById('owner-summary');
+          const ownerRadios = document.querySelectorAll('input[name="owner_id"]');
+
+          ownerRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+              if (this.checked) {
+                // 選択されたラジオボタンのラベルを取得
+                const label = this.closest('label');
+                const labelText = label ? label.querySelector('span').textContent : 'オーナーを選択してください';
+                
+                // summaryを更新
+                ownerSummary.textContent = labelText;
+                
+                // detailsを閉じる
+                ownerDetails.removeAttribute('open');
+              }
+            });
+          });
+        });
+      </script>
 
       <!-- button -->
       <div class="flex flex-col items-center gap-2 mt-6">
