@@ -20,8 +20,8 @@
         Analysis
       </a>
 
-      <a href="/questions/"
-        class="hover:opacity-70 {% if '/analysis/questions/' in request.path %}text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
+      <a href="{% url 'analysis:questions_start' %}"
+        class="hover:opacity-70 {% if 'analysis/questions' in request.path %}text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
         Questions
       </a>
 
@@ -38,7 +38,10 @@
       {# {% endif %} #}
     </nav>
 
-    <!-- ===== チーム切替 ===== -->
+    {% comment %}
+    ===== チーム切替 ===== 
+    現在未使用：各ページで独立してチーム選択するため
+    
     <div class="relative group flex items-center">
       <button
         class="flex items-center text-[#0E1336] group-hover:opacity-70 transition-opacity font-medium focus:outline-none">
@@ -58,7 +61,7 @@
 
         {% if teams %}
           {% for team in teams %}
-            <a href="{% url 'set_current_team' team.id %}"
+            <a href="{% url 'teams:set_current_team' team.id %}"
                class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50 transition-colors">
               {{ team.name }}
             </a>
@@ -70,6 +73,7 @@
         {% endif %}
       </div>
     </div>
+    {% endcomment %}
 
     <!-- ===== ユーザーメニュー ===== -->
     <div class="relative group flex items-center">

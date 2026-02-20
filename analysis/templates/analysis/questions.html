@@ -5,8 +5,8 @@
 {% block content %}
 
 <div class="min-h-screen">
-  <form id="question-form" method="POST" action="#"
-        class="max-w-4xl mx-auto p-8 space-y-16 pt-[10vh] pb-[30vh]">
+  <form id="question-form" method="POST" action="{% url 'analysis:submit_answers' %}" 
+  class="max-w-4xl mx-auto p-8 space-y-16 pt-[10vh] pb-[30vh]">
     {% csrf_token %}
 
     {% for q in page_obj.object_list %}
@@ -150,5 +150,18 @@
 {% endblock %}
 
 {% block extra_js %}
+
 <script src="{% static 'analysis/questions.js' %}"></script>
+
+<script src="{% static 'analysis/questions_save.js' %}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('question-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await submitAll();
+    });
+  });
+</script>
+
 {% endblock %}
