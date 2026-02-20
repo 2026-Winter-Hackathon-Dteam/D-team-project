@@ -12,13 +12,12 @@
     <!-- ======== フォーム ======== -->
     <form method="post" class="flex flex-col p-4 h-full w-[90%] mx-auto">
       {% csrf_token %}
-      {{ form.as_p }}<!-- 確認用（後ほど削除） -->
 
       <!-- inputs -->
       <div class="flex flex-col gap-8 py-6 flex-grow justify-around">
         <label class="flex flex-row items-center gap-4">
           <span class="flex-[1]">スペース名</span>
-          <input type="text" name="name" placeholder="{{ space_name }}" class="border border-gray-400 rounded-lg p-2 flex-[2]">
+          {{ form.name }}
           </label>
 
       <div class="flex flex-row items-start gap-4">
@@ -38,20 +37,10 @@
               </svg>
             </summary>
 
-            <div class="p-3 border-t border-gray-100 max-h-40 overflow-y-auto space-y-2">
-              {# {% for member in members %} #}
-              <label class="flex items-center justify-between gap-2 p-2 rounded cursor-pointer hover:bg-gray-50">
-                <span>{{ member.name }}（{{ member.employee_id }}）</span>
-
-                <input
-                  type="radio"
-                  name="owner_id"
-                  value="{{ member.id }}"
-                  class="w-5 h-5 border border-gray-400 appearance-none rounded-full
-                        checked:bg-teamy-orange cursor-pointer">
-              </label>
-              {# {% endfor %} #}
-            </div>
+            {{ owner_form.owner_id }}
+            {% if not owner_form.owner_id %}
+              <div class="p-3 text-red-500">フォームが初期化されていません</div>
+            {% endif %}
           </details>
         </div>
       </div>
