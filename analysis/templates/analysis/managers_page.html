@@ -1,50 +1,195 @@
 {% extends "base.html" %}
-
 {% load static %}
 
-{% block title %}チーム分析結果{% endblock %}
+{% block title %}マネージャー分析 | {{ team.name }}{% endblock %}
 
 {% block content %}
-
- <!-- チームリーダーのみ閲覧可能。チームリーダー以外は分析が表示されません） -->
-
-<div class="results-container">
-  <h1>チーム分析結果</h1>
-  <p>所属しているチームのマネージャー向けの分析結果です</p>
-
-  {% if is_team_leader %}
-    <div id="chart-container">
-        <!-- マトリクス図 -->
-        {{ team_matrix_data }}
+<div class="min-h-screen py-10 px-4 space-y-10 font-sans text-slate-700">
+  
+  <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
+    <div class="bg-teamy-navy px-6 py-1 flex justify-between items-center min-h-[72px]">
+      <div class="flex items-center gap-3 m-2">
+        <div id="team-select-container" class="relative group flex items-center min-h-[44px]">
+          <button type="button" class="flex items-center text-white text-2xl font-bold hover:opacity-80 transition-opacity focus:outline-none">
+            <span id="selected-team-name">
+              {% if team_id %}
+                {% for t in teams %}
+                  {% if t.id|stringformat:"s" == team_id|stringformat:"s" %}
+                    {{ t.name }}
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                チームを選択
+              {% endif %}
+            </span>
+            <svg class="ml-2 w-5 h-5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="absolute top-full left-0 mt-1 whitespace-nowrap min-w-[200px] bg-white border border-gray-100 shadow-xl rounded-md py-2 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 z-[100]">
+            {% for t in teams %}
+              <a href="?team_id={{ t.id }}" 
+                 class="block px-6 py-3 text-gray-800 hover:text-teamy-teal hover:bg-gray-50 text-lg {% if t.id|stringformat:"s" == team_id|stringformat:"s" %}font-bold text-teamy-teal{% endif %}">
+                {{ t.name }}
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+        <span class="text-white text-xl font-bold tracking-wider self-center">チームの価値観分析</span>
+      </div>
+      <a href="{% url 'analysis:personal_analysis' %}?team_id={{ team_id }}"
+        class="self-center inline-block bg-teamy-teal hover:bg-teamy-tealDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-semibold px-6 py-2 rounded-full shadow-md text-sm">
+        個人分析へ
+      </a>
     </div>
-    <div>
-      <!-- アドバイス表示 -->
-      {{ team_advice_data }}
+
+    <div class="p-8 lg:p-16 flex flex-col items-center">
+      <section class="w-full max-w-5xl"> 
+        <h2 class="text-xl font-bold mb-8 text-[#1a2035]">チームの価値観マップ</h2>
+        
+        <div class="text-[15px] space-y-3 mb-14 text-slate-600">
+            <div class="flex items-center gap-4">
+                <span class="inline-block px-4 py-1.5 rounded-lg border border-gray-400 font-medium min-w-[140px] text-center text-slate-700 bg-white shadow-sm">価値観の最大差</span>
+                <span>チーム内で最も価値観が離れている個人間の最大の差（個別リスク）</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="inline-block px-4 py-1.5 rounded-lg border border-gray-400 font-medium min-w-[140px] text-center text-slate-700 bg-white shadow-sm">価値観のばらつき</span>
+                <span>チーム全体の価値観のばらつき（構造的難易度）</span>
+            </div>
+            <p class="pt-2">この分析では、これらを用いてチーム運営上の調整難易度を可視化しています。</p>
+        </div>
+
+        <div class="flex flex-wrap lg:flex-nowrap items-start justify-center gap-20 xl:gap-32">
+          <div class="relative shrink-0">
+            <div class="absolute -left-12 top-0 bottom-12 flex flex-col items-center justify-between text-[13px] text-slate-500">
+                <span>大</span>
+                <div class="flex flex-col items-center gap-4">
+                    <div class="w-px h-24 bg-slate-300"></div>
+                    <span class="inline-block px-2 py-4 border border-slate-300 rounded-xl bg-white font-bold [writing-mode:vertical-rl] tracking-widest shadow-sm">
+                        価値観のばらつき
+                    </span>
+                    <div class="w-px h-24 bg-slate-300"></div>
+                </div>
+                <span>小</span>
+            </div>
+
+            <div id="matrix-container" class="relative shrink-0 w-[500px] h-[500px] bg-white border border-gray-200 m-4 shadow-sm">
+              <div class="absolute inset-0 w-full h-full flex flex-wrap pointer-events-none text-[15px] font-bold">
+                <div class="w-1/2 h-1/2 bg-[#EFEAEA] flex justify-center items-start pt-4 text-slate-500 text-lg">安定調和型</div>
+                <div class="w-1/2 h-1/2 bg-[#939191] flex justify-center items-start pt-4 text-white text-lg">視点深化型</div>
+                <div class="w-1/2 h-1/2 bg-[#D3CECE] flex justify-center items-start pt-4 text-slate-500 text-lg">部分多様型</div>
+                <div class="w-1/2 h-1/2 bg-[#A7A3A3] flex justify-center items-start pt-4 text-white text-lg">広範多様型</div>
+              </div>
+              <div id="plotArea" class="absolute inset-0 z-10 w-full h-full pointer-events-none"></div>
+            </div>
+
+            <div class="ml-4 mt-4 flex items-center justify-between text-[13px] text-slate-500 w-[500px]">
+                <span>小</span>
+                <div class="flex items-center gap-3 flex-1 px-4">
+                    <div class="h-px bg-slate-300 flex-1"></div>
+                    <span class="inline-block px-10 py-2 border border-slate-300 rounded-xl bg-white font-bold tracking-widest shadow-sm">
+                        価値観の最大差
+                    </span>
+                    <div class="h-px bg-slate-300 flex-1"></div>
+                </div>
+                <span>大</span>
+            </div>
+          </div>
+
+          <div class="w-full lg:w-[360px] pt-4 space-y-3">
+            {% for i in "12345678"|make_list %}
+            <div class="flex items-center gap-4 p-2 rounded-lg transition-all cursor-default group hover:bg-slate-50">
+              <span class="w-9 h-9 bg-teamy-teal text-white flex items-center justify-center rounded-full text-[15px] font-bold shrink-0 shadow-sm transition-transform group-hover:scale-110">{{ forloop.counter }}</span>
+              <span class="text-[17px] font-medium text-slate-700 group-hover:text-teamy-teal transition-colors">
+                {% cycle 'コミュニケーションの文脈' '相手への批判の伝え方' '相手を説得する方法' '上司と部下の関係' '意思決定の方法' '信頼する方法' '見解の相違があった場合' '効率的なスケジューリングの方法' %}
+              </span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
     </div>
-    <div>>
-      <!-- 散布図表示 -->
-      {{ team_scatter_data }}
+  </div>
+
+  <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
+    <div class="bg-teamy-navy px-10 py-4">
+      <h3 class="text-white text-xl font-bold flex items-center gap-2">
+        チームマネジメントのアドバイス
+      </h3>
     </div>
-  {% else %}
-    <p>このページはチームリーダーのみ閲覧できます。</p>
-  {% endif %}
+
+    <div class="p-8 lg:p-12">
+      <div class="divide-y divide-gray-200 rounded-lg shadow-sm">
+        {% for advice in team_advice_data %}
+        <div class="accordion-item">
+          <button class="w-full flex justify-between items-center py-6 px-10 text-left hover:bg-slate-50 transition-colors focus:outline-none" 
+                  onclick="toggleAccordion('content-{{ forloop.counter }}', this)">
+            <span class="text-xl font-bold text-slate-800">
+              {% if advice.value_key_id == "context" %}コミュニケーションの文脈
+              {% elif advice.value_key_id == "feedback" %}相手への批判の伝え方
+              {% elif advice.value_key_id == "persuasion" %}相手を説得する方法
+              {% elif advice.value_key_id == "hierarchy" %}上司と部下の関係
+              {% elif advice.value_key_id == "decision" %}意思決定の方法
+              {% elif advice.value_key_id == "trust" %}信頼する方法
+              {% elif advice.value_key_id == "conflict" %}見解の相違があった場合
+              {% elif advice.value_key_id == "time" %}効率的なスケジューリングの方法
+              {% else %}{{ advice.value_key_id }}{% endif %}
+            </span>
+            <svg class="w-6 h-6 text-slate-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+
+          <div id="content-{{ forloop.counter }}" class="hidden overflow-hidden transition-all duration-300">
+            <div class="px-12 py-10 space-y-10 bg-white border-t border-gray-100">
+              
+              <div class="flex justify-start">
+                <div class="inline-flex flex-col items-center border-b-2 border-slate-300 px-6">
+                  <h4 class="text-[24px] font-bold text-slate-800 pb-2">
+                    {% if advice.code == "Q1_stable_harmony" %}安定調和型
+                    {% elif advice.code == "Q2_deep_focus" %}視点深化型
+                    {% elif advice.code == "Q3_partial_diversity" %}部分多様型
+                    {% elif advice.code == "Q4_wide_diversity" %}広範多様型
+                    {% else %}{{ advice.code }}{% endif %}
+                  </h4>
+                </div>
+              </div>
+
+              <p class="text-[17px] leading-relaxed text-slate-800 font-medium">
+                {{ advice.situation_text|linebreaksbr }}
+              </p>
+
+              <div class="space-y-5">
+                <div class="inline-block bg-[#1a2035] text-white text-[15px] font-bold px-8 py-2.5 rounded-xl tracking-widest shadow-md">
+                  アドバイス
+                </div>
+                <p class="text-[17px] leading-relaxed text-slate-800 pl-1">
+                  {{ advice.summary_text|linebreaksbr }}
+                </p>
+              </div>
+
+              <div class="bg-[#e9ecef] rounded-2xl p-10 space-y-5 shadow-inner">
+                <div class="flex items-center gap-3">
+                  <span class="text-2xl">👉</span>
+                  <span class="font-bold text-[#1a2035] text-xl">action</span>
+                </div>
+                <p class="text-[16px] leading-relaxed text-slate-800 pl-10">
+                  {{ advice.detail_text|linebreaksbr }}
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 </div>
 
-{{ team_matrix_data|json_script:"team-matrix-data" }}
-{{ team_advice_data|json_script:"team-advice-data" }}
-{{ team_scatter_data|json_script:"team-scatter-data" }}
-
-<!-- グラフデータをJSON形式で埋め込み -->
-<script>
-  const TEAM_ID = "{{ team_id }}";
-  const teamMatrixData = JSON.parse(document.getElementById("team-matrix-data").textContent);
-  const teamAdviceData = JSON.parse(document.getElementById("team-advice-data").textContent);
-  const teamScatterData = JSON.parse(document.getElementById("team-scatter-data").textContent);
-  console.log("Team matrix data:", teamMatrixData);
-  console.log("Team advice data:", teamAdviceData);
-  console.log("Team scatter data:", teamScatterData);
-</script>
-
+{{ team_matrix_data|json_script:"matrix-data" }}
 {% endblock %}
 
-{% block extra_js %}{% endblock %}
+{% block extra_js %}
+<script src="{% static 'analysis/managers_page.js' %}"></script>
+{% endblock %}

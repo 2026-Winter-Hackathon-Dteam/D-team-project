@@ -229,6 +229,7 @@ def personal_analysis(request):
         "advice_data": advice_data,
         "teams": team_options,
         "is_team_leader": is_team_leader,
+        "target_user": user,
     }
     print(f"[DEBUG] Rendering personal_analysis with context: {context}")
     return render(request, "analysis/personal_analysis.html", context)
@@ -239,58 +240,68 @@ def personal_analysis(request):
 @require_http_methods(["GET", "POST"])
 def managers_page(request):
     """チームマネージャー向けページ表示"""
-    team_id = request.GET.get("team_id", "")
+    # 1. クエリパラメータ(GET)からteam_idを取得。なければセッションから取得。
+    # 指定のデフォルトID "aaa11111-1111-1111-1111-111111111111" を優先的に考慮
+    team_id = request.GET.get("team_id") or request.session.get("selected_team_id") or "aaa11111-1111-1111-1111-111111111111"
 
-    # ログインユーザー取得（未ログイン時はテスト用ユーザー）
-    if getattr(request, "user", None) and request.user.is_authenticated: #本番では、getattr(・・・None)は外しても良い 
+    # 2. ログインユーザー取得（テスト用ユーザー固定）
+    if getattr(request, "user", None) and request.user.is_authenticated:
         current_user = request.user
     else:
         current_user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
-        #return redirect("analysis:login")  # 未ログインならログインページへ（本番用）
 
-    team = get_object_or_404(Teams, pk=team_id)
-    is_team_leader = team.leader_user_id == current_user.id
+    # 3. ユーザーが所属しているチーム一覧を取得（プルダウン用）
+    team_users = Team_Users.objects.filter(user=current_user).select_related("team")
+    team_options = [
+        {
+            "id": str(tu.team_id),
+            "name": tu.team.name,
+        }
+        for tu in team_users
+    ]
 
+    # 4. 指定されたteam_idの有効性チェックとセッション更新
+    try:
+        team = get_object_or_404(Teams, pk=team_id)
+    except:
+        # 万が一指定IDで見つからない場合は所属チームの先頭を使用
+        if team_options:
+            team_id = team_options[0]["id"]
+            team = get_object_or_404(Teams, pk=team_id)
+        else:
+            return redirect("analysis:personal_analysis")
+
+    request.session["selected_team_id"] = str(team_id)
+
+    # 5. リーダー権限の確認
+    # 指定のテストユーザーがリーダーであるため、通常通り判定
+    is_team_leader = (team.leader_user_id == current_user.id)
+    
+    # 6. データの取得
+    # _get_team_scores 内で max_diff や std が計算されている想定
     team_scores = _get_team_scores(team_id=team_id) if is_team_leader else []
     team_advice = _get_team_advices(team_id=team_id) if is_team_leader else []
-    team_matrixdata = (
-        [
-            {
-                "value_key_id": d.get("value_key_id"),
-                "x": d.get("max_diff"),
-                "y": d.get("std"),
-            }
-            for d in team_scores
-        ]
-        if is_team_leader
-        else []
-    )
-    team_scatter_data = _get_team_scatter_data(team_id=team_id) if is_team_leader else []
-    l_team_scatter_data = (
-        [
-            {
-                "value_key_id": d.get("value_key_id"),
-                "x": user.get("diff"),
-                "y": user.get("personal_score"),
-            }
-            for d in team_scatter_data
-            for user in d.get("users", [])
-        ]
-        if is_team_leader
-        else []
-    )
     
-    print(f"[DEBUG] Team graph data: {team_scores}")  # デバッグ用出力
-    print(f"[DEBUG] Team advice data: {team_advice}")  # デバッグ用出力
-    print(f"[DEBUG] Team scatter data: {l_team_scatter_data}")  # デバッグ用出力
-    print(f"[DEBUG] Team matrix data: {team_matrixdata}")  # デバッグ用出力
+    # マトリクス用データの整形 (JSの managers_page.js が max_diff と std を期待している場合)
+    team_matrixdata = [
+        {
+            "value_key_id": d.get("value_key_id"),
+            "max_diff": d.get("max_diff"),
+            "std": d.get("std"),
+        }
+        for d in team_scores
+    ]
 
     context = {
-        "team_id": team_id,
+        "team": team,
+        "team_id": str(team_id),
+        "teams": team_options,
         "team_advice_data": team_advice,
-        "team_scatter_data": l_team_scatter_data,
         "is_team_leader": is_team_leader,
         "team_matrix_data": team_matrixdata,
+        "target_user": current_user,
     }
 
+    print(f"[DEBUG] Managers Page - User: {current_user.id}, Team: {team_id}, Leader: {is_team_leader}")
+    
     return render(request, "analysis/managers_page.html", context)
