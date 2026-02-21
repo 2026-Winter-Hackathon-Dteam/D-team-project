@@ -27,8 +27,8 @@ function renderMatrixChart() {
         // 座標計算 (左下が 0,0 の想定)
         // x: 最大差 (右に行くほど大きい)
         // y: ばらつき (上に行くほど大きい)
-        const posX = (data.max_diff / 100) * width;
-        const posY = height - ((data.std / 50) * height); // Y軸は上が0なので引き算
+        const posX = (data.x / 100) * width;
+        const posY = height - ((data.y / 50) * height); // Y軸は上が0なので引き算
 
         dot.style.left = `${posX}px`;
         dot.style.top = `${posY}px`;
