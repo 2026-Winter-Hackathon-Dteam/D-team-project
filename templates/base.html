@@ -24,13 +24,6 @@
 
     <!-- メイン -->
     <main>
-    {% if messages %}
-      <div class="flash-messages">
-        {% for message in messages %}
-          <div class="flash-message">{{ message }}</div>
-        {% endfor %}
-      </div>
-    {% endif %}
     {% block content %}{% endblock %}
     </main>
     
