@@ -7,32 +7,31 @@
   <div id="modal-bg" class="absolute inset-0 bg-black/50 flex items-center justify-center">
 
     <!-- モーダル本体 -->
-    <div class="modal-content bg-white rounded-lg shadow-xl h-[800px] w-full max-w-[640px] relative overflow-hidden flex flex-col justify-center">
+    <div class="modal-content bg-white rounded-lg shadow-xl h-[800px] w-full max-w-2xl relative overflow-hidden flex flex-col justify-center">
      
       <!-- 閉じるボタン -->
       <button type="button" class="btn-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600 z-50">×</button>
      
       <!-- 各スライド -->
       <div class="analysis_guide h-full overflow-y-auto" data-step="1">
-        <div class="flex items-center min-h-full px-6 py-8">
+        <div class="h-full px-6 py-8 flex items-center justify-center">
           {% include "analysis/modals/guide1.html" %}
         </div>
       </div>
 
       <div class="analysis_guide h-full overflow-y-auto" data-step="2">
-        <div class="flex items-center min-h-full px-6 py-8">
+        <div class="h-full px-6 py-8 flex items-center justify-center">
           {% include "analysis/modals/guide2.html" %}
         </div>
       </div>
       
       <div class="analysis_guide h-full overflow-y-auto" data-step="3">
-        <div class="flex items-center min-h-full px-6 py-8">
+        <div class="h-full px-6 py-8 flex items-center justify-center">
           {% include "analysis/modals/guide3.html" %}
         </div>
       </div>
     </div>
       
-    </div>
   </div>
 </div>
 

@@ -1,48 +1,70 @@
 {% load static %}
 <!-- ======== 全体レイアウト（3カラム） ======== -->
-<div class="grid grid-cols-[60px_1fr_60px] items-center gap-6 w-full">
+<div class="grid grid-cols-[60px_1fr_60px] items-stretch gap-6 w-full h-full">
 
   <!-- --- 左：戻るボタン枠 --- -->
-  <div class="flex justify-center">
-    <button type="button" class="btn-prev shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:-translate-x-1 transition">←</button>
+  <div class="flex items-center justify-center">
+    <button
+      type="button"
+      class="btn-prev shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:-translate-x-1 transition">
+      ←
+    </button>
   </div>
 
   <!-- --- 中央：本文 --- -->
-  <div class="space-y-10 py-4">
-    <section>
-      <h2 class="text-2xl font-bold border-l-4 border-teamy-teal pl-4">それぞれに<br>「正解・不正解」はありません</h2>
-      <p class="text-base leading-relaxed pt-4">
-        このアプリは「どちらが正しいか」を判断するものではありません。<br>
-        どの価値観にも<span class="font-bold">メリット</span>と<span class="font-bold">デメリット</span>があります。
-      </p>
-      <p class="mt-4 p-4 bg-gray-50 rounded ">
-        問題が起きるのは<br>自分の価値観が「相手にはどう見えているか」を<br>
-        知らないときです。
-      </p>
-    </section>
+  <div class="min-h-0 overflow-y-auto">
+    <div class="min-h-full flex items-center justify-center">
+      <div class="space-y-8 py-4 w-full">
 
-    <section>
-      <h2 class="text-2xl font-bold border-l-4 border-teamy-teal pl-4"> 2つの方向性</h2>
-      <div class="space-y-6">
-        <p class="text-base leading-relaxed pt-4">
-          大事なのは、どちら側にいるかではなく<br>
-          <span class="text-teamy-navy font-bold">どれくらい離れているか</span>です。
-        </p>
-        
-        <div class="text-base leading-relaxed pt-4 gap-4">
-          <p>
-          <span class="font-bold border-b-2 border-teamy-teal/40">差が小さければ</span><br>無理に変える必要はありません。
+        <section>
+          <h2 class="text-2xl font-bold border-l-4 border-teamy-teal pl-4">
+            それぞれに<br>「正解・不正解」はありません
+          </h2>
+          <p class="text-base leading-relaxed pt-4">
+            このアプリは「どちらが正しいか」を判断するものではありません。<br>
+            どの価値観にも<span class="font-bold">メリット</span>と<span class="font-bold">デメリット</span>があります。
           </p>
-          <br>
-          <p>
-          <span class="font-bold border-b-2 border-teamy-teal/40">差が大きければ</span><br>行動を少し（または意識的に）変えることで<br>誤解や衝突を減らせます。
+          <p class="mt-4 p-4 bg-gray-50 rounded ">
+            問題が起きるのは<br>自分の価値観が「相手にはどう見えているか」を<br>
+            知らないときです。
           </p>
-        </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold border-l-4 border-teamy-teal pl-4">
+            2つの方向性
+          </h2>
+          <div class="space-y-6">
+            <p class="text-base leading-relaxed pt-4">
+              大事なのは、どちら側にいるかではなく<br>
+              <span class="text-teamy-navy font-bold">どれくらい離れているか</span>です。
+            </p>
+
+            <div class="text-base leading-relaxed pt-4 gap-4">
+              <p>
+                <span class="font-bold border-b-2 border-teamy-teal/40">差が小さければ</span><br>
+                無理に変える必要はありません。
+              </p>
+              <br>
+              <p>
+                <span class="font-bold border-b-2 border-teamy-teal/40">差が大きければ</span><br>
+                行動を少し（または意識的に）変えることで<br>
+                誤解や衝突を減らせます。
+              </p>
+            </div>
+          </div>
+        </section>
+
       </div>
-    </section>
+    </div>
   </div>
+
   <!-- --- 右：次へ --- -->
-  <div class="flex justify-center">
-    <button type="button" class="btn-next shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:translate-x-1 transition">→</button>
+  <div class="flex items-center justify-center">
+    <button
+      type="button"
+      class="btn-next shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:translate-x-1 transition">
+      →
+    </button>
   </div>
-  </div>
+</div>
