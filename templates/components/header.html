@@ -4,12 +4,12 @@
 
   <!-- ===== ロゴ ===== -->
   <div class="flex-shrink-0 flex items-center">
-    <a href="/" class="ml-6">
+    <a href="{% url 'accounts:top' %}" class="ml-6">
       <img src="{% static 'imgs/Teamy_logo.png' %}" alt="Teamy_logo" class="h-[72px] w-auto">
     </a>
   </div>
 
- {# {% if request.user.is_authenticated %} #} 
+ {% if request.user.is_authenticated %}
   <!-- ================= ログイン後 ================= -->
   <div class="hidden md:flex items-center gap-6">
 
@@ -30,50 +30,13 @@
         Teams
       </a>
 
-      {# {% if request.user.is_admin %} #}
-      <a href="/members/"
+      {% if request.user.is_admin %} 
+      <a href="{% url 'accounts:members' %}"
         class="hover:opacity-70 {% if request.path == '/members/' %}text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
         Members
       </a>
-      {# {% endif %} #}
+      {% endif %}
     </nav>
-
-    {% comment %}
-    ===== チーム切替 ===== 
-    現在未使用：各ページで独立してチーム選択するため
-    
-    <div class="relative group flex items-center">
-      <button
-        class="flex items-center text-[#0E1336] group-hover:opacity-70 transition-opacity font-medium focus:outline-none">
-        {{ current_team.name|default:"チーム未選択" }}
-        <svg class="ml-1 w-4 h-4 transition-transform duration-200 group-hover:rotate-180"
-             fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 9l-7 7-7-7"></path>
-        </svg>
-      </button>
-
-      <div
-        class="absolute top-full left-0 whitespace-nowrap w-max  
-               bg-white border border-gray-100 shadow-lg rounded-md py-2 
-               invisible opacity-0 group-hover:visible group-hover:opacity-100
-               transition-all duration-200 z-[100]">
-
-        {% if teams %}
-          {% for team in teams %}
-            <a href="{% url 'teams:set_current_team' team.id %}"
-               class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50 transition-colors">
-              {{ team.name }}
-            </a>
-          {% endfor %}
-        {% else %}
-          <span class="block px-4 py-2 text-sm text-gray-400">
-            所属チームがありません
-          </span>
-        {% endif %}
-      </div>
-    </div>
-    {% endcomment %}
 
     <!-- ===== ユーザーメニュー ===== -->
     <div class="relative group flex items-center">
@@ -97,21 +60,25 @@
         {% if request.user.is_owner %}
           <a href="/space/" class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">スペース編集</a>
         {% endif %}
-        <a href="/logout/" class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">ログアウト</a>
+        <form method="post" action="{% url 'accounts:logout' %}">
+          {% csrf_token %}
+          <button type="submit"
+              class="block w-full text-left px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">
+              ログアウト
+          </button>
+        </form>
       </div>
     </div>
 
   </div>
 
-  {% comment %} 
-  {% else %}
+ {% else %}
   <!-- ================= ログイン前 ================= -->
   <nav class="flex items-center gap-12 mr-6">
-    <a href="#" 
+    <a href="{% url 'accounts:login' %}" 
     class="add-owner self-center inline-block border border-teamy-teal text-teamy-teal hover:bg-teamy-teal hover:text-white hover:scale-[1.05] active:scale-[0.98] transition-transform px-6 py-2 mt-2 rounded-full">
       Login
     </a>
   </nav>
-  {% endif %} 
- {% endcomment %} 
+ {% endif %} 
 </header>

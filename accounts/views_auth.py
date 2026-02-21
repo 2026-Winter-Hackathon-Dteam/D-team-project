@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.db import IntegrityError
 from .models import CustomUser
 from .forms import OwnerSignUpForm, OwnerMemberCreateForm ,SpaceCreateForm, LoginForm
@@ -56,7 +56,7 @@ class OwnerSignupView(View):
 
 # ***************************************************************************
 # ↓↓↓↓↓↓↓ 作成中のためレビュー対象外 ↓↓↓↓↓↓↓ 
-# サインアップ：一般ユーザー
+# 一般ユーザー作成
 class OwnerMemberCreateView(LoginRequiredMixin, View):
     # 未ログイン時にログイン画面に遷移
     login_url = "login"
@@ -133,6 +133,10 @@ class CustomLoginView(LoginView):
         return super().form_invalid(form)
 
 
+# ***************************************************************************
+# ログアウト
+class CustomLogoutView(LogoutView):
+    next_page = reverse_lazy("accounts:login")  
 
 # ***************************************************************************
 # ランダムパスワードの生成
