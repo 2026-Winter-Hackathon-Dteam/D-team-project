@@ -14,7 +14,7 @@
         class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">×</button>
 
         <!-- ======== フォーム ======== -->
-        <form method="POST">
+        <form method="POST" action="{% url 'teams:create_team' %}">
           {% csrf_token %}
 
           <div class="space-y-8 pt-6">

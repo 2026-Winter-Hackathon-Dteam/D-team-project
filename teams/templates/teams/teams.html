@@ -12,7 +12,7 @@
       <!-- ===== 上部ヘッダ ===== -->
       <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-bold text-teamy-navy">チームリスト</h1>
-        {% if user.is_admin %}
+        {% if True %} <!-- ===== 本番でif user.is_admin への変更を忘れないようにする！！ ===== -->
         <div class="flex items-center gap-4">
           <button type="button" class="btn-help h-8 w-8 transition-transform hover:scale-110">
             <img src="{% static 'imgs/help.png' %}" alt="ヘルプ">
@@ -59,7 +59,8 @@
               <div class="flex gap-4 justify-end items-center">
                 <button
                   type="button"
-                  class="btn-edit-team p-2 -m-2 transition-transform hover:scale-125 shrink-0">
+                  class="btn-edit-team p-2 -m-2 transition-transform hover:scale-125 shrink-0"
+                  data-team-id="{{ team.id }}">
                   <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-7 h-7 shrink-0">
                 </button>
                 <button
@@ -98,7 +99,7 @@
           </p>
         </div>
 
-        {% if user.is_admin %}
+        {% if True %} <!-- ===== 本番でif user.is_admin への変更を忘れないようにする！！ ===== -->
         <button
           type="button"
           id="openAddMember"
@@ -150,16 +151,19 @@
               </td>
 
               <td class="py-4 text-right w-[100px]">
-                {% if user.is_admin %}
+                {% if True %} <!-- ===== 本番でif user.is_admin への変更を忘れないようにする！！ ===== -->
                 <div class="flex items-center justify-end gap-4">
 
-                  {% if member.user.id != selected_team.leader_user.id %}
+                  {% if not selected_team.leader_user or member.user.id != selected_team.leader_user.id %}
                   <!-- リーダー設定ボタン（リーダー本人は非表示） -->
                   <button
                     type="button"
                     class="btn-set-leader p-2 -m-2 transition-transform hover:scale-125 shrink-0"
+                    data-team-id="{{ selected_team.id }}"
                     data-member-id="{{ member.user.id }}"
-                    data-member-name="{{ member.user.name }}">
+                    data-member-name="{{ member.user.name }}"
+                    data-member-employee-id="{{ member.user.employee_id }}"
+                  >
                     <img src="{% static 'teams/imgs/leader_gray.png' %}" class="w-7 h-7 shrink-0" alt="leader">
                   </button>
                   {% endif %}
@@ -169,7 +173,8 @@
                     type="button"
                     class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125 shrink-0"
                     data-member-id="{{ member.user.id }}"
-                    data-member-name="{{ member.user.name }}">
+                    data-member-name="{{ member.user.name }}"
+                    data-member-employee-id="{{ member.user.employee_id }}">
                     <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7 shrink-0">
                   </button>
 
