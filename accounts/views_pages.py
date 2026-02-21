@@ -3,13 +3,7 @@ from django.views.generic import TemplateView
 
 
 # ***************************************************************************
-def sample(request):
-    # return render(request, "accounts/modals/create_member.html", {
-    # return render(request, "accounts/modals/create_member_success.html", {
-    return render(request, "accounts/members.html", {
-        "team_list": [],
-    })
-
+# testコード
 def test_create_member(request):
     # HTMXからのアクセス（GET）なら、入力フォームを返す
     if request.method == "GET":
@@ -23,13 +17,16 @@ def test_create_member(request):
             'generated_password': 'tm9je!&ne8s1',
         }
         return render(request, "accounts/modals/create_member_success.html", context)
-  
 
+
+# ***************************************************************************
 class TopView(TemplateView):
     template_name = "accounts/top.html"
 
 def members(request):
-    return render(request, "accounts/members.html")
+        return render(request, "accounts/members.html", {
+        "team_list": [],
+    })
 
 def profile(request):
     return render(request, "accounts/profile.html")
