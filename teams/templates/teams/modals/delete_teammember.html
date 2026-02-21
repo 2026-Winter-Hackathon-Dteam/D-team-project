@@ -16,8 +16,8 @@
       <form
         id="deleteMemberForm"
         method="POST"
-        action="{% url 'delete_member' %}"
-        hx-post="{% url 'delete_member' %}"
+        action="{% url 'teams:delete_member' %}"
+        hx-post="{% url 'teams:delete_member' %}"
         hx-target="#team-detail"
         hx-select="#team-detail"
         hx-swap="outerHTML"

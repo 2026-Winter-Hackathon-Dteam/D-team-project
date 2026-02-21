@@ -1,6 +1,7 @@
 # teams/views.py
 
 import json
+from django.urls import reverse
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from .models import Teams, Team_Users
@@ -9,14 +10,13 @@ from django.contrib.auth.decorators import login_required # 追記
 from django.views.decorators.http import require_http_methods # 追記
 from django.views.decorators.http import require_POST
 from django.shortcuts import redirect
-from django.contrib import messages
 from django.db.models import Q
 
 User = get_user_model()
 
 @require_http_methods(["GET"])
 def set_current_team(request, team_id):
-    return redirect(f"/teams/?team_id={team_id}")
+    return redirect(f"{reverse('teams:team_index')}?team_id={team_id}")
 
 
 #@login_required # ログイン機能実装後に有効化
@@ -85,24 +85,21 @@ def create_team(request):
     
         # ===== 管理者チェック =====
     if not current_user.is_admin:
-        messages.error(request, "権限がありません")
-        return redirect("team_index")
+        return redirect("teams:team_index")
 
     team_name = request.POST.get("team_name", "").strip()
     description = request.POST.get("team_description", "").strip()
 
     # 空チェック
     if not team_name:
-        messages.error(request, "チーム名を入力してください")
-        return redirect("team_index")
+        return redirect("teams:team_index")
 
     # 重複チェック
     if Teams.objects.filter(
         name=team_name,
         space=current_user.space
     ).exists():
-        messages.error(request, "同じ名前のチームが既に存在します")
-        return redirect("team_index")
+        return redirect("teams:team_index")
 
     # 作成
     Teams.objects.create(
@@ -112,8 +109,7 @@ def create_team(request):
         leader_user=None
     )
 
-    messages.success(request, "チームを作成しました")
-    return redirect("team_index")
+    return redirect("teams:team_index")
 
 
 # @login_required  # ログイン機能実装後に有効化
@@ -132,14 +128,12 @@ def delete_team(request):
 
     # ===== 管理者チェック =====
     if not current_user.is_admin:
-        messages.error(request, "チームを削除する権限がありません")
-        return redirect("team_index")
+        return redirect("teams:team_index")
 
     team_id = request.POST.get("team_id")
 
     if not team_id:
-        messages.error(request, "削除対象が指定されていません")
-        return redirect("team_index")
+        return redirect("teams:team_index")
 
     # 同一spaceチェック付きで取得
     team = get_object_or_404(
@@ -152,9 +146,7 @@ def delete_team(request):
 
     team.delete()
 
-    messages.success(request, f"{team_name} を削除しました")
-
-    return redirect("team_index")
+    return redirect("teams:team_index")
 
 # @login_required  # ログイン機能実装後有効化
 @require_POST
@@ -172,16 +164,14 @@ def edit_team(request):
 
     # ===== 管理者チェック =====
     if not current_user.is_admin:
-        messages.error(request, "チームを編集する権限がありません")
-        return redirect("team_index")
+        return redirect("teams:team_index")
 
     team_id = request.POST.get("team_id")
     team_name = request.POST.get("team_name", "").strip()
     description = request.POST.get("team_description", "").strip()
 
     if not team_id:
-        messages.error(request, "編集対象が指定されていません")
-        return redirect("team_index")
+        return redirect("teams:team_index")
 
     # ===== 対象チーム取得（同一spaceチェック） =====
     team = get_object_or_404(
@@ -192,26 +182,21 @@ def edit_team(request):
 
     # ===== 空チェック =====
     if not team_name:
-        messages.error(request, "チーム名を入力してください")
-        return redirect("team_index")
+        return redirect("teams:team_index")
 
     # ===== 重複チェック（自分を除外） =====
     if Teams.objects.filter(
         name=team_name,
         space=current_user.space
     ).exclude(id=team_id).exists():
-        messages.error(request, "同じ名前のチームが既に存在します")
-        return redirect("team_index")
+        return redirect("teams:team_index")
 
     # ===== 更新 =====
     team.name = team_name
     team.description = description
     team.save()
 
-    messages.success(request, "チーム情報を更新しました")
-
-    return redirect(f"/teams/?team_id={team.id}")
-
+    return redirect(f"{reverse('teams:team_index')}?team_id={team.id}")
 
 # @login_required  # ログイン機能実装後有効化
 @require_POST

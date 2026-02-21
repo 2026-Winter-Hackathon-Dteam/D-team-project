@@ -13,7 +13,7 @@
         class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">×</button>
 
         <!-- ======== 本体 ======== -->
-        <form method="POST" action="{% url 'delete_team' %}">
+        <form method="POST" action="{% url 'teams:delete_team' %}">
           {% csrf_token %}
           <div class="flex flex-col items-center w-full p-10 gap-10">
             <span class="text-2xl font-medium flex text-center">このチームを<br>削除しますか？</span>

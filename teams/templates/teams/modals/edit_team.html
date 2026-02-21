@@ -14,7 +14,7 @@
         class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">×</button>
 
         <!-- ======== フォーム ======== -->
-        <form method="POST" action="{% url 'edit_team' %}">
+        <form method="POST" action="{% url 'teams:edit_team' %}">
           {% csrf_token %}
           <input type="hidden" name="team_id" id="editTargetId">
 

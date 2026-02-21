@@ -13,7 +13,7 @@
 
   <!-- 追加ボタン -->
   <button
-    hx-post="{% url 'add_member' %}"
+    hx-post="{% url 'teams:add_member' %}"
     hx-vals='{"user_id": "{{ user.id }}", "team_id": "{{ team_id }}"}'
     hx-target="#team-detail"
     hx-select="#team-detail"
