@@ -203,6 +203,7 @@ def personal_analysis(request):
     ]
 
     # チーム未選択時はスコアのみ表示、ユーザーがteamに所属していなければ、チーム選択前にリダイレクト
+    team_graph_data = None
     if not team_id:
         graph_data = _get_user_scores_only(user)
         advice_data = []
@@ -221,14 +222,19 @@ def personal_analysis(request):
             }
             for item in graph_data
         ]
+        # チームスコアデータを取得
+        team_graph_data = _get_team_scores(team_id)
+        print(f"[DEBUG] team_id: {team_id}, team_graph_data: {team_graph_data}")
         advice_data = _get_user_advices_with_team(user, team_id=team_id)
         is_team_leader = Teams.objects.filter(id=team_id, leader_user_id=user.id).exists()
     context = {
         "team_id": team_id,
         "graph_data": graph_data,
+        "team_graph_data": team_graph_data,
         "advice_data": advice_data,
         "teams": team_options,
         "is_team_leader": is_team_leader,
+        "target_user": user,
     }
     print(f"[DEBUG] Rendering personal_analysis with context: {context}")
     return render(request, "analysis/personal_analysis.html", context)

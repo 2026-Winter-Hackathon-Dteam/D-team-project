@@ -64,9 +64,9 @@ def _get_user_advices_with_team(user, team_id):
                 "importance": importance,
                 "advice_text": advice_text
             }
-            order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
-            order_index = {key: index for index, key in enumerate(order)}
-            sorted_list = sorted(results_data.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
+    order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
+    order_index = {key: index for index, key in enumerate(order)}
+    sorted_list = sorted(results_data.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
 
     return list(sorted_list)
 
