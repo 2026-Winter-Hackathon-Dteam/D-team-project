@@ -72,6 +72,7 @@ class CustomUserManager(BaseUserManager):
             **extra_fields
         )
         space.owner_user = owner
+        space.save()
         return space, owner
 
     #スーパーユーザーの作成
