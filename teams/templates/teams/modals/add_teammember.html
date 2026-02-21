@@ -31,7 +31,7 @@
         <input type="text" name="q" 
                class="w-full rounded-full border border-gray-400 py-3 pr-6 pl-14 text-xl" 
                placeholder="検索" 
-               hx-get="{# {% url 'user_search' %} #}" 
+               hx-get="{% url 'teams:user_search' %}" 
                hx-trigger="keyup changed delay:500ms" 
                hx-target="#search-results"
                hx-vals='{"team_id": "{{ selected_team.id }}"}' /> 
