@@ -53,11 +53,6 @@ def space_edit(request):
         form = SpaceEditForm(instance=target)
         owner_form = SpaceOwnerChangeForm(space)
     
-    # デバッグ: owner_formのchoicesを確認
-    import sys
-    print(f"DEBUG: owner_form.fields['owner_id'].choices = {owner_form.fields['owner_id'].choices}", file=sys.stderr)
-    print(f"DEBUG: members count = {members.count()}", file=sys.stderr)
-    
     context = {
         "form": form,
         "owner_form": owner_form,
@@ -68,3 +63,28 @@ def space_edit(request):
 
 
 # space削除
+# login_required
+@require_http_methods(["POST"])
+@transaction.atomic
+def space_delete(request, space_id):
+    
+    # テスト用ユーザーを取得（後に削除）
+    if getattr(request, "user", None) and request.user.is_authenticated:
+        current_user = request.user
+    else:
+        current_user = get_object_or_404(get_user_model(), pk="11111111-1111-1111-1111-222222222001")  # テスト用ユーザー
+    
+    space = get_object_or_404(Spaces, id=space_id)
+    
+    # current_user がスペースのオーナーであることを確認
+    if current_user != space.owner_user:
+        return redirect('spaces:space_edit', space_id=space_id)  # オーナーでない場合は編集ページへリダイレクト
+    
+    if request.method == "POST":
+        space.owner_user = None
+        space.save(update_fields=['owner_user'])
+        space.customuser_set.all().delete()
+        space.delete()
+        return redirect('accounts:login')  # personal_analysis.htmlへリダイレクト（後でTOP遷移に修正）
+    
+    return redirect('spaces:space_edit')  # GETリクエストは編集ページへリダイレクト

@@ -84,9 +84,10 @@
   <div class="flex flex-col items-center gap-1">
   <span class="text-base">スペースを削除する</span>
     <div class="flex flex-col items-center gap-2 mt-auto">
-      <a href="#" class="add-account self-center inline-block  bg-gray-300 hover:bg-gray-400 hover:scale-[1.03] active:scale-[0.98] transition-transform text-sm px-6 py-1 border-gray-400 rounded-full shadow-md">
-    削除
-      </a>
-  </div>
+      <form method="post" action="{% url 'spaces:space_delete' space.id %}" class="add-account self-center inline-block  bg-gray-300 hover:bg-gray-400 hover:scale-[1.03] active:scale-[0.98] transition-transform text-sm px-6 py-1 border-gray-400 rounded-full shadow-md">
+        {% csrf_token %}
+        <button type="submit">削除</button>
+      </form>
+    </div>
 </div>
 {% endblock %}
