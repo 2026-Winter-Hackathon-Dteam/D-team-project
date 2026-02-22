@@ -1,0 +1,165 @@
+  <!-- 8項目のタイトル部分へホバー時に表示する内容
+  呼び出し側から渡されるkeyに基づいて表示を切り替え -->
+
+<div class="category-description-box text-teamy-navy">
+  {% if key == "context" %}
+    <h4 class="text-lg font-bold mb-1">コミュニケーションの文脈</h4>
+    <p class="text-xs mb-4 text-gray-600">どこまで言葉で明示するかに関する価値観です。</p>
+    <div class="space-y-4">
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-teal pl-2 mb-1">ローコンテクスト</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>言葉にされた情報を重視します。</li>
+          <li>前提・結論・背景を明確に共有することで、誤解を防げると考えます。</li>
+        </ul>
+      </div>
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-orange pl-2 mb-1">ハイコンテクスト</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>言葉以外の背景や空気、関係性を重視します。</li>
+          <li>文脈や行間を読み取ることが自然だと感じます。</li>
+        </ul>
+      </div>
+    </div>
+
+  {% elif key == "feedback" %}
+    <h4 class="text-lg font-bold mb-1">相手への批判の伝え方</h4>
+    <p class="text-xs mb-4 text-gray-600">批判をどう伝えるかに関する価値観です。</p>
+    <div class="space-y-4">
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-teal pl-2 mb-1">直接的なネガティブ・フィードバック</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>問題点や批判は率直に伝える方が誠実だと考えます。</li>
+          <li>指摘と人格は別物だという前提があります。</li>
+        </ul>
+      </div>
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-orange pl-2 mb-1">間接的なネガティブ・フィードバック</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>相手の感情や関係性への配慮を重視します。</li>
+          <li>柔らかい表現や前置きを通じて伝えることが自然です。</li>
+        </ul>
+      </div>
+    </div>
+
+  {% elif key == "persuasion" %}
+    <h4 class="text-lg font-bold mb-1">相手を説得する方法</h4>
+    <p class="text-xs mb-4 text-gray-600">「なぜ納得するか」「どう説明されると腹落ちするか」の価値観です。</p>
+    <div class="space-y-4">
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-teal pl-2 mb-1">原理優先（なぜ？）</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>背景・理由・考え方を理解した上で納得したいタイプです。</li>
+          <li>筋が通っていることを重視します。</li>
+        </ul>
+      </div>
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-orange pl-2 mb-1">応用優先（どうやって？）</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>具体的な方法や手順が示されると納得しやすいタイプです。</li>
+          <li>実行イメージが持てることを重視します。</li>
+        </ul>
+      </div>
+    </div>
+
+  {% elif key == "hierarchy" %}
+    <h4 class="text-lg font-bold mb-1">上司と部下の関係</h4>
+    <p class="text-xs mb-4 text-gray-600">組織内の立場や役割をどう捉えるかの価値観です。</p>
+    <div class="space-y-4">
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-teal pl-2 mb-1">平等主義的</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>上司と部下は対等に意見を出し合う関係だと考えます。</li>
+          <li>フラットなコミュニケーションを好みます。</li>
+        </ul>
+      </div>
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-orange pl-2 mb-1">階層主義的</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>役職や立場には明確な意味があると考えます。</li>
+          <li>序列に沿った指示や報告が重要だと感じます。</li>
+        </ul>
+      </div>
+    </div>
+
+  {% elif key == "decision" %}
+    <h4 class="text-lg font-bold mb-1">意思決定の方法</h4>
+    <p class="text-xs mb-4 text-gray-600">どのように決めると納得できるかの価値観です。</p>
+    <div class="space-y-4">
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-teal pl-2 mb-1">合意志向</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>関係者の意見をすり合わせ、納得感を重視します。</li>
+          <li>時間がかかっても合意形成を大切にします。</li>
+        </ul>
+      </div>
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-orange pl-2 mb-1">トップダウン式</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>決定権を明確にし、スピードと実行力を重視します。</li>
+          <li>最終判断はリーダーが行うべきだと考えます。</li>
+        </ul>
+      </div>
+    </div>
+
+  {% elif key == "trust" %}
+    <h4 class="text-lg font-bold mb-1">信頼する方法</h4>
+    <p class="text-xs mb-4 text-gray-600">何をもって相手を信頼するかに関する価値観です。</p>
+    <div class="space-y-4">
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-teal pl-2 mb-1">タスクベース</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>仕事の成果や約束を守ることによって信頼が築かれます。</li>
+          <li>実務上の信頼を重視します。</li>
+        </ul>
+      </div>
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-orange pl-2 mb-1">関係ベース</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>一緒に過ごす時間や個人的な関係性を通じて信頼が育ちます。</li>
+          <li>人としてのつながりを重視します。</li>
+        </ul>
+      </div>
+    </div>
+
+  {% elif key == "conflict" %}
+    <h4 class="text-lg font-bold mb-1">見解の相違があった場合</h4>
+    <p class="text-xs mb-4 text-gray-600">意見の違いにどう向き合うかの価値観です。</p>
+    <div class="space-y-4">
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-teal pl-2 mb-1">対立型</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>議論や反論は、より良い結論のために必要だと考えます。</li>
+          <li>公の場での意見のぶつかり合いも問題ないと感じます。</li>
+        </ul>
+      </div>
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-orange pl-2 mb-1">対立回避型</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>対立は関係性に影響すると感じます。</li>
+          <li>意見の違いは慎重に、穏やかに扱いたいと考えます。</li>
+        </ul>
+      </div>
+    </div>
+
+  {% elif key == "time" %}
+    <h4 class="text-lg font-bold mb-1">効率的なスケジューリングの方法</h4>
+    <p class="text-xs mb-4 text-gray-600">時間や計画をどう扱うかに関する価値観です。</p>
+    <div class="space-y-4">
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-teal pl-2 mb-1">直線的な時間</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>計画通りに一つずつ進めることを重視します。</li>
+          <li>締切やスケジュールの厳守が重要です。</li>
+        </ul>
+      </div>
+      <div class="bg-gray-50 p-2 rounded">
+        <p class="font-bold text-sm border-l-2 border-teamy-orange pl-2 mb-1">柔軟な時間</p>
+        <ul class="list-disc list-inside text-[11px] leading-relaxed ml-1">
+          <li>状況に応じて予定を変えることは自然だと考えます。</li>
+          <li>優先順位の変化や割り込みにも対応します。</li>
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+</div>

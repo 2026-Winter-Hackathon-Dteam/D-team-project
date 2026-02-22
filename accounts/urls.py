@@ -1,7 +1,10 @@
 from django.urls import path
-from .views import sample
+from . import views 
 
+app_name = 'accounts'
 
 urlpatterns = [
-    path('sample/', sample),
+    path('sample/', views.sample, name='members'),
+    # アカウント作成モーダルテスト用
+    path('create-member/', views.test_create_member, name='create_member'),
 ]

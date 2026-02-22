@@ -1,0 +1,37 @@
+{% load static %}
+
+<div class="max-w-4xl mx-auto py-12 space-y-12">
+
+  {% with score=graph_data.0.personal_score_normalized key="context" title="コミュニケーションの文脈" left="ローコンテクスト" right="ハイコンテクスト" %}
+    {% include "analysis/includes/me_row.html" %}
+  {% endwith %}
+
+  {% with score=graph_data.1.personal_score_normalized key="feedback" title="相手への批判の伝え方" left="直接的" right="間接的" %}
+    {% include "analysis/includes/me_row.html" %}
+  {% endwith %}
+
+  {% with score=graph_data.2.personal_score_normalized key="persuasion" title="説得の組み立て方" left="原理優先" right="応用優先" %}
+    {% include "analysis/includes/me_row.html" %}
+  {% endwith %}
+
+  {% with score=graph_data.3.personal_score_normalized key="hierarchy" title="権威との距離感" left="平等主義" right="階層主義" %}
+    {% include "analysis/includes/me_row.html" %}
+  {% endwith %}
+
+  {% with score=graph_data.4.personal_score_normalized key="decision" title="意思決定の進め方" left="合意重視" right="トップダウン" %}
+    {% include "analysis/includes/me_row.html" %}
+  {% endwith %}
+
+  {% with score=graph_data.5.personal_score_normalized key="trust" title="信頼の築き方" left="タスク重視" right="関係重視" %}
+    {% include "analysis/includes/me_row.html" %}
+  {% endwith %}
+
+  {% with score=graph_data.6.personal_score_normalized key="conflict" title="議論のスタイル" left="対立回避" right="対立歓迎" %}
+    {% include "analysis/includes/me_row.html" %}
+  {% endwith %}
+
+  {% with score=graph_data.7.personal_score_normalized key="time" title="スケジュールへの考え方" left="直線的" right="柔軟" %}
+    {% include "analysis/includes/me_row.html" %}
+  {% endwith %}
+
+</div>
