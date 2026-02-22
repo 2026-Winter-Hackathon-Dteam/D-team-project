@@ -10,10 +10,11 @@ from .models import UserValueScore, Question
 from .services import recalc_team_scores
 from .views_graph import _get_user_scores_only, _get_user_scores_with_team, _get_team_scores, _get_team_scatter_data
 from .views_advices import _get_user_advices_with_team, _get_team_advices
+from django.contrib.auth.decorators import login_required
 
 
 # 回答保存　submit_answersを1回実行すると、SQLへのクエリは3+N回（Nはユーザーが所属するチーム数）
-#@login_required
+@login_required
 @require_http_methods(["POST"])
 @transaction.atomic
 def submit_answers(request):
@@ -39,12 +40,7 @@ def submit_answers(request):
     if not answers:
         return JsonResponse({"error": "no answers"}, status=400)
 
-    # ログインユーザー取得（未ログイン時はテスト用ユーザー）
-    if getattr(request, "user", None) and request.user.is_authenticated: #本番では、getattr(・・・None)は外しても良い 
-        user = request.user
-    else:
-        user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
-        #return redirect("analysis:login")  # 未ログインならログインページへ（本番用）
+    user = request.user
 
 
     # Questionからまとめて取得（id,value_key,is_reverse）
@@ -127,22 +123,15 @@ def submit_answers(request):
 
 
 # members_pageビュー
-#@login_required
+@login_required
 @require_http_methods(["GET", "POST"])
 def members_page(request):
     """
     価値観公開しているユーザーの評価結果ページを表示（GET）
     グラフデータをコンテキストに含める
     """
-    # ログインユーザー取得（未ログイン時はテスト用ユーザー）
-    if getattr(request, "user", None) and request.user.is_authenticated: #本番では、getattr(・・・None)は外しても良い 
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222002")
-        #return redirect("analysis:login")  # 未ログインならログインページへ（本番用）
-
-    target_user_id = "11111111-1111-1111-1111-222222222001" # テスト用ユーザーID
-    #target_user_id = request.GET.get("user_id") # 本番用
+    current_user = request.user
+    target_user_id = request.GET.get("user_id")
     if not target_user_id or str(current_user.id) == target_user_id:
         return redirect("analysis:personal_analysis")
 
@@ -180,19 +169,13 @@ def members_page(request):
 
 
 # personal_analysisビュー
-#@login_required
+@login_required
 @require_http_methods(["GET"])
 def personal_analysis(request):
     """チーム比較＋アドバイス表示ページ（GET）"""
     team_id = request.GET.get("team_id", "")
 
-    # ログインユーザー取得（未ログイン時はテスト用ユーザー）
-    if getattr(request, "user", None) and request.user.is_authenticated: #本番では、getattr(・・・None)は外しても良い 
-        user = request.user
-    else:
-        user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
-        #return redirect("analysis:login")  # 未ログインならログインページへ（本番用）
-        
+    user = request.user
 
     team_options = [
         {
@@ -241,18 +224,13 @@ def personal_analysis(request):
 
 
 # managers_pageビュー
-#@login_required
+@login_required
 @require_http_methods(["GET", "POST"])
 def managers_page(request):
     """チームマネージャー向けページ表示"""
     team_id = request.GET.get("team_id", "")
 
-    # ログインユーザー取得（未ログイン時はテスト用ユーザー）
-    if getattr(request, "user", None) and request.user.is_authenticated: #本番では、getattr(・・・None)は外しても良い 
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
-        #return redirect("analysis:login")  # 未ログインならログインページへ（本番用）
+    current_user = request.user
 
     team = get_object_or_404(Teams, pk=team_id)
     is_team_leader = team.leader_user_id == current_user.id
