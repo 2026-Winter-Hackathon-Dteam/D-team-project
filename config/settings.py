@@ -12,9 +12,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = os.getenv("DEBUG", "False")だけではDjangoは文字列の"False"を受け取ってしまって、boolianのFalseにならない
+DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "yes")
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
+# .env.prodのスペース対策
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv("ALLOWED_HOSTS", "").split(",")
+    if host.strip()
+]
 
 
 # Application definition
@@ -30,6 +36,7 @@ INSTALLED_APPS = [
     'analysis',
     'spaces',
     'teams',
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -77,7 +84,7 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
-LOGIN_URL = "accounts:login"
+# LOGIN_URL = "accounts:login"
 LOGOUT_REDIRECT_URL = "accounts:login"
 
 # Password validation
@@ -115,20 +122,68 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 # 各アプリのstaticを読み込む
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
 # config/staticを読み込む    
 STATICFILES_DIRS = [
     BASE_DIR / "static",  
 ]
 # ↓デプロイ時のcollectstatic用
-#STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+AWS_CLOUDFRONT_DNS = os.getenv("AWS_CLOUDFRONT_DNS")
+AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "ap-northeast-1")
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "config.storages.StaticStorage",
+        "OPTIONS": {
+            "bucket_name": os.getenv("AWS_STORAGE_BUCKET_NAME"),
+            "location": "static",
+        },
+    },
+}
+
+STATIC_URL = f"https://{AWS_CLOUDFRONT_DNS}/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#↓本番はCSRF_TRUSTED_ORIGINSにドメイン名とALBに変更
-#CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS","").split(",")
-#SESSION_COOKIE_SECURE = not DEBUG
-#CSRF_COOKIE_SECURE = not DEBUG
+# POST処理を信用していいオリジンの指定
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS","").split(",")
+
+# 'https://teamy-profile.com'を入力して最初に表示されるページへの自動遷移。topならtopに変える。
+LOGIN_URL = "/top/"
+
+# sessionIDを含むCookieをHTTPSの時だけ許可する
+SESSION_COOKIE_SECURE = not DEBUG
+
+# CSRFトークンを含むCookieをHTTPSの時だけ許可する
+CSRF_COOKIE_SECURE = not DEBUG
+
+# ALBがHTTPSをHTTPとして通信しているので、Djangoに元はHTTPSと信じさせる＋万一スルーされたらhttpはリダイレクトさせる
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# クライアントがアクセスしてきたHOST名をX_Forwarded_Hostヘッダーから取得する
+USE_X_FORWARDED_HOST = True
+
+# HSTS(ブラウザにHTTPSでアクセスすべきサイトだと覚えさせる時間と、サブドメインアクセスでも有効にする))
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+# ブラウザが勝手にContent-Typeを推測するのを防ぐ
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# デフォルトもDENYであるが明示的に表示
+X_FRAME_OPTIONS = 'DENY'
+
+# 他人がアプリ内のログイン後のURLなどをそのままコピペしてリンクとしても、リンクとしてはteamy-profile.comに飛ぶ
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
+# デフォルトでも'Lax'ではあるが将来性のために明示。sessionIDとCSRFトークンをGETなら送る、POSTなら送らない
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
