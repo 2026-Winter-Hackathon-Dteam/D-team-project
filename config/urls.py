@@ -9,7 +9,7 @@ urlpatterns = [
     path('spaces/', include('spaces.urls')),
     path('teams/', include('teams.urls')),
     path('analysis/', include('analysis.urls', namespace='analysis')),
-
+    path('health/', views.health_check),
 ]
 
 # Tailwind.CSS 動作確認のための開発環境用static配信設定（DEBUG=True時のみ有効）
