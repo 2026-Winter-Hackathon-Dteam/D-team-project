@@ -1,7 +1,10 @@
+import re
+import uuid
 from django.db import models
 from django.conf import settings
 from django.core.validators import RegexValidator
-import uuid
+from django.core.exceptions import ValidationError
+
 
 # Spacesテーブル
 class Spaces(models.Model):
@@ -14,8 +17,8 @@ class Spaces(models.Model):
         validators=[
             RegexValidator(
                 # r''(raw文字列)
-                regex=r'^[a-zA-Z0-9]{3}$',
-                message='3桁の英数字のみ入力してください'
+                regex=r'^[A-Z0-9]{3}$',
+                message='英数字3文字で入力してください'
             )
         ],
         unique=True, 
@@ -24,7 +27,9 @@ class Spaces(models.Model):
     owner_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,  # カスタムUserモデルを参照
         on_delete=models.CASCADE, 
-        related_name="owned_spaces"
+        related_name="owned_spaces",
+        null=True,
+        blank=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -33,6 +38,21 @@ class Spaces(models.Model):
         db_table = "Spaces"
         verbose_name = "スペース"
         verbose_name_plural = "スペース"
+
     def __str__(self):
         return f"{self.name}({self.code})"
+    
+    def clean(self):
+        if self.code:
+            value_code = self.code.strip().upper()
+
+            if not re.fullmatch(r"^[A-Z0-9]{3}$", value_code):
+                raise ValidationError("スペースコードは英数字3文字以内")
+            self.code = value_code
+
+    # 保存時に呼ぶuser.save()をオーバーライド
+    # 英文字を大文字に揃えて保存
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 

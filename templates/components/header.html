@@ -4,13 +4,12 @@
 
   <!-- ===== ロゴ ===== -->
   <div class="flex-shrink-0 flex items-center">
-    {# <a href="{% url 'accounts:top' %}" class="ml-6" #}
-    <a href="#" class="ml-6">
+    <a href="{% url 'accounts:top' %}" class="ml-6">
       <img src="{% static 'imgs/Teamy_logo.png' %}" alt="Teamy_logo" class="h-[72px] w-auto">
     </a>
   </div>
 
- {# {% if request.user.is_authenticated %} #} 
+ {% if request.user.is_authenticated %}
   <!-- ================= ログイン後 ================= -->
   <div class="hidden md:flex items-center gap-6">
 
@@ -31,13 +30,12 @@
         Teams
       </a>
 
-      {# {% if request.user.is_admin %} #}
-      {# <a href="{% url 'accounts:members' %}" #}
-      <a href="#"
+      {% if request.user.is_admin %} 
+      <a href="{% url 'accounts:members' %}"
         class="hover:opacity-70 {% if request.path == '/members/' %}text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
         Members
       </a>
-      {# {% endif %} #}
+      {% endif %}
     </nav>
 
     <!-- ===== ユーザーメニュー ===== -->
@@ -62,21 +60,25 @@
         {% if request.user.is_owner %}
           <a href="/space/" class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">スペース編集</a>
         {% endif %}
-        <a href="/logout/" class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">ログアウト</a>
+        <form method="post" action="{% url 'accounts:logout' %}">
+          {% csrf_token %}
+          <button type="submit"
+              class="block w-full text-left px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">
+              ログアウト
+          </button>
+        </form>
       </div>
     </div>
 
   </div>
 
-  {% comment %} 
-  {% else %}
+ {% else %}
   <!-- ================= ログイン前 ================= -->
   <nav class="flex items-center gap-12 mr-6">
-    <a href="#" 
+    <a href="{% url 'accounts:login' %}" 
     class="add-owner self-center inline-block border border-teamy-teal text-teamy-teal hover:bg-teamy-teal hover:text-white hover:scale-[1.05] active:scale-[0.98] transition-transform px-6 py-2 mt-2 rounded-full">
       Login
     </a>
   </nav>
-  {% endif %} 
- {% endcomment %} 
+ {% endif %} 
 </header>
