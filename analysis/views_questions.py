@@ -9,8 +9,21 @@ from .models import Question
 
 #テスト用
 def index(request):
-    # return HttpResponse("INDEX OK")
-    return render(request, "analysis/personal_analysis.html")
+    dummy_graph = [
+        {"personal_score_normalized": 20},
+        {"personal_score_normalized": 40},
+        {"personal_score_normalized": 60},
+        {"personal_score_normalized": 80},
+        {"personal_score_normalized": 30},
+        {"personal_score_normalized": 50},
+        {"personal_score_normalized": 70},
+        {"personal_score_normalized": 90},
+    ]
+
+    return render(request, "analysis/members_page.html", {
+        "target_user_name": "テストユーザー",
+        "graph_data": dummy_graph,
+    })
 
 QUESTIONS_PER_PAGE = 6  # ページ数は自由に設定可
 
