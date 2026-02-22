@@ -1,0 +1,65 @@
+{% load static %}
+
+<div class="w-full max-w-[840px] mx-auto bg-white p-8 rounded-lg relative">
+
+  <!-- ======== 閉じるボタン ======== -->
+  <button type="button" class="btn-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">
+    ×
+  </button>
+
+  <!-- ======== 全体レイアウト（3カラム） ======== -->
+  <div class="grid grid-cols-[auto_1fr_auto] items-center gap-12">
+
+    <!-- ======== 左：戻るボタン ======== -->
+    <div class="flex justify-center">
+      <button type="button" class="btn-prev w-12 h-12 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:-translate-x-1 transition">
+        ←
+      </button>
+    </div>
+
+    <!-- ======== 中央：テキスト＋画像 ======== -->
+    <div>
+
+      <!-- 見出し -->
+      <div>
+        <h1 class="text-2xl font-semibold h-[72px] flex items-center">
+          メンバーを管理者にしましょう
+        </h1>
+
+        <!-- 説明文 -->
+        <p class="h-[140px] flex items-center">
+          <span>
+            オーナーはメンバーから<span class="font-bold">管理者</span>を決めることができます。<br>
+            管理者は以下の操作を行えます。<br><br>
+            ・メンバーの作成 / 削除<br>
+            ・チームの作成 / 編集 / 削除<br>
+            ・チームへのメンバー追加 / 削除
+          </span>
+        </p>
+      </div>
+
+      <!-- 画像 -->
+      <img src="{% static 'imgs/discription_admin.svg' %}" alt="admin" class="w-full py-6">
+
+      <!-- ステップインジケーター -->
+      <div class="flex justify-center">
+        <div class="relative flex items-center w-48">
+          <div class="absolute inset-x-0 top-1/2 h-[1px] bg-teamy-gray -translate-y-1/2"></div>
+          <div class="relative z-10 w-3 h-3 rounded-full bg-teamy-gray"></div>
+          <div class="relative z-10 w-3 h-3 rounded-full bg-teamy-gray ml-auto"></div>
+          <div class="relative z-10 flex items-center justify-center w-9 h-9 rounded-full bg-teamy-navy text-white text-md font-bold ml-auto">3</div>
+          <div class="relative z-10 ml-auto w-3 h-3 rounded-full bg-teamy-gray"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ======== 右：次へボタン ======== -->
+    <div class="flex justify-center">
+      <button type="button" class="btn-next w-12 h-12 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:translate-x-1 transition">
+        →
+      </button>
+    </div>
+
+  </div>
+</div>

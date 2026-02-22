@@ -1,0 +1,35 @@
+services:
+  db:
+    image: mysql:8.0.42
+    container_name: dteam_dev_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+      - './my.cnf:/etc/my.cnf'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: dteam_django
+    env_file:
+      - .env
+    volumes:
+      - .:/app   # 開発時のみ
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    command: python manage.py runserver 0.0.0.0:8000
+
+
+volumes:
+  db_data:

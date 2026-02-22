@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}メンバーの価値観公開{% endblock %}
+
+{% block content %}
+
+<div class="results-container">
+  <h1>{{ target_user_name }}さんの価値観</h1>
+  <p>価値観公開している{{ target_user_name }}さんの価値観です</p>
+  
+  <!-- グラフ表示 -->
+  <div id="chart-container">
+    <!-- HTMLとCSSでグラフを実装 -->
+    {{ graph_data }}
+  </div>
+  
+  <div class="results-links">
+    <a href="{% url 'analysis:question_page' 1 %}">もう一度診断する</a>
+  </div>
+</div>
+
+<!-- グラフデータをJSON形式で埋め込み -->
+<script>
+  const graphData = {{ graph_data|safe }};
+  console.log("Graph data:", graphData);
+</script>
+
+{% endblock %}
+
+{% block extra_js %}{% endblock %}

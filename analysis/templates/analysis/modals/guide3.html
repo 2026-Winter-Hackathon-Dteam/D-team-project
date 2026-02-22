@@ -1,0 +1,147 @@
+{% load static %}
+<!-- ======== 全体レイアウト（3カラム） ======== -->
+<div class="grid grid-cols-[60px_1fr_60px] items-stretch gap-6 w-full h-full">
+
+  <!-- --- 左：戻るボタン枠 --- -->
+  <div class="flex items-center justify-center">
+    <button
+      type="button"
+      class="btn-prev shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:-translate-x-1 transition">
+      ←
+    </button>
+  </div>
+
+  <!-- --- 中央：本文 --- -->
+  <div class="min-h-0 overflow-y-auto">
+    <div class="min-h-full flex items-center justify-center">
+      <div class="space-y-8 py-4 w-full">
+
+        <h2 class="text-2xl font-bold border-l-4 border-teamy-teal pl-4">
+          8つの価値観とは？
+        </h2>
+
+        <p class="text-base leading-relaxed">
+          コミュニケーションには、主に次の8つの軸があります。
+        </p>
+
+        <ol class="grid grid-cols-1 gap-y-6">
+
+          <li class="flex gap-4 items-start">
+            <span class="text-teamy-navy font-black text-2xl leading-none">01</span>
+            <div>
+              <p class="font-bold text-teamy-navy">コミュニケーションの文脈</p>
+              <p class="text-base text-gray-700 mt-1">
+                ローコンテクスト ↔ ハイコンテクスト
+              </p>
+              <p class="text-sm text-gray-400 mt-0.5 ml-6">
+                （はっきり言うか、行間を読むか）
+              </p>
+            </div>
+          </li>
+
+          <li class="flex gap-4 items-start">
+            <span class="text-teamy-navy font-black text-2xl leading-none">02</span>
+            <div>
+              <p class="font-bold text-teamy-navy">相手への批判の伝え方</p>
+              <p class="text-base text-gray-700 mt-1">
+                直接的 ↔ 間接的なネガティブ・フィードバック
+              </p>
+              <p class="text-sm text-gray-400 mt-0.5 ml-6">
+                （率直に批判するか、柔らかく伝えるか）
+              </p>
+            </div>
+          </li>
+
+          <li class="flex gap-4 items-start">
+            <span class="text-teamy-navy font-black text-2xl leading-none">03</span>
+            <div>
+              <p class="font-bold text-teamy-navy">相手を説得する方法</p>
+              <p class="text-base text-gray-700 mt-1">
+                原理優先 ↔ 応用優先
+              </p>
+              <p class="text-sm text-gray-400 mt-0.5 ml-6">
+                （なぜ？から話すか、どうやって？から話すか）
+              </p>
+            </div>
+          </li>
+
+          <li class="flex gap-4 items-start">
+            <span class="text-teamy-navy font-black text-2xl leading-none">04</span>
+            <div>
+              <p class="font-bold text-teamy-navy">上司と部下の関係</p>
+              <p class="text-base text-gray-700 mt-1">
+                平等主義 ↔ 階層主義
+              </p>
+              <p class="text-sm text-gray-400 mt-0.5 ml-6">
+                （フラットか、上下関係を重視するか）
+              </p>
+            </div>
+          </li>
+
+          <li class="flex gap-4 items-start">
+            <span class="text-teamy-navy font-black text-2xl leading-none">05</span>
+            <div>
+              <p class="font-bold text-teamy-navy">意思決定の方法</p>
+              <p class="text-base text-gray-700 mt-1">
+                合意志向 ↔ トップダウン
+              </p>
+              <p class="text-sm text-gray-400 mt-0.5 ml-6">
+                （全員で決めるか、誰かが決めるか）
+              </p>
+            </div>
+          </li>
+
+          <li class="flex gap-4 items-start">
+            <span class="text-teamy-navy font-black text-2xl leading-none">06</span>
+            <div>
+              <p class="font-bold text-teamy-navy">信頼する方法</p>
+              <p class="text-base text-gray-700 mt-1">
+                タスクベース ↔ 関係ベース
+              </p>
+              <p class="text-sm text-gray-400 mt-0.5 ml-6">
+                （仕事で信頼するか、人間関係で信頼するか）
+              </p>
+            </div>
+          </li>
+
+          <li class="flex gap-4 items-start">
+            <span class="text-teamy-navy font-black text-2xl leading-none">07</span>
+            <div>
+              <p class="font-bold text-teamy-navy">見解の相違があった場合</p>
+              <p class="text-base text-gray-700 mt-1">
+                対立型 ↔ 対立回避型
+              </p>
+              <p class="text-sm text-gray-400 mt-0.5 ml-6">
+                （議論を歓迎するか、避けたいか）
+              </p>
+            </div>
+          </li>
+
+          <li class="flex gap-4 items-start">
+            <span class="text-teamy-navy font-black text-2xl leading-none">08</span>
+            <div>
+              <p class="font-bold text-teamy-navy">効率的なスケジューリングの方法</p>
+              <p class="text-base text-gray-700 mt-1">
+                直線的な時間 ↔ 柔軟な時間
+              </p>
+              <p class="text-sm text-gray-400 mt-0.5 ml-6">
+                （計画重視か、状況対応重視か）
+              </p>
+            </div>
+          </li>
+
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- --- 右：次へ（非表示） --- -->
+  <div class="flex items-center justify-center">
+    <button
+      type="button"
+      class="btn-next invisible shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:translate-x-1 transition">
+      →
+    </button>
+  </div>
+
+</div>

@@ -1,0 +1,84 @@
+{% load static %}
+
+<header class="flex items-center justify-between h-24 p-8 bg-white shadow-md sticky top-0 z-50">
+
+  <!-- ===== ロゴ ===== -->
+  <div class="flex-shrink-0 flex items-center">
+    <a href="{% url 'accounts:top' %}" class="ml-6">
+      <img src="{% static 'imgs/Teamy_logo.png' %}" alt="Teamy_logo" class="h-[72px] w-auto">
+    </a>
+  </div>
+
+ {% if request.user.is_authenticated %}
+  <!-- ================= ログイン後 ================= -->
+  <div class="hidden md:flex items-center gap-6">
+
+    <!-- ===== ナビ ===== -->
+    <nav class="flex items-center gap-12 mr-6">
+      <a href="{% url 'analysis:personal_analysis' %}"
+        class="hover:opacity-70 {% if '/analysis/personal_analysis/' in request.path %} text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
+        Analysis
+      </a>
+
+      <a href="{% url 'analysis:questions_start' %}"
+        class="hover:opacity-70 {% if 'analysis/questions' in request.path %}text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
+        Questions
+      </a>
+
+      <a href="{% url 'teams:team_index' %}"
+        class="hover:opacity-70 {% if request.path == '/teams/' %}text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
+        Teams
+      </a>
+
+      {% if request.user.is_admin %} 
+      <a href="{% url 'accounts:members' %}"
+        class="hover:opacity-70 {% if request.path == '/members/' %}text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
+        Members
+      </a>
+      {% endif %}
+    </nav>
+
+    <!-- ===== ユーザーメニュー ===== -->
+    <div class="relative group flex items-center">
+      <button
+        class="flex items-center text-[#0E1336] group-hover:opacity-70 transition-opacity font-medium focus:outline-none">
+        {{ request.user.name }}
+        <svg class="ml-1 w-4 h-4 transition-transform duration-200 group-hover:rotate-180"
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+
+      <div
+        class="absolute top-full right-0 whitespace-nowrap w-max  
+               bg-white border border-gray-100 shadow-lg rounded-md py-2 
+               invisible opacity-0 group-hover:visible group-hover:opacity-100
+               transition-all duration-200 z-[100]">
+        <a href="/profile/" class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">プロフィール変更</a>
+        <a href="/password/" class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">パスワード変更</a>
+        {% if request.user.is_owner %}
+          <a href="/space/" class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">スペース編集</a>
+        {% endif %}
+        <form method="post" action="{% url 'accounts:logout' %}">
+          {% csrf_token %}
+          <button type="submit"
+              class="block w-full text-left px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">
+              ログアウト
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+ {% else %}
+  <!-- ================= ログイン前 ================= -->
+  <nav class="flex items-center gap-12 mr-6">
+    <a href="{% url 'accounts:login' %}" 
+    class="add-owner self-center inline-block border border-teamy-teal text-teamy-teal hover:bg-teamy-teal hover:text-white hover:scale-[1.05] active:scale-[0.98] transition-transform px-6 py-2 mt-2 rounded-full">
+      Login
+    </a>
+  </nav>
+ {% endif %} 
+</header>
