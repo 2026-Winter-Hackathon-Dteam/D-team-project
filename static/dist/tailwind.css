@@ -2813,6 +2813,11 @@ video {
   border-color: rgb(203 213 225 / var(--tw-border-opacity, 1));
 }
 
+.border-teamy-tealDark {
+  --tw-border-opacity: 1;
+  border-color: rgb(3 171 162 / var(--tw-border-opacity, 1));
+}
+
 .border-l-transparent {
   border-left-color: transparent;
 }

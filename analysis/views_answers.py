@@ -249,12 +249,12 @@ def managers_page(request):
         current_user = get_object_or_404(CustomUser, pk="11111111-1111-1111-1111-222222222001")
         #return redirect("analysis:login")  # 未ログインならログインページへ（本番用）
         
-    # 所属チーム一覧（プルダウン用）※フロントテスト用の仮コードです
-    team_users = Team_Users.objects.filter(user=current_user).select_related("team")
+    # リーダーであるチーム一覧（プルダウン用）※フロントテスト用の仮コードです
+    leader_teams = Teams.objects.filter(leader_user=current_user)
     team_options = [
-    {"id": str(tu.team_id), "name": tu.team.name}
-    for tu in team_users
-]
+        {"id": str(team.id), "name": team.name}
+        for team in leader_teams
+    ]
 
     team = get_object_or_404(Teams, pk=team_id)
     is_team_leader = team.leader_user_id == current_user.id

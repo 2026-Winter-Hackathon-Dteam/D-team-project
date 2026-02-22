@@ -1,57 +1,129 @@
 document.addEventListener('DOMContentLoaded', function() {
     renderMatrixChart();
+    attachHoverSync();
 });
 
-//  *チームの価値観マップ（マトリクス）を描画
+// マトリクス上にドットを描画
 function renderMatrixChart() {
     const plotArea = document.getElementById('plotArea');
     const jsonData = document.getElementById('matrix-data');
     
     if (!plotArea || !jsonData) return;
 
-    // JSONデータを取得
     const matrixData = JSON.parse(jsonData.textContent);
     
-    // プロットエリアのサイズ取得
+    // マトリクス図エリアの実寸pxサイズをHTMLから取得
     const width = plotArea.clientWidth;
     const height = plotArea.clientHeight;
 
-    // データの正規化（max_diffとstdを座標に変換）
-    // max_diff(x軸): 0〜100 を想定
-    // std(y軸): 0〜50 を想定 (ばらつきなのでxより範囲が狭いことが多い)
-    
+    // 配列の1要素をdataとして（x:40,y:20など）,配列の順番をindexとして受け取りループ
     matrixData.forEach((data, index) => {
-        const dot = document.createElement('div');
-        dot.className = 'absolute w-10 h-10 bg-teamy-teal text-white rounded-full flex items-center justify-center font-bold shadow-lg border-2 border-white transition-transform hover:scale-110 z-20';
-        
-        // 座標計算 (左下が 0,0 の想定)
-        // x: 最大差 (右に行くほど大きい)
-        // y: ばらつき (上に行くほど大きい)
-        const posX = (data.x / 100) * width;
-        const posY = height - ((data.y / 50) * height); // Y軸は上が0なので引き算
 
+        // ドットにする空divにスタイルを適用し、各ドットにdata-index属性で項目番号を持たせる
+        // （8件固定なのでHTMLで書いてもいいが、チーム回答0件のときにDOMに残り隠す制御が必要なためJSで描画）
+        const dot = document.createElement('div');
+        dot.className =
+        'matrix-dot absolute w-10 h-10 bg-teamy-teal text-white rounded-full flex items-center justify-center font-bold shadow-md transition-transform duration-150 ease-out z-20';        
+        dot.dataset.index = index;
+        
+        // 横の割合（0〜100）を、実際のグラフサイズにあわせたpx座標に変換
+        // 縦の割合（0〜50）を、px座標に変換（CSSは上が0px基準のためheightから引いて上下反転）
+        const posX = (data.x / 100) * width;
+        const posY = height - ((data.y / 50) * height);
+
+        // 座標位置にドットを配置し、自身のサイズ分を-50％ずらして中心補正
         dot.style.left = `${posX}px`;
         dot.style.top = `${posY}px`;
-        dot.style.transform = 'translate(-50%, -50%)'; // 中心を合わせる
+        dot.style.transform = 'translate(-50%, -50%)';
         
-        dot.textContent = index + 1; // 1〜8の番号
-        
-        // ツールチップ（ホバー時に項目名などを出す場合用）
+        // ドットに番号とツールチップ設定
+        dot.textContent = index + 1;
         dot.title = `項目 ${index + 1}`;
         
+        // 作成したドット要素をマトリクスエリアに追加して画面に表示
         plotArea.appendChild(dot);
     });
 }
 
-//  アコーディオンの開閉
+
+// リストにホバーしたら対応するドットを強調（scale版）
+function attachHoverSync() {
+
+    // 右側の項目リスト（8項目）とドットを取得
+    const listItems = document.querySelectorAll('.matrix-list-item');
+    const dots = document.querySelectorAll('.matrix-dot');
+
+    // 8項目リストごとにイベントを設定
+    listItems.forEach(item => {
+
+        // リスト側が持っているdata-indexとリストを取得（どのドットと対応するか）
+        const index = item.dataset.index;
+        // リスト内の丸要素（番号の丸）を取得
+        const circle = item.querySelector('span');
+
+        // ----- マウスが乗ったとき -----
+        item.addEventListener('mouseenter', () => {
+            // 全ドットの中からindexが一致するドットだけ変更
+            dots.forEach(dot => {
+                if (dot.dataset.index === index) {
+
+                    // 色の変更・ドット拡大・前面移動
+                    dot.classList.remove('bg-teamy-teal');
+                    dot.classList.add('bg-teamy-orange');
+                    dot.style.transform = 'translate(-50%, -50%) scale(1.25)';
+                    dot.style.zIndex = 1000;
+                }
+            });
+
+            // 右側リストのドット強調
+            circle.classList.remove('bg-teamy-teal');
+            circle.classList.add('bg-teamy-orange');
+            circle.style.transform = 'scale(1.1)';
+        });
+
+        // ----- マウスが離れたとき -----
+        item.addEventListener('mouseleave', () => {
+
+            // 対応するドットを元に戻す
+            dots.forEach(dot => {
+                if (dot.dataset.index === index) {
+
+                    // 色・拡大・前面移動を戻す
+                    dot.classList.remove('bg-teamy-orange');
+                    dot.classList.add('bg-teamy-teal');
+                    dot.style.transform = 'translate(-50%, -50%)';
+
+                    // z-indexを元に戻す
+                    dot.style.zIndex = 20;
+                }
+            });
+
+            // リスト側の丸も元に戻す
+            circle.classList.remove('bg-teamy-orange');
+            circle.classList.add('bg-teamy-teal');
+            circle.style.transform = 'scale(1)';
+        });
+    });
+}
+
+
+// アコーディオンの開閉
 function toggleAccordion(contentId, button) {
+
+    // 開閉対象のコンテンツと矢印を取得
     const content = document.getElementById(contentId);
     const icon = button.querySelector('svg');
 
+    // hiddenクラスの有無で開閉判定
     if (content.classList.contains('hidden')) {
+
+        // 開く＆矢印回転
         content.classList.remove('hidden');
         if (icon) icon.classList.add('rotate-180');
+
     } else {
+
+        // 閉じる＆矢印回転
         content.classList.add('hidden');
         if (icon) icon.classList.remove('rotate-180');
     }
