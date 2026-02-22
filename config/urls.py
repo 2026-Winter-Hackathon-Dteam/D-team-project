@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -9,7 +10,7 @@ urlpatterns = [
     path('spaces/', include('spaces.urls')),
     path('teams/', include('teams.urls')),
     path('analysis/', include('analysis.urls', namespace='analysis')),
-
+    path('', RedirectView.as_view(url='/top/'), name='root'),
 ]
 
 # Tailwind.CSS 動作確認のための開発環境用static配信設定（DEBUG=True時のみ有効）
