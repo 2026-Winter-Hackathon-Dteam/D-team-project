@@ -13,14 +13,11 @@ def sample(request):
     return HttpResponse("")
 
 # spaceとowner編集画面表示 (GET)と編集処理 (POST)
-# @login_required
+@login_required
 @require_http_methods(["GET", "POST"])
 def space_edit(request, space_id):
     # 現在のユーザーのスペースを取得（1ユーザー = 1スペース想定）
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(get_user_model(), pk="11111111-1111-1111-1111-222222222001")  # テスト用ユーザー
+    current_user = request.user
     
     space = get_object_or_404(Spaces, owner_user=current_user)
     
@@ -63,16 +60,12 @@ def space_edit(request, space_id):
 
 
 # space削除
-# login_required
+@login_required
 @require_http_methods(["POST"])
 @transaction.atomic
 def space_delete(request, space_id):
     
-    # テスト用ユーザーを取得（後に削除）
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(get_user_model(), pk="11111111-1111-1111-1111-222222222001")  # テスト用ユーザー
+    current_user = request.user
     
     space = get_object_or_404(Spaces, id=space_id)
     
@@ -83,8 +76,8 @@ def space_delete(request, space_id):
     if request.method == "POST":
         space.owner_user = None
         space.save(update_fields=['owner_user'])
-        space.customuser_set.all().delete()
+        space.users.all().delete()
         space.delete()
-        return redirect('accounts:login')  # personal_analysis.htmlへリダイレクト（後でTOP遷移に修正）
+        return redirect('accounts:top') # トップページへリダイレクト
     
-    return redirect('spaces:space_edit')  # GETリクエストは編集ページへリダイレクト
+    return redirect('spaces:space_edit', space_id=space_id)  # GETリクエストは編集ページへリダイレクト
