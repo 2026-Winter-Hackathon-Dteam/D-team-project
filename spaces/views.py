@@ -43,9 +43,20 @@ def space_edit(request, space_id):
                     new_owner_id = owner_form.cleaned_data.get('owner_id')
                     if new_owner_id:
                         new_owner = get_object_or_404(User, id=new_owner_id)
+                        
+                        #　現在のオーナーのis_adminをFalseに更新
+                        current_owner = space.owner_user
+                        if current_owner:
+                            current_owner.is_admin = False
+                            current_owner.save(update_fields=['is_admin'])
+                        
+                        # 新しいオーナーのis_adminをTrueに更新
+                        new_owner.is_admin = True
+                        new_owner.save(update_fields=['is_admin'])
+                        
                         space.owner_user = new_owner
                         space.save(update_fields=['owner_user'])
-            return redirect('analysis:personal_analysis')  # personal_analysis.htmlへリダイレクト（後で修正）
+            return redirect('accounts:members')  # members.htmlへリダイレクト(accoutsの方で、オーナーではない場合にはtopにリダイレクトする処理を入れて欲しい)
     else:
         form = SpaceEditForm(instance=target)
         owner_form = SpaceOwnerChangeForm(space)
@@ -71,7 +82,7 @@ def space_delete(request, space_id):
     
     # current_user がスペースのオーナーであることを確認
     if current_user != space.owner_user:
-        return redirect('spaces:space_edit', space_id=space_id)  # オーナーでない場合は編集ページへリダイレクト
+        return redirect('accounts:top')  # オーナーでない場合はトップページへリダイレクト
     
     if request.method == "POST":
         space.owner_user = None
