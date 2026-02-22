@@ -13,7 +13,15 @@
         class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">×</button>
 
       <!-- ======== 本体 ======== -->
-      <form method="POST" action="">
+      <form
+        id="deleteMemberForm"
+        method="POST"
+        action="{% url 'teams:delete_member' %}"
+        hx-post="{% url 'teams:delete_member' %}"
+        hx-target="#team-detail"
+        hx-select="#team-detail"
+        hx-swap="outerHTML"
+      >
         {% csrf_token %}
 
         <div class="flex flex-col items-center w-full p-10 gap-10">
@@ -32,14 +40,14 @@
               ---
             </span>
 
-            <!-- member-id -->
-            <span id="memberDeleteTargetIdDisplay"
+            <!-- member-id→社員ID表示に変更 -->
+            <span id="memberDeleteTargetEmployeeId"
                   class="text-gray-600 text-xl">
               ---
             </span>
 
             <!-- hidden -->
-            <input type="hidden" name="member_id" id="memberDeleteTargetId">
+            <input type="hidden" name="user_id" id="memberDeleteTargetId">
             <input type="hidden" name="team_id" value="{{ selected_team.id }}">
           </div>
         </div>

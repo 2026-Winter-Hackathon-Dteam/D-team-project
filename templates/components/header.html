@@ -15,8 +15,8 @@
 
     <!-- ===== ナビ ===== -->
     <nav class="flex items-center gap-12 mr-6">
-      <a href="/analysis/"
-        class="hover:opacity-70 {% if request.path == '/analysis/' %}text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
+      <a href="{% url 'analysis:personal_analysis' %}"
+        class="hover:opacity-70 {% if '/analysis/personal_analysis/' in request.path %} text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
         Analysis
       </a>
 
@@ -25,7 +25,7 @@
         Questions
       </a>
 
-      <a href="/teams/"
+      <a href="{% url 'teams:team_index' %}"
         class="hover:opacity-70 {% if request.path == '/teams/' %}text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
         Teams
       </a>
@@ -42,7 +42,7 @@
     <div class="relative group flex items-center">
       <button
         class="flex items-center text-[#0E1336] group-hover:opacity-70 transition-opacity font-medium focus:outline-none">
-        {{ request.user.name|default:"ユーザー" }}
+        {{ request.user.name }}
         <svg class="ml-1 w-4 h-4 transition-transform duration-200 group-hover:rotate-180"
              fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

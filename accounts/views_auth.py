@@ -137,6 +137,7 @@ class CustomLoginView(LoginView):
 # ログアウト
 class CustomLogoutView(LogoutView):
     next_page = reverse_lazy("accounts:login")  
+    http_method_names = ['post']
 
 # ***************************************************************************
 # ランダムパスワードの生成

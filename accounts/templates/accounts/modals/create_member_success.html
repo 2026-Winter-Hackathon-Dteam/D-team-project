@@ -1,0 +1,149 @@
+{% load static %}
+<!-- モーダル全体 -->
+<div id="createMemberModal" class="fixed inset-0 z-50">
+  <!-- 背景 -->
+  <div class="modal-bg absolute inset-0 bg-black/50 flex items-center justify-center">
+
+    <!-- 本体 -->
+    <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-[480px] p-10 relative text-xl">
+
+      <!-- 閉じる -->
+      <button type="button"
+        class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">
+        ×
+      </button>
+
+      <div class="pt-4 text-center">
+        <h3 class="text-3xl font-bold text-teamy-navy mb-6">アカウントを作成しました</h3>
+
+        <p class="text-red-500 text-lg font-medium leading-relaxed mb-6">
+          このパスワードは再表示できません。<br>必ず控えてください。
+        </p>
+
+        <div class="border-2 border-gray-200 rounded-xl p-8 mb-4">
+          <div class="space-y-6 text-left text-base mb-8">
+            
+            <div class="flex justify-between items-center group">
+              <span class="text-gray-700">スペースコード</span>
+              <div class="flex items-center gap-4">
+                <span id="display-space" class="text-gray-500 font-mono">{{ space_code }}</span>
+                <button type="button" onclick="copySingle('display-space', this)" class="text-gray-400 hover:text-gray-600 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center group">
+              <span class="text-gray-700">社員ID</span>
+              <div class="flex items-center gap-4">
+                <span id="display-id" class="text-gray-500 font-mono">{{ employee_id }}</span>
+                <button type="button" onclick="copySingle('display-id', this)" class="text-gray-400 hover:text-gray-600 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center group">
+              <span class="text-gray-700">初期パスワード</span>
+              <div class="flex items-center gap-4">
+                <span id="display-pw" class="text-gray-500 font-mono">{{ generated_password }}</span>
+                <button type="button" onclick="copySingle('display-pw', this)" class="text-gray-400 hover:text-gray-600 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" 
+            onclick="copyAll('display-space', 'display-id', 'display-pw', this)" 
+            class="border bg-teamy-grayLight hover:bg-teamy-gray text-teamy-grayText font-medium
+                  py-2 px-6 rounded-full transition-transform 
+                  hover:scale-[1.03] hover:shadow-md active:scale-[0.98]">
+            すべてコピー
+          </button>
+        </div>
+
+        <p id="copy-msg" class="text-center text-sm text-gray-500 font-medium h-5 opacity-0 transition-opacity mb-4">
+          コピーしました
+        </p>
+
+        <div class="flex flex-col items-center gap-5">
+          <button type="button"
+            hx-get="{% url 'accounts:create_member' %}"
+            hx-target="#createMemberModal"
+            hx-swap="outerHTML"
+            class="bg-teamy-orange hover:bg-teamy-orangeDark text-white font-medium
+                  py-3 px-16 rounded-full transition-transform shadow-md 
+                  hover:scale-[1.03] hover:shadow-md active:scale-[0.98]">
+            続けてアカウントを作成
+          </button>
+
+          <button type="button"
+          class="modal-close border border-teamy-orangeDark text-teamy-orangeDark font-medium
+                py-2 px-6 rounded-full transition-transform shadow-md 
+                hover:scale-[1.03] hover:shadow-md active:scale-[0.98]">
+            閉じる
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+// ----- コピーしました表示 -----
+function showCopyMessage() {
+  const msg = document.getElementById('copy-msg');
+  msg.classList.remove('opacity-0');
+  setTimeout(() => msg.classList.add('opacity-0'), 2000); // 2秒で消す
+  // Id('copy-msg')の要素を取得して変数msgに格納し、透明クラス（opacity-0）を外すことで表示/2秒後に戻す
+}
+
+// ----- 単体コピー ----- 
+function copySingle(elementId, btn) {
+  const text = document.getElementById(elementId).innerText;
+  if (!text) return;
+  // HTMLからコピーしたい要素のIDをonclick="copySingle('display-id', this)"で引数として送り、elementIdで受け取りtextとして格納
+
+  // クリップボードに保存が成功したら通知を出す
+  navigator.clipboard.writeText(text).then(() => {
+    // コピー時ボタンアニメ（0.5秒大きくする）
+    btn.classList.add('scale-125');
+    setTimeout(() => btn.classList.remove('scale-125'), 500);
+    
+    showCopyMessage();
+  });
+  /*
+  navigator.clipboard.はクリップボードに保存するメソッドで、writeText(text)でコピーする場所を指定
+  成功したら通知を出す関数を呼び出す。
+  */
+}
+
+// ----- すべてコピー ----- 
+function copyAll(spaceElem, idElem, pwElem, btn) {
+  // それぞれの要素からテキストを取得して変数に格納
+  const space = document.getElementById(spaceElem).innerText;
+  const id = document.getElementById(idElem).innerText;
+  const pw = document.getElementById(pwElem).innerText;
+
+  // テンプレートリテラル（`）で + で繋げることなく「項目名：値」の形をつくる
+  const combinedText = `スペースコード：${space}\n社員ID：${id}\n初期パスワード：${pw}`;
+
+  navigator.clipboard.writeText(combinedText).then(() => {
+    // コピー時ボタンアニメ
+    btn.classList.add('scale-105');
+    setTimeout(() => btn.classList.remove('scale-105'), 500);
+    
+    showCopyMessage();
+  });
+}
+</script>

@@ -1,0 +1,61 @@
+{% load static %}
+<!-- ======== 全体レイアウト（3カラム） ======== -->
+<div class="grid grid-cols-[60px_1fr_60px] items-stretch gap-6 w-full h-full">
+
+  <!-- --- 左：戻るボタン枠 （非表示）--- -->
+  <div class="flex items-center justify-center">
+    <button
+      type="button"
+      class="btn-prev invisible shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:-translate-x-1 transition">
+      ←
+    </button>
+  </div>
+
+  <!-- --- 中央：本文 --- -->
+  <div class="min-h-0 overflow-y-auto">
+    <div class="min-h-full flex items-center justify-center">
+      <div class="space-y-8 py-4 w-full">
+
+        <h2 class="text-2xl font-bold border-l-4 border-teamy-teal pl-4">
+          このアプリが目指していること
+        </h2>
+
+        <ul class="space-y-3">
+          <li class="flex items-start">
+            <span class="mr-2">✕</span> 人を変えることではありません
+          </li>
+          <li class="flex items-start">
+            <span class="mr-2">✕</span> 性格を否定することでもありません
+          </li>
+        </ul>
+
+        <div class="bg-teamy-teal/5 p-6 rounded-lg">
+          <p class="text-base leading-relaxed text-gray-800 font-semibold">
+            「この相手・このチームでは<br>どう振る舞うと一番うまくいくか」を<br>
+            状況ごとにわかるようにすることです。
+          </p>
+        </div>
+
+        <p class="text-base leading-relaxed px-4">
+          あなたが悪いのではなく、相手が悪いのでもなく、<br>
+          <span class="font-bold border-b-2 border-teamy-teal/40">
+            価値観の距離を知らなかっただけ。
+          </span><br>
+          <br>
+          このアプリは、その距離を教えてくれます。
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- --- 右：次へ --- -->
+  <div class="flex items-center justify-center">
+    <button
+      type="button"
+      class="btn-next shrink-0 w-10 h-10 font-bold text-xl rounded-full bg-teamy-navy text-white flex items-center justify-center shadow-md hover:translate-x-1 transition">
+      →
+    </button>
+  </div>
+
+</div>

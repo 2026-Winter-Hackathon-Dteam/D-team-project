@@ -1,0 +1,53 @@
+<div class="grid grid-cols-[220px_1fr] items-center w-full gap-8">
+
+  <!-- タイトル -->
+  <div class="relative text-teamy-grayText text-base font-bold tracking-wider">
+
+    <span class="group cursor-pointer inline-block">
+      {{ title }}
+
+      <!-- ホバー説明 -->
+      <div class="invisible group-hover:visible opacity-0 group-hover:opacity-100
+                  absolute top-full left-0 mt-4 z-50
+                  w-[420px] p-6
+                  bg-white rounded-xl shadow-2xl border border-gray-100
+                  text-sm text-gray-700 leading-relaxed
+                  transition-opacity duration-200
+                  pointer-events-none">
+
+        {% include "analysis/includes/category_descriptions.html" with key=key %}
+
+      </div>
+    </span>
+
+  </div>
+
+  <!-- バーエリア -->
+  <div class="relative">
+
+    <div class="relative h-3 bg-teamy-gray rounded-full w-full">
+
+      <div
+        class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-700 ease-out"
+        style="left: {{ score }}%;"
+      >
+        <div
+          class="w-7 h-7 rounded-full
+          {% if score < 50 %}
+            bg-teamy-orange
+          {% else %}
+            bg-teamy-teal
+          {% endif %}">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="flex justify-between mt-3">
+      <span class="text-sm text-teamy-orange font-bold">{{ left }}</span>
+      <span class="text-sm text-teamy-teal font-bold opacity-80">{{ right }}</span>
+    </div>
+
+  </div>
+
+</div>
