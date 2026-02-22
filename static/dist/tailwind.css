@@ -1220,6 +1220,10 @@ video {
   aspect-ratio: 1 / 1;
 }
 
+.aspect-\[4\/3\] {
+  aspect-ratio: 4/3;
+}
+
 .size-6 {
   width: 1.5rem;
   height: 1.5rem;
@@ -1415,6 +1419,30 @@ video {
   height: 1px;
 }
 
+.h-20 {
+  height: 5rem;
+}
+
+.h-14 {
+  height: 3.5rem;
+}
+
+.h-\[calc\(100vh-80px\)\] {
+  height: calc(100vh - 80px);
+}
+
+.h-\[320px\] {
+  height: 320px;
+}
+
+.h-\[calc\(55vh\)\] {
+  height: calc(55vh);
+}
+
+.h-\[200px\] {
+  height: 200px;
+}
+
 .max-h-full {
   max-height: 100%;
 }
@@ -1437,6 +1465,14 @@ video {
 
 .max-h-40 {
   max-height: 10rem;
+}
+
+.max-h-20 {
+  max-height: 5rem;
+}
+
+.max-h-16 {
+  max-height: 4rem;
 }
 
 .min-h-screen {
@@ -1533,6 +1569,10 @@ video {
 
 .min-h-0 {
   min-height: 0px;
+}
+
+.min-h-\[calc\(100vh-80px\)\] {
+  min-height: calc(100vh - 80px);
 }
 
 .w-12 {
@@ -1817,6 +1857,10 @@ video {
   width: 640px;
 }
 
+.w-\[260px\] {
+  width: 260px;
+}
+
 .min-w-\[500px\] {
   min-width: 500px;
 }
@@ -1967,6 +2011,10 @@ video {
 
 .max-w-5xl {
   max-width: 64rem;
+}
+
+.max-w-\[320px\] {
+  max-width: 320px;
 }
 
 .flex-1 {
@@ -2284,6 +2332,10 @@ video {
 
 .gap-16 {
   gap: 4rem;
+}
+
+.gap-14 {
+  gap: 3.5rem;
 }
 
 .gap-x-4 {
@@ -3465,6 +3517,11 @@ video {
   padding-right: 1.75rem;
 }
 
+.py-3\.5 {
+  padding-top: 0.875rem;
+  padding-bottom: 0.875rem;
+}
+
 .pb-4 {
   padding-bottom: 1rem;
 }
@@ -3653,6 +3710,10 @@ video {
   padding-right: 4rem;
 }
 
+.pt-16 {
+  padding-top: 4rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -3778,6 +3839,10 @@ video {
   font-size: 24px;
 }
 
+.text-\[40px\] {
+  font-size: 40px;
+}
+
 .font-bold {
   font-weight: 700;
 }
@@ -3832,6 +3897,14 @@ video {
 
 .leading-none {
   line-height: 1;
+}
+
+.leading-snug {
+  line-height: 1.375;
+}
+
+.leading-loose {
+  line-height: 2;
 }
 
 .tracking-widest {
@@ -4122,12 +4195,24 @@ video {
   text-decoration-color: #04D0C5;
 }
 
+.decoration-\[\#F1A46C\] {
+  text-decoration-color: #F1A46C;
+}
+
 .decoration-4 {
   text-decoration-thickness: 4px;
 }
 
+.decoration-2 {
+  text-decoration-thickness: 2px;
+}
+
 .underline-offset-8 {
   text-underline-offset: 8px;
+}
+
+.underline-offset-4 {
+  text-underline-offset: 4px;
 }
 
 .accent-orange-400 {
@@ -4938,12 +5023,25 @@ video {
     padding: 3.5rem;
   }
 
+  .md\:py-16 {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
   .md\:pb-6 {
     padding-bottom: 1.5rem;
   }
 
   .md\:pt-20 {
     padding-top: 5rem;
+  }
+
+  .md\:pt-14 {
+    padding-top: 3.5rem;
+  }
+
+  .md\:pt-10 {
+    padding-top: 2.5rem;
   }
 
   .md\:text-5xl {

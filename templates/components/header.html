@@ -1,11 +1,11 @@
 {% load static %}
 
-<header class="flex items-center justify-between h-24 p-8 bg-white shadow-md sticky top-0 z-50">
+<header class="flex items-center justify-between h-20 p-8 bg-white shadow-md sticky top-0 z-50">
 
   <!-- ===== ロゴ ===== -->
   <div class="flex-shrink-0 flex items-center">
     <a href="{% url 'accounts:top' %}" class="ml-6">
-      <img src="{% static 'imgs/Teamy_logo.png' %}" alt="Teamy_logo" class="h-[72px] w-auto">
+      <img src="{% static 'imgs/Teamy_logo.png' %}" alt="Teamy_logo" class="h-14 w-auto">
     </a>
   </div>
 
@@ -16,7 +16,7 @@
     <!-- ===== ナビ ===== -->
     <nav class="flex items-center gap-12 mr-6">
       <a href="{% url 'analysis:personal_analysis' %}"
-        class="hover:opacity-70 {% if '/analysis/personal_analysis/' in request.path %} text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
+        class="hover:opacity-70 {% if '/analysis/' in request.path and not '/analysis/questions' in request.path %} text-teamy-teal{% else %}text-teamy-grayDark{% endif %}">
         Analysis
       </a>
 
