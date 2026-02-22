@@ -10,8 +10,8 @@ static/dist/*
 # mac
 .DS_Store
 
-.env.prod          # 本番の環境変数（絶対にGitに入れてはいけない）
 staticfiles/       # collectstaticの出力先
 __pycache__/.      # Pythonが.pyファイルを実行する際に自動的に作られるキャッシュファイルの入るフォルダ
 # 慣習的に入れている(python2以前用)。__pycache__/の中に作られるキャッシュファイル単体のこと
 *.pyc
+.env.prod
