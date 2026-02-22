@@ -138,7 +138,7 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "app.storages.StaticStorage",
+        "BACKEND": "config.storages.StaticStorage",
         "OPTIONS": {
             "bucket_name": os.getenv("AWS_STORAGE_BUCKET_NAME"),
             "location": "static",
