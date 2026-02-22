@@ -15,7 +15,7 @@ def sample(request):
 # spaceとowner編集画面表示 (GET)と編集処理 (POST)
 # @login_required
 @require_http_methods(["GET", "POST"])
-def space_edit(request):
+def space_edit(request, space_id):
     # 現在のユーザーのスペースを取得（1ユーザー = 1スペース想定）
     if getattr(request, "user", None) and request.user.is_authenticated:
         current_user = request.user
@@ -28,7 +28,7 @@ def space_edit(request):
     if current_user != space.owner_user:
         return HttpResponseForbidden("オーナーしかスペースを編集できません。")
     
-    target = get_object_or_404(Spaces, id=space.id)
+    target = get_object_or_404(Spaces, id=space_id)
     
     # スペースに所属するメンバーを取得
     User = get_user_model()
