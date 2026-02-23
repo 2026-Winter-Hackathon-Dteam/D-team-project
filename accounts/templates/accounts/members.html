@@ -8,7 +8,7 @@
 
   <div class="flex items-center justify-between">
     <!-- スペース名 -->
-    <h1 class="text-3xl font-bold text-teamy-navy">{{ space_name }}スペース名</h1>
+    <h1 class="text-3xl font-bold text-teamy-navy">{{ space.name }}</h1>
     
     <div class="add_member flex items-center gap-4">
       <!-- [？]ヘルプリンク -->
@@ -82,6 +82,7 @@
         </tr>
       </thead>
 
+      {% comment %}
       <tbody class="divide-y divide-gray-100"> <!-- divideはtr間に線を入れてくれる -->
         <tr class="hover:bg-gray-50">
           <td class="py-4 px-2">
@@ -119,20 +120,19 @@
             </div>
           </td>
         </tr>
+        {% endcomment %}
 
-        {% comment %}
-        変数ができたらこちらに差し替え
         <tbody class="divide-y divide-gray-100"> <!-- divideはtr間に線を入れてくれる -->
-        {% for member in members %}
+        {% for member in space_members %}
           <tr class="hover:bg-gray-50">
 
             <!-- ===== 権限 ===== -->
             <td class="py-4 px-2">
-              {% if member.g_is_owner %}
+              {% if member.space.owner_user == member %}
                 <span class="inline-block border border-teamy-orangeDark text-teamy-orangeDark px-4 py-1 rounded-full">
                   オーナー
                 </span>
-              {% elif member.g_is_admin %}
+              {% elif member.is_admin %}
                 <span class="inline-block border border-teamy-orangeDark text-teamy-orangeDark px-4 py-1 rounded-full">
                   管理者
                 </span>
@@ -142,7 +142,7 @@
             </td>
 
             <!-- ===== 名前 ===== -->
-            <td class="py-4 px-2">{{ member.user_name }}</td>
+            <td class="py-4 px-2">{{ member.name }}</td>
 
             <!-- ===== ユーザーID ===== -->
             <td class="py-4 px-2">{{ member.employee_id }}</td>
@@ -150,14 +150,14 @@
             <!-- ===== 所属チーム ===== -->
             <td class="py-4 px-2">
               <div class="flex items-center flex-nowrap gap-2 overflow-x-auto w-full">
-                {% for team in member.teams.all %}
+                {% for membership in member.team_users_set.all %}
                   <div class="flex-shrink-0 inline-flex items-center gap-1 bg-teamy-grayLight rounded-full px-3 py-1 whitespace-nowrap h-7">
-                    {% if team.is_leader %}
+                    {% if membership.team.leader_user == member %}
                       <img src="{% static 'accounts/imgs/leader.png' %}"
                           alt="leader"
                           class="w-7 h-7 -ml-3 flex-shrink-0">
                     {% endif %}
-                    {{ team.name }}
+                    {{ membership.team.name }}
                   </div>
                 {% endfor %}
               </div>
@@ -186,9 +186,8 @@
             </td>
           </tr>
         {% endfor %}
-        </tbody>
-      {% endcomment %}
-
+      </tbody>
+    </table>
   </div>
 </div>
 
