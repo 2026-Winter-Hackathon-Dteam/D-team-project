@@ -1,9 +1,13 @@
 import re
 from django import forms
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import CustomUser
 from spaces.models import Spaces
+from teams.models import Teams
 
+
+# カスタムユーザークラスを取得
+User = get_user_model()
 
 # ***************************************************************************
 # スペース作成フォーム(スペース作成はサインアップの一部のためaccountsアプリ内に作成)
@@ -38,11 +42,10 @@ class SpaceCreateForm(forms.ModelForm):
         return code.upper()
 
 # ***************************************************************************
-# ユーザー作成フォーム
-# オーナー
+# オーナーユーザー作成フォーム
 class OwnerSignUpForm(UserCreationForm):
     class Meta:
-        model = CustomUser
+        model = User
         fields = ["employee_id", "name"]
         labels = {
             "employee_id":"社員ID",
@@ -68,23 +71,61 @@ class OwnerSignUpForm(UserCreationForm):
         employee_id = self.cleaned_data["employee_id"]
         return employee_id.upper()
 
-
-# ↓↓↓↓↓↓↓ 作成中のためレビュー対象外 ↓↓↓↓↓↓↓ 
-# 一般ユーザー
-class OwnerMemberCreateForm(UserCreationForm):
+# ***************************************************************************
+# 一般ユーザー作成フォーム
+class OwnerMemberCreateForm(forms.ModelForm):
+    teams = forms.ModelMultipleChoiceField(
+        label="チーム",
+        queryset=Teams.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
     class Meta:
-        model = CustomUser
-        fields = ["employee_id", "name", "password"]
+        model = User
+        fields = ["employee_id", "name", "is_admin"]
+        labels = {
+            "employee_id":"社員ID",
+            "name":"名前",
+        }
+        widgets = {
+            "employee_id": forms.TextInput(attrs={
+                "maxlength": 15,
+                "pattern": "^[A-Za-z0-9]{1,15}$",
+            }),
+            "is_admin":forms.CheckboxInput(attrs={
+                "class":"sr-only peer"
+            })
+        }
     
+    # フォーム表示時の処理
     def __init__(self, *args, **kwargs):
+        # ユーザー情報をを受け取る
+        space = kwargs.pop("space", None)
+        user = kwargs.pop("user", None)
         # フォームの初期化
         super().__init__(*args, **kwargs)
 
-        for field in self.fields.values():
-            field.widget.attrs.update({
+        if space:
+            self.fields["teams"].queryset = Teams.objects.filter(space=space)
+
+        self.fields["employee_id"].widget.attrs.update({
                 "class": "w-full border border-gray-400 rounded-lg p-3",
-            })
-# ↑↑↑↑↑↑ ここまで作成中のためレビュー対象外  ↑↑↑↑↑↑  
+            }) 
+        self.fields["name"].widget.attrs.update({
+                "class": "w-full border border-gray-400 rounded-lg p-3",
+            }) 
+        # HTMLの{{ choice_label }} の表示名を指定
+        self.fields["teams"].label_from_instance = (
+              lambda obj: obj.name
+        )
+        # is_adminはオーナーユーザー以外に表示しない
+        if user != space.owner_user:
+            self.fields.pop("is_admin")
+        
+    def clean_employee_id(self):
+        employee_id = self.cleaned_data["employee_id"]
+        return employee_id.upper()
+
 
 
 # ***************************************************************************
