@@ -98,12 +98,14 @@ def _get_user_scores_with_team(user, team_id):
                 "team_mean": team_mean,
                 "team_mean_normalized": normalize_score(team_mean),
             }
-            
-        order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
-        order_index = {key: index for index, key in enumerate(order)}
-        sorted_list = sorted(results_data.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
-
+        
         print(f"[DEBUG] UserValueScore: {score}, TeamValueScore: {team_score}")
+        
+    order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
+    order_index = {key: index for index, key in enumerate(order)}
+    sorted_list = sorted(results_data.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
+
+ 
     return list(sorted_list)
 
 # チームスコア取得
@@ -202,8 +204,8 @@ def _get_team_scatter_data(team_id):
                 "diff_normalized": normalize_score(diff) if diff is not None else None,
             })
             
-            order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
-            order_index = {key: index for index, key in enumerate(order)}
-            sorted_list = sorted(value_buckets.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
+    order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
+    order_index = {key: index for index, key in enumerate(order)}
+    sorted_list = sorted(value_buckets.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
 
     return list(sorted_list)

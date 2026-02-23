@@ -127,7 +127,7 @@ data-user-name="{{ target_user.name }}">
       <!-- チームとの比較ページ -->
       <div id="content-team" class="hidden relative min-h-[400px]">
 
-        {% if teams %}
+        {% if team_id and graph_data and team_graph_data %}
           {% include "analysis/includes/personal_team.html" %}
         {% else %}
           <!-- マスク -->
