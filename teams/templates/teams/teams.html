@@ -144,8 +144,8 @@
 
               <td class="py-4 px-2 text-center">
                 {% if member.user.is_profile_public %}
-                <a href="{% url 'analysis:members_page' member.user.id %}"
-                   class="border border-teamy-teal text-teamy-teal text-base px-4 py-1 rounded-full hover:bg-cyan-50 transition-colors font-medium"></a>>
+                <a href="{% url 'analysis:members_page' %}?user_id={{ member.user.id }}"
+                   class="border border-teamy-teal text-teamy-teal text-base px-4 py-1 rounded-full hover:bg-cyan-50 transition-colors font-medium">
                    ページをみる
                 </a>
                 {% endif %}
