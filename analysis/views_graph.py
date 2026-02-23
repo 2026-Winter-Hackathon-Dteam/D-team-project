@@ -11,13 +11,18 @@ MAX_DIFF_THEORETICAL_MAX = RANGE  # 最大差の理論上の最大値（-12か�
 def normalize_score(score):
     return (score - THEORETICAL_MIN) / RANGE * 100
 
-# 標準偏差を0-100に正規化(0<=std<=12の想定)
-def normalize_std(std_value):
-    return std_value / THEORETICAL_MAX * 100
+# ===== チーム分析マトリクス図　表示スケール設定 =====
+PRACTICAL_STD_MAX = 6
+PRACTICAL_DIFF_MAX = 12
+DISPLAY_MAX = 50
 
-# 最大差を0-100に正規化（0<=max_diff<=24の想定）
+def normalize_std(std):
+    capped = min(abs(std), PRACTICAL_STD_MAX)
+    return capped / PRACTICAL_STD_MAX * DISPLAY_MAX
+
 def normalize_max_diff(diff):
-    return diff / MAX_DIFF_THEORETICAL_MAX * 100
+    capped = min(abs(diff), PRACTICAL_DIFF_MAX)
+    return capped / PRACTICAL_DIFF_MAX * DISPLAY_MAX
 
 
 # ユーザースコア取得（ユーザースコアのみ）
