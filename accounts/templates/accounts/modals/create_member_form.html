@@ -28,30 +28,30 @@
         <!-- hx-swap="outerHTML"はターゲットを箱ごと入れ替える　innerHTMLで箱は残して中身だけ入れ替えも可能 -->
 
         <div class="space-y-8 pt-6">
-
+        {{form.non_field_errors}}
           <!-- 名前 -->
           <div>
-            <label class="block font-medium mb-2">アカウント名</label>
-            <input type="text"
-              name="name"
-              class="w-full border border-gray-400 rounded-lg p-3"
-              required>
+            <label class="block font-medium mb-2">
+              {{form.name.label_tag}}
+              {{form.name}}
+              {{form.name.errors}}              
+            </label>
           </div>
 
           <!-- 社員ID -->
           <div>
-            <label class="block font-medium mb-2">社員ID</label>
-            <input type="text"
-              name="employee_id"
-              maxlength="15"
-              pattern="^[A-Za-z0-9]{1,15}$"
-              class="w-full border border-gray-400 rounded-lg p-3"
-              required>
+            <label class="block font-medium mb-2">
+              {{form.employee_id.label_tag}}
+              {{form.employee_id}}
+              {{form.employee_id.errors}} 
+            </label>
           </div>
 
           <!-- チーム -->
           <div>
-            <label class="block font-medium mb-2">チーム</label>
+            <label class="block font-medium mb-2"> 
+              {{ form.teams.label }}
+            </label>
 
             <details class="group border border-gray-400 rounded-lg overflow-hidden">
               <summary
@@ -66,31 +66,27 @@
               </summary>
 
               <div class="p-3 border-t border-gray-100 max-h-40 overflow-y-auto space-y-2">
-
-                {% if teams %}
-                  {% for team in teams %}
+                {% for checkbox in form.teams %}
                   <label class="flex items-center gap-2 p-2 rounded cursor-pointer">
-                    <input type="checkbox"
-                      name="teams"
-                      value="{{ team.id }}"
-                      class="w-5 h-5 border border-gray-400 appearance-none
-                             rounded-full checked:bg-teamy-orange cursor-pointer">
-                    <span>{{ team.name }}</span>
+                    {{ checkbox.tag }}
+                    <span>{{ checkbox.choice_label }}</span>
                   </label>
-                  {% endfor %}
-                {% endif %}
-
+                {% empty %}
+                  <p class="text-gray-400 text-sm">
+                    所属可能なチームがありません
+                  </p>
+                {% endfor %}
               </div>
             </details>
           </div>
 
           <!-- 管理者トグル -->
-          {% if user.is_owner %}
+          {% if request.user == request.user.space.owner_user %}
           <div class="flex items-center justify-around py-2">
             <span class="font-medium">管理者にする</span>
 
             <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" name="is_admin" class="sr-only peer">
+              {{ form.is_admin }}
               <div
                 class="w-14 h-7 bg-gray-200 rounded-full peer
                   peer-checked:after:translate-x-full
