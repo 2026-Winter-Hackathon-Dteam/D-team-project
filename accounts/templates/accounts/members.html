@@ -81,48 +81,7 @@
           <th class="w-24 py-4"></th>
         </tr>
       </thead>
-
-      {% comment %}
       <tbody class="divide-y divide-gray-100"> <!-- divideはtr間に線を入れてくれる -->
-        <tr class="hover:bg-gray-50">
-          <td class="py-4 px-2">
-            <span class="inline-block border border-teamy-orangeDark text-teamy-orangeDark px-4 py-1 rounded-full">
-              管理者
-            </span>
-          </td>
-
-          <td class="py-4 px-2">山田 太郎</td>
-          <td class="py-4 px-2">taro yamada</td>
-
-          <td class="py-4 px-2">
-            <div class="flex items-center flex-nowrap gap-2 overflow-x-auto w-full">
-              <div class="flex-shrink-0 inline-flex items-center gap-1 bg-teamy-grayLight rounded-full px-3 py-1 whitespace-nowrap h-7">
-                <img src="{% static 'accounts/imgs/leader.png' %}" alt="leader" class="w-7 h-7 -ml-3 flex-shrink-0 ">
-                Aチーム
-              </div>
-              <div class="flex-shrink-0 inline-flex items-center gap-1 bg-teamy-grayLight rounded-full px-3 py-1 whitespace-nowrap h-7">
-                Bチーム
-              </div>
-            </div>
-          </td>
-
-          <td class="py-4 px-2 text-right">
-            <div class="inline-flex items-center gap-3">
-              <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
-                 <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-7 h-7">
-              </a>
-              <button type="button" class="btn-delete transition-transform hover:scale-125 active:scale-95 inline-block"
-                data-modal="deleteMemberModal" 
-                data-name="山田 太郎"
-                data-user-id="12345">
-                <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-7 h-7">
-              </button> 
-            </div>
-          </td>
-        </tr>
-        {% endcomment %}
-
-        <tbody class="divide-y divide-gray-100"> <!-- divideはtr間に線を入れてくれる -->
         {% for member in space_members %}
           <tr class="hover:bg-gray-50">
 
