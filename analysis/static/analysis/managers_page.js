@@ -25,11 +25,11 @@ function renderMatrixChart() {
         dot.className =
         'matrix-dot absolute w-10 h-10 bg-teamy-teal text-white rounded-full flex items-center justify-center font-bold shadow-md transition-transform duration-150 ease-out z-20';        
         dot.dataset.index = index;
-        
-        // 横の割合（0〜100）を、実際のグラフサイズにあわせたpx座標に変換
-        // 縦の割合（0〜50）を、px座標に変換（CSSは上が0px基準のためheightから引いて上下反転）
-        const posX = (data.x / 100) * width;
-        const posY = height - ((data.y / 50) * height);
+
+        // 横の割合（0〜100）を、実際のグラフサイズにあわせたpx座標に変換（CSSに合わせてwidth-で左右反転）
+        // 縦の割合（0〜50）を、px座標に変換
+        const posX = width -((data.x / 100) * width);
+        const posY = (data.y / 50) * height;
 
         // 座標位置にドットを配置し、自身のサイズ分を-50％ずらして中心補正
         dot.style.left = `${posX}px`;
