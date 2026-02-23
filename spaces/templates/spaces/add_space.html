@@ -17,18 +17,18 @@
       <div class="flex flex-col gap-8 py-6 flex-grow justify-around">
         <label class="flex flex-row items-center gap-4">
           <span class="flex-[1]">スペース名</span>
-          <input type="text" name="name" placeholder="{{ space_name }}" class="border border-gray-400 rounded-lg p-2 flex-[2]">
+          {{ form.name }}
           </label>
 
       <div class="flex flex-row items-start gap-4">
         <span class="flex-[1] pt-3">オーナー変更</span>
 
         <div class="flex-[2]">
-          <details class="group border border-gray-400 rounded-lg overflow-hidden">
+          <details id="owner-details" class="group border border-gray-400 rounded-lg overflow-hidden">
             <summary
               class="flex justify-between items-center py-3 px-3 cursor-pointer
                     bg-white hover:bg-gray-50">
-              <span class="text-gray-500">オーナーを選択してください</span>
+              <span id="owner-summary" class="text-gray-500">オーナーを選択してください</span>
 
               <svg class="ml-1 w-4 h-4 transition-transform duration-200 group-open:rotate-180"
                   fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,23 +37,37 @@
               </svg>
             </summary>
 
-            <div class="p-3 border-t border-gray-100 max-h-40 overflow-y-auto space-y-2">
-              {# {% for member in members %} #}
-              <label class="flex items-center justify-between gap-2 p-2 rounded cursor-pointer hover:bg-gray-50">
-                <span>{{ member.name }}（{{ member.employee_id }}）</span>
-
-                <input
-                  type="radio"
-                  name="owner_id"
-                  value="{{ member.id }}"
-                  class="w-5 h-5 border border-gray-400 appearance-none rounded-full
-                        checked:bg-teamy-orange cursor-pointer">
-              </label>
-              {# {% endfor %} #}
-            </div>
+            {{ owner_form.owner_id }}
+            {% if not owner_form.owner_id %}
+              <div class="p-3 text-red-500">フォームが初期化されていません</div>
+            {% endif %}
           </details>
         </div>
       </div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const ownerDetails = document.getElementById('owner-details');
+          const ownerSummary = document.getElementById('owner-summary');
+          const ownerRadios = document.querySelectorAll('input[name="owner_id"]');
+
+          ownerRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+              if (this.checked) {
+                // 選択されたラジオボタンのラベルを取得
+                const label = this.closest('label');
+                const labelText = label ? label.querySelector('span').textContent : 'オーナーを選択してください';
+                
+                // summaryを更新
+                ownerSummary.textContent = labelText;
+                
+                // detailsを閉じる
+                ownerDetails.removeAttribute('open');
+              }
+            });
+          });
+        });
+      </script>
 
       <!-- button -->
       <div class="flex flex-col items-center gap-2 mt-6">
@@ -70,9 +84,10 @@
   <div class="flex flex-col items-center gap-1">
   <span class="text-base">スペースを削除する</span>
     <div class="flex flex-col items-center gap-2 mt-auto">
-      <a href="#" class="add-account self-center inline-block  bg-gray-300 hover:bg-gray-400 hover:scale-[1.03] active:scale-[0.98] transition-transform text-sm px-6 py-1 border-gray-400 rounded-full shadow-md">
-    削除
-      </a>
-  </div>
+      <form method="post" action="{% url 'spaces:space_delete' space.id %}" class="add-account self-center inline-block  bg-gray-300 hover:bg-gray-400 hover:scale-[1.03] active:scale-[0.98] transition-transform text-sm px-6 py-1 border-gray-400 rounded-full shadow-md">
+        {% csrf_token %}
+        <button type="submit">削除</button>
+      </form>
+    </div>
 </div>
 {% endblock %}

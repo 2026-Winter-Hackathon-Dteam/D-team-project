@@ -5,6 +5,7 @@ from django.views.decorators.http import require_http_methods
 from uuid import UUID
 import random
 from .models import Question
+from django.contrib.auth.decorators import login_required
 
 
 #テスト用
@@ -34,14 +35,14 @@ def questions_index(request):
 
 
 # questions_startは質問開始前のページ
-#login_required
+@login_required
 @require_http_methods(["GET"])
 def questions_start(request):
     return render(request, "analysis/questions_start.html")
 
 
 # 質問取得
-#@login_required
+@login_required
 @require_http_methods(["GET"])
 def question_page(request, page):
 
