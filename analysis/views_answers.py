@@ -299,7 +299,7 @@ def managers_page(request):
         "team_scatter_data": l_team_scatter_data,
         "is_team_leader": is_team_leader,
         "team_matrix_data": team_matrixdata,
-        "teams": team_options, # フロントテスト用に追加
+        "leader_teams": team_options, # フロントテスト用に追加
     }
 
     return render(request, "analysis/managers_page.html", context)

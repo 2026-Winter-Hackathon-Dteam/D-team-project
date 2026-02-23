@@ -6,149 +6,156 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <style>
   /* ヒーローの高さを固定 0px判定での非表示対策 */
-  .swiper { 
+  .heroSwiper { 
     width: 100%; 
-    height: 320px;  
+    min-height: 40vh;
   }
 </style>
 {% endblock %}
 
 {% block content %}
+
+<div class="h-[calc(100vh-80px)] overflow-auto lg:overflow-hidden flex flex-col">
+
 <!-- ======== ヒーローカルーセル ======== -->
-<section class="swiper heroSwiper">
-  <div class="swiper-wrapper">
+<section>
+  <div class="swiper heroSwiper">
+    <div class="swiper-wrapper">
 
-    <article class="swiper-slide flex items-center h-full pt-6 pb-4 md:pt-10 md:pb-6">
-      <div class="mx-auto max-w-6xl flex items-center gap-6 px-10 w-full">
-        <div class="flex flex-col gap-5 flex-1">
-          <h1 class="text-[40px] font-bold text-teamy-navy">
-            コミュニケーションを<br>もっとスムーズに
-          </h1>
-          <p>
-            <span class="font-['Montserrat'] font-bold">Teamy</span>は<br>
-            自分と相手（チーム）の価値観の違いを見える化し<br>
-            コミュニケーションの最適解を教えてくれるアプリです。
-          </p>
+      <article class="swiper-slide flex items-center h-full pt-6 pb-2 md:pt-10">
+        <div class="mx-auto max-w-5xl flex flex-col md:flex-row items-center px-6 md:px-10 w-full gap-6">
+          <div class="flex flex-col gap-5 flex-1">
+            <h1 class="text-3xl lg:text-4xl font-bold text-teamy-navy">
+              コミュニケーションを<br>もっとスムーズに</h1>
+              <p>
+                <span class="font-['Montserrat'] font-bold">Teamy</span>は<br>
+                自分と相手（チーム）の価値観の違いを見える化し<br>
+                コミュニケーションの最適解を教えてくれるアプリです。
+              </p>
+          </div>
+          <div class="w-44 md:w-[260px] h-auto flex items-center justify-center shrink-0">
+            <img
+              src="{% static 'imgs/growth.png' %}" alt="growth"
+              class="max-w-full max-h-full object-contain">
+          </div>
         </div>
-        <div class="w-[320px] h-[240px] flex items-center justify-center shrink-0">
-          <img src="{% static 'imgs/growth.png' %}" alt="growth"
-               class="max-w-full max-h-full object-contain">
-        </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="swiper-slide flex items-center h-full pt-6 pb-4 md:pt-10 md:pb-6">
-      <div class="mx-auto max-w-6xl flex items-center gap-6 px-10 w-full">
-        <div class="flex flex-col gap-5 flex-1">
-          <h1 class="text-[40px] font-bold text-teamy-navy">
-            価値観はさまざま<br>コミュニケーションは1つだけ？
-          </h1>
-          <p>
-            人は誰でも、自分なりの「正しいコミュニケーションの型」を持っています。<br>
-            ただしそれは<br>
-            <span class="underline">チームや相手が変われば正解ではなくなる</span>ことがあります。<br>
-            <br>              
-            Teamyが重視するのは「相対性」です。
-          </p>
+      <article class="swiper-slide flex items-center h-full pt-6 pb-4 md:pt-10 md:pb-6">
+        <div class="mx-auto max-w-5xl flex flex-col md:flex-row items-center px-6 md:px-10 w-full gap-6">
+          <div class="flex flex-col gap-5 flex-1">
+            <h1 class="text-3xl lg:text-4xl font-bold text-teamy-navy">
+              価値観はさまざま<br>コミュニケーションは1つだけ？</h1>
+              <p>
+                人は誰でも、自分なりの「正しいコミュニケーションの型」を持っています。<br>
+                ただしそれは<br>
+                <span class="underline">チームや相手が変われば正解ではなくなる</span>ことがあります。<br>
+                <br>              
+                Teamyが重視するのは「相対性」です。
+              </p>
+          </div>
+          <div class="w-60 md:w-[280px] h-auto flex items-center justify-center shrink-0">
+            <img
+              src="{% static 'imgs/network.png' %}" alt="network"
+              class="max-w-full max-h-full object-contain">
+          </div>
         </div>
-        <div class="w-[320px] h-[240px] flex items-center justify-center shrink-0">
-          <img src="{% static 'imgs/network.png' %}" alt="network"
-               class="max-w-full max-h-full object-contain">
-        </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="swiper-slide flex items-center h-full pt-6 pb-4 md:pt-10 md:pb-6">
-      <div class="mx-auto max-w-6xl flex items-center gap-6 px-10 w-full">
-        <div class="flex flex-col gap-5 flex-1">
-          <h1 class="text-[40px] font-bold text-teamy-navy">
-            違いを知ると<br>あなたの言動が変わるかも
-          </h1>
-          <p>
-            自分の価値観と、相手の価値観<br>
-            その差はどれくらいあるのか<br>
-            <br>
-            それによって「そのままでいい」「少し調整する」「意識的に変える」など<br>
-            あなたの行動指針を、Teamyがアドバイスします。
-          </p>
+      <article class="swiper-slide flex items-center h-full pt-6 pb-4 md:pt-10 md:pb-6">
+        <div class="mx-auto max-w-5xl flex flex-col md:flex-row items-center px-6 md:px-10 w-full gap-6">
+          <div class="flex flex-col gap-5 flex-1">
+            <h1 class="text-3xl lg:text-4xl font-bold text-teamy-navy">
+              違いを知ると<br>あなたの言動が変わるかも</h1>
+              <p>
+                自分の価値観と、相手の価値観<br>
+                その差はどれくらいあるのか<br>
+                <br>
+                それによって「そのままでいい」「少し調整する」「意識的に変える」など<br>
+                あなたの行動指針を、Teamyがアドバイスします。
+              </p>
+          </div>
+          <div class="w-44 md:w-[260px] h-auto flex items-center justify-center shrink-0">
+            <img
+              src="{% static 'imgs/team.png' %}" alt="team"
+              class="max-w-full max-h-full object-contain">
+          </div>
         </div>
-        <div class="w-[320px] h-[240px] flex items-center justify-center shrink-0">
-          <img src="{% static 'imgs/team.png' %}" alt="team"
-               class="max-w-full max-h-full object-contain">
-        </div>
-      </div>
-    </article>
+      </article>
 
+    </div>
   </div>
-</section>
-
-<!-- ======== はじめる ボタン ======== -->
- <!-- 非ログイン時のみボタンを表示する -->
-{% if not request.user.is_authenticated %}
-<section class="py-0">
-  <div class="mx-auto max-w-6xl px-10">
-    <a href="{% url 'accounts:signup' %}"
-       class="inline-block bg-[#F1A46C] hover:bg-[#E89455] hover:scale-[1.03] transition-transform text-white font-medium px-8 py-3 rounded-[36px]">
-      はじめる
+  
+  <!-- ======== はじめる ボタン ======== -->
+  <!-- 非ログイン時のみボタンを表示する -->
+  <div class="mx-auto max-w-5xl px-6 md:px-10">
+    {% if not request.user.is_authenticated %}
+    <a
+    href="{% url 'accounts:signup' %}"
+    class="inline-block bg-teamy-orange hover:bg-teamy-orangeDark hover:scale-[1.03] transition-transform text-white font-medium px-8 py-[10px] rounded-full">
+    はじめる
     </a>
+    {% endif %}
   </div>
-</section>
-{% endif %}
 
+</section>
 <!-- ======== アプリ概要 ======== -->
-<section class="mx-auto max-w-6xl px-10 py-6">
-  <div class="grid grid-cols-1 gap-14 md:grid-cols-3">
+<section class="mx-auto max-w-7xl px-6 md:px-10 py-6 flex-1">
+  <div class="grid grid-cols-1 gap-12 md:grid-cols-3 w-full">
 
-    <article class="group text-center border border-gray-200 bg-white p-6 shadow-2xl">
-      <img src="{% static 'imgs/icon_Q&A.png' %}" alt="Q&A"
-           class="mx-auto max-h-20 max-w-full object-contain transition-transform group-hover:scale-110"> 
-      <h2 class="text-xl font-bold mb-4">Question</h2>
-      <p class="text-teamy-grayDark text-sm">
-        質問に答えると<br>
-        あなたやチームの価値観を<br>
-        診断します
-      </p>
+    <article class="group text-center border border-gray-200 bg-white p-7 shadow-2xl">
+      <img 
+        src="{% static 'imgs/icon_Q&A.png' %}" alt="Q&A" 
+        class="mx-auto max-h-20 max-w-full object-contain transition-transform group-hover:scale-110"> 
+        <h2 class="text-xl font-bold mb-4">Question</h2>
+          <p class="text-teamy-grayDark text-sm">
+            質問に答えると<br>
+            あなたやチームの価値観を<br>
+            診断します
+          </p>
     </article>
 
-    <article class="group text-center border border-gray-200 bg-white p-6 shadow-2xl">
-      <img src="{% static 'imgs/icon_graph.png' %}" alt="graph"
-           class="mx-auto max-h-20 max-w-full object-contain transition-transform group-hover:scale-110"> 
-      <h2 class="text-xl font-bold mb-4">Analysis</h2>
-      <p class="text-teamy-grayDark text-sm">
-        両者の位置関係を可視化し<br>
-        最適なコミュニケーションを<br>
-        アドバイス
-      </p>
+    <article class="group text-center border border-gray-200 bg-white p-7 shadow-2xl">
+      <img 
+        src="{% static 'imgs/icon_graph.png' %}" alt="graph"
+        class="mx-auto max-h-20 max-w-full object-contain transition-transform group-hover:scale-110"> 
+        <h2 class="text-xl font-bold mb-4">Analysis</h2>
+          <p class="text-teamy-grayDark text-sm">
+            両者の位置関係を可視化し<br>
+            最適なコミュニケーションを<br>
+            アドバイス
+          </p>
     </article>
 
-    <article class="group text-center border border-gray-200 bg-white p-6 shadow-2xl">
-      <img src="{% static 'imgs/icon_action.png' %}" alt="Action"
-           class="mx-auto max-h-20 max-w-full object-contain transition-transform group-hover:scale-110"> 
-      <h2 class="text-xl font-bold mb-4">Action</h2>
-      <p class="text-teamy-grayDark text-sm">
-        チームが変わると<br>
-        同じあなたでも立ち位置は変わる<br>
-        状況ごとの最適解を
-      </p>
+    <article class="group text-center border border-gray-200 bg-white p-7 shadow-2xl">
+      <img 
+        src="{% static 'imgs/icon_action.png' %}" alt="Action" 
+        class="mx-auto max-h-20 max-w-full object-contain transition-transform group-hover:scale-110"> 
+        <h2 class="text-xl font-bold mb-4">Action</h2>
+          <p class="text-teamy-grayDark text-sm">
+            チームが変わると<br>
+            同じあなたでも立ち位置は変わる<br>
+            状況ごとの最適解を<br>
+          </p>
     </article>
 
   </div>
 </section>
 
+</div>
 {% endblock %}
 
 {% block extra_js %}
-<!-- swiper -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    new Swiper(".heroSwiper", {
+    const swiper = new Swiper(".heroSwiper", {
       loop: true,
       effect: 'fade', 
       fadeEffect: { crossFade: true },
       speed: 1000,
       autoplay: {
-        delay: 4500,
+        delay: 5000,
         disableOnInteraction: false,
       },
     });

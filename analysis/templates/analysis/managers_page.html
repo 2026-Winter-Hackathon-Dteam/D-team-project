@@ -18,7 +18,7 @@
           <button type="button" class="flex items-center text-white text-2xl font-bold hover:opacity-80 transition-opacity focus:outline-none">
             <span id="selected-team-name">
               {% if team_id %}
-                {% for t in teams %}
+                {% for t in leader_teams %}
                   {% if t.id|stringformat:"s" == team_id|stringformat:"s" %}
                     {{ t.name }}
                   {% endif %}
