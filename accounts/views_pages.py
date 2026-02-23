@@ -57,7 +57,7 @@ def create_member(request):
                         # チーム所属登録
                         teams = form.cleaned_data["teams"]
                         if teams:
-                            Team_Users.objects.create([
+                            Team_Users.objects.bulk_create([
                                 Team_Users(user=user, team=team)
                                 for team in teams
                             ])
