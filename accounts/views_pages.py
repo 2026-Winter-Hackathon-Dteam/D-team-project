@@ -2,7 +2,7 @@ import secrets
 import string
 from django.db import IntegrityError, transaction
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.generic import TemplateView
 from django.contrib.auth import get_user_model
