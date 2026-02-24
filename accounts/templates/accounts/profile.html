@@ -4,10 +4,10 @@
 {% block title %}profile{% endblock %}
 
 {% block content %}
-<div class="flex flex-col justify-center items-center gap-6 h-[calc(100vh-80px)]">
+<div class="flex flex-col justify-center items-center gap-6 h-[calc(100vh-96px)]">
   <!-- ======== 見出し ======== -->
-  <div class="w-full max-w-[720px] h-[70%] flex flex-col items-center border border-gray-100 bg-white text-xl shadow-2xl p-10">
-    <h1 class="text-4xl text-teamy-navy font-extrabold">プロフィール</h1>
+  <div class="w-full max-w-[720px] h-[80%] flex flex-col items-center border border-gray-100 bg-white text-lg shadow-2xl p-10">
+    <h1 class="text-3xl text-teamy-navy font-extrabold">プロフィール</h1>
 
     <!-- ======== フォーム ======== -->
     <form method="post" class="flex flex-col p-4 h-full w-[90%] mx-auto">
@@ -17,22 +17,26 @@
       <div class="flex flex-col gap-8 py-6 flex-grow justify-around">
         <label class="flex flex-row items-center gap-4">
           <span class="flex-[1]">名前</span>
-          <input type="text" name="name" placeholder="山田 太郎{{ g_user_name }}" class="border border-gray-400 rounded-lg p-2 flex-[2]">
+          <input type="text" name="name" placeholder="{{ g_user_name }}" class="border border-gray-400 rounded-lg p-1 flex-[2]">
         </label>
 
         <div class="flex flex-row items-center gap-4">
           <span class="flex-[1]">社員ID</span>
-          <span class="flex-[2]">12345{{ request.user.employee_id }}</span>
+          <span class="flex-[2]">{{ request.user.employee_id }}</span>
         </div>
 
         <div class="flex flex-row items-center gap-4">
           <span class="flex-[1]">所属チーム</span>
           <div class="flex items-center flex-nowrap gap-2 flex-[2] overflow-x-auto">
-            {# {% for team in user_teams %} #}
-              <span class="bg-gray-200 text-gray-600 px-4 py-1 rounded-full text-base shadow-sm whitespace-nowrap">Aチーム{{ team.name }}</span>
-            {# {% empty %} #}
-              <span class="flex items-center text-gray-400 text-sm">所属しているチームはありません</span>
-            {# {% endfor %} #}
+            {% for team in user_teams %}
+              <span class="bg-gray-200 text-gray-600 px-4 py-1 rounded-full text-sm shadow-sm whitespace-nowrap">
+                {{ team.name }}
+              </span>
+            {% empty %}
+              <span class="flex items-center text-gray-400 text-sm">
+                所属しているチームはありません
+              </span>
+            {% endfor %}
           </div>
         </div>
 
@@ -47,7 +51,7 @@
                       after:content-[''] after:absolute after:top-[2px] after:left-[2px]
                       after:bg-white after:border after:rounded-full after:h-6 after:w-6
                       after:transition-all peer-checked:bg-teamy-orange">
-                  </div>
+              </div>
             </label>
           </div>
         </div>
@@ -57,22 +61,11 @@
       <!-- button -->
       <div class="flex flex-col items-center gap-2 mt-6">
         <button type="submit"
-          class="add-account self-center inline-block  bg-[#F1A46C] hover:bg-[#E89455] hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-medium px-6 py-2 border-gray-400 rounded-full shadow-md">
+          class="add-account self-center inline-block bg-teamy-orange hover:bg-teamy-orangeDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-medium px-6 py-2 border-gray-400 rounded-full shadow-md text-base">
           変更する
         </button>
       </div>
     </form>
   </div>
-
-  <!-- オーナーアカウント削除（オーナーのみ） -->
-  {# {% if user.is_owner %} #}
-  <div class="flex flex-col items-center gap-1">
-  <span class="text-base">このオーナーアカウントを削除する</span>
-    <div class="flex flex-col items-center gap-2 mt-auto">
-      <a href="#" class="add-account self-center inline-block  bg-gray-300 hover:bg-gray-400 hover:scale-[1.03] active:scale-[0.98] transition-transform text-sm px-6 py-1 border-gray-400 rounded-full shadow-md">
-    削除
-      </a>
-  </div>
-  {# {% endif %} #}
 </div>
 {% endblock %}
