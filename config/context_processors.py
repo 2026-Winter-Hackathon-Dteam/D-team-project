@@ -11,3 +11,13 @@ def header_context(request):
             show_space_edit_button = True
     
     return {"show_space_edit_button": show_space_edit_button}
+
+# オーナーユーザーかどうか返す
+def is_owner_user(request):
+    g_is_owner = False
+    if request.user.is_authenticated:
+        if request.user.space:
+            if request.user.space.owner_user == request.user:
+                g_is_owner = True
+    return{"g_is_owner":g_is_owner}
+
