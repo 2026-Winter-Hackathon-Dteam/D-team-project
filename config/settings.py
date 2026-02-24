@@ -188,3 +188,22 @@ SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 # デフォルトでも'Lax'ではあるが将来性のために明示。sessionIDとCSRFトークンをGETなら送る、POSTなら送らない
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': '/config/django_error.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
