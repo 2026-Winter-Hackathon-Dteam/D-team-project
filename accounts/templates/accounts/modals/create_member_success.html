@@ -2,14 +2,17 @@
 <!-- モーダル全体 -->
 <div id="createMemberModal" class="fixed inset-0 z-50">
   <!-- 背景 -->
-  <div class="modal-bg absolute inset-0 bg-black/50 flex items-center justify-center">
+  <div class="modal-bg absolute inset-0 bg-black/50 flex items-center justify-center"
+  onclick="location.reload()">
 
     <!-- 本体 -->
-    <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-[480px] p-10 relative text-xl">
+    <div class="modal-content bg-white rounded-lg shadow-xl w-full max-w-[480px] p-10 relative text-xl"
+    onclick="event.stopPropagation()">
 
       <!-- 閉じる -->
       <button type="button"
-        class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">
+        class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600"
+        onclick="location.reload()">
         ×
       </button>
 
@@ -87,7 +90,8 @@
           <button type="button"
           class="modal-close border border-teamy-orangeDark text-teamy-orangeDark font-medium
                 py-2 px-6 rounded-full transition-transform shadow-md 
-                hover:scale-[1.03] hover:shadow-md active:scale-[0.98]">
+                hover:scale-[1.03] hover:shadow-md active:scale-[0.98]"
+                onclick="location.reload()">
             閉じる
           </button>
         </div>
