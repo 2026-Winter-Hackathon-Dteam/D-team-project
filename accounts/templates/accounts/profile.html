@@ -16,26 +16,23 @@
       <!-- inputs -->
       <div class="flex flex-col gap-8 py-6 flex-grow justify-around">
         <label class="flex flex-row items-center gap-4">
-          <span class="flex-[1]">名前</span>
-          <input type="text" name="name" placeholder="{{ g_user_name }}" class="border border-gray-400 rounded-lg p-1 flex-[2]">
+            {{form.name.label_tag}}
+            {{form.name}}
+            {{form.name.errors}}  
         </label>
 
         <div class="flex flex-row items-center gap-4">
-          <span class="flex-[1]">社員ID</span>
+          <span class="flex-[1]">社員ID:</span>
           <span class="flex-[2]">{{ request.user.employee_id }}</span>
         </div>
 
         <div class="flex flex-row items-center gap-4">
-          <span class="flex-[1]">所属チーム</span>
+          <span class="flex-[1]">所属チーム:</span>
           <div class="flex items-center flex-nowrap gap-2 flex-[2] overflow-x-auto">
             {% for team in user_teams %}
-              <span class="bg-gray-200 text-gray-600 px-4 py-1 rounded-full text-sm shadow-sm whitespace-nowrap">
-                {{ team.name }}
-              </span>
+              <span class="bg-gray-200 text-gray-600 px-4 py-1 rounded-full text-base shadow-sm whitespace-nowrap">{{ team.name }}</span>
             {% empty %}
-              <span class="flex items-center text-gray-400 text-sm">
-                所属しているチームはありません
-              </span>
+              <span class="flex items-center text-gray-400 text-sm">所属しているチームはありません</span>
             {% endfor %}
           </div>
         </div>
@@ -44,7 +41,7 @@
           <span class="flex-[2]">価値観をチームメンバーに公開する</span>
           <div class="flex-[1]">
             <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" name="is_admin" class="sr-only peer">
+              {{ form.is_profile_public }}
               <div
                 class="w-14 h-7 bg-gray-200 rounded-full peer
                       peer-checked:after:translate-x-full
