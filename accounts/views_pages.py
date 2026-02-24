@@ -1,13 +1,16 @@
 import secrets
 import string
 from django.db import IntegrityError, transaction
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from .forms import  OwnerMemberCreateForm
+from django.contrib.auth.views import PasswordChangeView
+from .forms import  OwnerMemberCreateForm, CustomPasswordChangeForm
 from teams.models import Team_Users
 
 
@@ -97,9 +100,17 @@ def profile(request):
 def edit_member(request):
     return render(request, "accounts/edit_member.html")
 
-@login_required
-def change_password(request):
-    return render(request, "accounts/change_password.html")
+class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+    form_class = CustomPasswordChangeForm
+    template_name="accounts/change_password.html"
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "パスワードを変更しました")
+        return response
+
+    def get_success_url(self):
+        return self.request.path
 
 
 # ***************************************************************************

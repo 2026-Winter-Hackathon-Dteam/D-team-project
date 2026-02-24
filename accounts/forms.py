@@ -1,7 +1,7 @@
 import re
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from spaces.models import Spaces
 from teams.models import Teams
 
@@ -186,3 +186,29 @@ class LoginForm(AuthenticationForm):
             self.cleaned_data["username"] = login_id
 
         return super().clean()
+    
+# ***************************************************************************
+# パスワード変更フォーム
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label="旧パスワード",
+        widget=forms.PasswordInput(attrs={
+            "class":"border border-gray-400 rounded-lg p-2"
+        })
+    )
+    new_password1 = forms.CharField(
+        label="新パスワード",
+        widget=forms.PasswordInput(attrs={
+            "class":"border border-gray-400 rounded-lg p-2"
+        })
+    )
+    new_password2 = forms.CharField(
+        label="新パスワード（確認）",
+        widget=forms.PasswordInput(attrs={
+            "class":"border border-gray-400 rounded-lg p-2"
+        })
+    )
+
+    def __init__(self, *args, **kwargs):
+        # フォームの初期化
+        super().__init__(*args, **kwargs)

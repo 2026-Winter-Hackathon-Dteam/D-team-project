@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views_pages
 from .views_auth import OwnerSignupView, CustomLoginView, CustomLogoutView
+from .views_pages import CustomPasswordChangeView
 from .views_pages import TopView
 
 
@@ -15,5 +16,5 @@ urlpatterns = [
     path('create-member/', views_pages.create_member, name='create_member'),
     path('edit_member/', views_pages.edit_member , name='edit_member'),
     path('profile/', views_pages.profile , name='profile'),
-    path('change_password/', views_pages.change_password , name='change_password'),
+    path('change_password/', CustomPasswordChangeView.as_view(), name='change_password'),
 ]
