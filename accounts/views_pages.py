@@ -1,11 +1,11 @@
 import secrets
 import string
 from django.db import IntegrityError, transaction
+from django.db.models import Q
 from django.shortcuts import render, redirect
-from django.views import View
 from django.views.generic import TemplateView
+from django.views.decorators.http import require_http_methods
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .forms import  OwnerMemberCreateForm
 from teams.models import Team_Users
@@ -83,12 +83,32 @@ def create_member(request):
 
 
 # ***************************************************************************
+# メンバー表示
 @login_required
 def members(request):
-        return render(request, "accounts/members.html", {
-        "team_list": [],
-    })
+    space=request.user.space
+    query = request.GET.get("q", "").strip()
+    
+    # メンバー一覧取得
+    space_members = (
+        User.objects
+        .filter(space=space)
+        .prefetch_related("team_users_set__team")
+    )
+    # 検索がある場合だけ絞り込み(名前または社員IDの部分一致)
+    if query:
+        space_members = space_members.filter(
+            Q(name__icontains=query) |
+            Q(employee_id__icontains=query)
+        )
 
+    context = {
+        "space":space,
+        "space_members": space_members,
+    }
+    return render(request, "accounts/members.html", context)
+
+# ***************************************************************************
 @login_required
 def profile(request):
     return render(request, "accounts/profile.html")
