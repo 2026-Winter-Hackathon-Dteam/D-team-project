@@ -123,9 +123,9 @@ def _get_team_advices(team_id):
             "summary_text": advice.summary_text if advice else "",
             "detail_text": advice.detail_text if advice else "",
         }
-        order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
-        order_index = {key: index for index, key in enumerate(order)}
-        sorted_list = sorted(results_data.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
+    order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
+    order_index = {key: index for index, key in enumerate(order)}
+    sorted_list = sorted(results_data.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
 
 
     return list(sorted_list)
