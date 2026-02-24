@@ -19,23 +19,13 @@ from django.contrib.auth.decorators import login_required
 @transaction.atomic
 def submit_answers(request):
 
-    print(f"[DEBUG] submit_answers called - Method: {request.method}")
-    print(f"[DEBUG] Content-Type: {request.content_type}")
-    print(f"[DEBUG] request.body: {request.body[:200]}")  # 先頭200文字を確認
-
     # 回答受け取る
     try:
         data = json.loads(request.body.decode("utf-8"))
         answers = data.get("answers", {})
         is_profile_public = data.get("is_profile_public", False)  # 公開設定を取得
-        print(f"[DEBUG] Parsed answers: {answers}")
-        print(f"[DEBUG] is_profile_public: {is_profile_public}")
     except Exception as e:
-        print(f"[DEBUG] JSON parsing error: {e}")
-        print(f"[DEBUG] request.POST: {request.POST}")  # フォームデータを確認
         return JsonResponse({"error": "invalid json"}, status=400)
-
-    print("ANSWERS:", answers) # saveAnswers()動いているか確認用
 
     if not answers:
         return JsonResponse({"error": "no answers"}, status=400)
@@ -86,11 +76,6 @@ def submit_answers(request):
         )
         for value_key, total_score in value_totals.items()
     ]
-
-    print(f"[DEBUG] UserValueScore objects to save: {len(objs)}")
-    print(f"[DEBUG] value_totals: {value_totals}")
-    print(f"[DEBUG] First object to save: user={objs[0].user if objs else 'N/A'}, value_key_id={objs[0].value_key_id if objs else 'N/A'}, personal_score={objs[0].personal_score if objs else 'N/A'}")
-    sys.stdout.flush()
 
     # DB保存
     try:
