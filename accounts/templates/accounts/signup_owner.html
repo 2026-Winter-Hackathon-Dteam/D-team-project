@@ -4,81 +4,73 @@
 
 {% block content %}
 
-<div class="flex gap-4 p-12 min-h-[calc(100vh-80px)] items-stretch"> <!-- ヘッダー分の高さ80pxを引く -->
-  <!-- ======== 見出し ======== -->
-  <div class="flex flex-1 flex-col justify-between p-8">
-    <div>
-      <h1 class="text-5xl text-teamy-navy font-extrabold leading-normal">スペースと<br>オーナーアカウントの作成</h1>
-      <!-- [？]ヘルプリンク -->
-        <button type="button" class="btn-help h-8 w-8 m-2">
+<div class="flex w-full p-8 min-h-[calc(100vh-80px)] justify-center">
+  <div class="flex items-stretch py-8 w-full max-w-6xl mx-auto justify-between">
+    <!-- ======== 見出し ======== -->
+    <div class="flex flex-1 flex-col justify-between p-6">
+      <div>
+        <h1 class="text-4xl text-teamy-navy font-extrabold leading-normal">
+          スペースと<br>オーナーアカウントの作成
+        </h1>
+
+        <button type="button" class="btn-help h-7 w-7 m-2">
           <img src="{% static 'imgs/help.png' %}" alt="へルプを表示">
         </button>
-    </div>
+      </div>
 
-    <!-- ======== ログイン ======== -->
-    <div class="flex items-center gap-4 mb-12 ml-4">
-      <p>すでにアカウントをお持ちの方はこちら</p>
+      <!-- ======== ログイン ======== -->
+      <div class="flex items-center gap-3 mb-8 ml-4 text-sm">
+        <p>すでにアカウントをお持ちの方はこちら</p>
         <a href="{% url 'accounts:login' %}" 
-        class="add-owner self-center inline-block border border-teamy-teal text-teamy-teal hover:bg-teamy-teal hover:text-white hover:scale-[1.05] active:scale-[0.98] transition-transform px-6 py-2 mt-2 rounded-full">
+          class="add-owner self-center inline-block border border-teamy-teal text-teamy-teal hover:bg-teamy-teal hover:text-white hover:scale-[1.05] active:scale-[0.98] transition-transform px-5 py-1.5 mt-2 rounded-full text-sm">
           Login
         </a>
+      </div>
     </div>
-  </div>
 
-  <!-- ======== フォーム ======== -->
-<div class="flex-1 flex items-center justify-center">
-  <div class="w-full max-w-[80%] h-[90%] border border-gray-100 bg-white shadow-2xl p-10 rounded-sm flex flex-col justify-center"> 
-      <form method="post" class="flex flex-col gap-2 p-4 max-w-md mx-auto">
-      {% csrf_token %}
+    <!-- ======== フォーム ======== -->
+    <div class="flex-1 flex items-center justify-center">
+      <div class="w-full max-w-md border border-gray-100 bg-white shadow-xl p-8 rounded-sm flex flex-col justify-center"> 
+        <form method="post" class="flex flex-col gap-2 p-3 max-w-sm mx-auto text-sm">
+        {% csrf_token %}
 
-        {% for space_field in space_form %}
-          <label for="{{ space_field.id_for_label }}" class="flex flex-col gap-1">
-            {{ space_field.label }}
-            {{ space_field }}
+          {% for space_field in space_form %}
+            <label for="{{ space_field.id_for_label }}" class="flex flex-col gap-1">
+              {{ space_field.label }}
+              {{ space_field }}
 
-            {% if space_field.errors %}
-              <p class="text-red-500 text-sm">
-                {{ space_field.errors.0 }}
-              </p>
-            {% endif %}
-          </label>
-        {% endfor %}
+              {% if space_field.errors %}
+                <p class="text-red-500 text-xs">
+                  {{ space_field.errors.0 }}
+                </p>
+              {% endif %}
+            </label>
+          {% endfor %}
 
-        {% for user_field in user_form %}
-          <label for="{{ user_field.id_for_label }}" class="flex flex-col gap-1">
-            {{ user_field.label }}
-            {{ user_field }}
+          {% for user_field in user_form %}
+            <label for="{{ user_field.id_for_label }}" class="flex flex-col gap-1">
+              {{ user_field.label }}
+              {{ user_field }}
 
-            {% if user_field.errors %}
-              <p class="text-red-500 text-sm">
-                {{ user_field.errors.0 }}
-              </p>
-            {% endif %}
-          </label>
-        {% endfor %}
+              {% if user_field.errors %}
+                <p class="text-red-500 text-xs">
+                  {{ user_field.errors.0 }}
+                </p>
+              {% endif %}
+            </label>
+          {% endfor %}
 
-        <!--<label class="flex flex-col gap-1">社員ID
-          <input type="text" name="employee_id" inputmode="numeric" pattern="[0-9]*" maxlength="10" class="border border-gray-400 rounded-lg p-2" required>
-        </label>
-
-        <label class="flex flex-col gap-1">名前
-          <input type="text" name="user_name" class="border border-gray-400 rounded-lg p-2" required>
-        </label>
-
-        <label class="flex flex-col gap-1">パスワード
-          <input type="password" name="password" class="border border-gray-400 rounded-lg p-2" required>
-        </label>-->
-
-        <!-- button -->
-        <button type="submit" class="add-account self-center inline-block bg-[#F1A46C] hover:bg-[#E89455] hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-medium px-8 py-2 mt-6 border-gray-400 rounded-full shadow-md">
-          作成
-        </button>
-    </form>
+          <button type="submit"
+            class="add-account self-center inline-block bg-[#F1A46C] hover:bg-[#E89455] hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-medium px-6 py-1.5 mt-4 rounded-full shadow">
+            作成
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
   
-  {% include "components/tutorial_modal.html" %}
+{% include "components/tutorial_modal.html" %}
 {% endblock %}
 
 {% block extra_js %}
