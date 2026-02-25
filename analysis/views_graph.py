@@ -104,8 +104,6 @@ def _get_user_scores_with_team(user, team_id):
                 "team_mean_normalized": normalize_score(team_mean),
             }
         
-        print(f"[DEBUG] UserValueScore: {score}, TeamValueScore: {team_score}")
-        
     order = ["context", "feedback", "persuasion", "hierarchy", "decision", "trust", "conflict", "time"]
     order_index = {key: index for index, key in enumerate(order)}
     sorted_list = sorted(results_data.values(), key=lambda x: order_index.get(x['value_key_id'], 999))
