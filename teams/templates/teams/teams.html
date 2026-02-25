@@ -60,7 +60,9 @@
                 <button
                   type="button"
                   class="btn-edit-team p-2 -m-2 transition-transform hover:scale-125 shrink-0"
-                  data-team-id="{{ team.id }}">
+                  data-team-id="{{ team.id }}"
+                  data-team-name="{{ team.name }}"
+                  data-team-description="{{ team.description|default_if_none:'' }}">
                   <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-7 h-7 shrink-0">
                 </button>
                 <button

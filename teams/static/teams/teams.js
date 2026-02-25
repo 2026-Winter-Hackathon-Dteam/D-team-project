@@ -1,5 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  const createErrFlag = document.getElementById('create-team-error-flag');
+  if (createErrFlag) {
+    document.getElementById('createTeamModal')?.classList.remove('hidden');
+  }
+
+  const editErrFlag = document.getElementById('edit-team-error-flag');
+  if (editErrFlag) {
+    document.getElementById('editTeamModal')?.classList.remove('hidden');
+  }
+
   // --- モーダル内の入力内容をリセットする関数 ---
   const resetModalForm = (modal) => {
     // モーダルを閉じたらフォーム入力内容をリセットする
@@ -8,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // フォーム外のinput（検索窓など）をクリア
     const inputs = modal.querySelectorAll('input:not([type="hidden"])');
     inputs.forEach(input => { input.value = ''; });
+
   };
 
   // クリックイベント
@@ -54,7 +65,20 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const modal = document.getElementById('editTeamModal');
       if (modal) {
-        document.getElementById('editTargetId').value = btn.dataset.teamId;
+        // まず前回入力を消す
+        resetModalForm(modal);
+
+        // team_id
+        document.getElementById('editTargetId').value = btn.dataset.teamId || '';
+
+        // team名
+        const nameInput = modal.querySelector('input[name="name"]');
+        if (nameInput) nameInput.value = btn.dataset.teamName || '';
+
+        // description
+        const descTextarea = modal.querySelector('textarea[name="description"]');
+        if (descTextarea) descTextarea.value = btn.dataset.teamDescription || '';
+
         modal.classList.remove('hidden');
       }
       return;
