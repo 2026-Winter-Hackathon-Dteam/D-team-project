@@ -55,8 +55,8 @@
                bg-white border border-gray-100 shadow-lg rounded-md py-2 
                invisible opacity-0 group-hover:visible group-hover:opacity-100
                transition-all duration-200 z-[100]">
-        <a href="/profile/" class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">プロフィール変更</a>
-        <a href="/password/" class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">パスワード変更</a>
+        <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">プロフィール変更</a>
+        <a href="{% url 'accounts:change_password' %}" class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">パスワード変更</a>
         {% if show_space_edit_button %}
           <a href="{% url 'spaces:space_edit' request.user.space.id %}" class="block px-4 py-2 hover:text-[#04D0C5] hover:bg-gray-50">スペース編集</a>
         {% endif %}
@@ -76,7 +76,7 @@
   <!-- ================= ログイン前 ================= -->
   <nav class="flex items-center gap-12 mr-6">
     <a href="{% url 'accounts:login' %}" 
-    class="add-owner self-center inline-block border border-teamy-teal text-teamy-teal hover:bg-teamy-teal hover:text-white hover:scale-[1.05] active:scale-[0.98] transition-transform px-6 py-2 mt-2 rounded-full">
+    class="add-owner self-center inline-block border border-teamy-teal text-teamy-teal hover:bg-teamy-teal hover:text-white hover:scale-[1.05] active:scale-[0.98] transition-transform px-6 py-1.5 mt-2 rounded-full">
       Login
     </a>
   </nav>
