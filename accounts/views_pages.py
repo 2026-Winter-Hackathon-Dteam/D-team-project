@@ -1,7 +1,7 @@
 import secrets
 import string
 from django.db import IntegrityError, transaction
-from django.db.models import Q
+from django.db.models import Q, Case, When, Value, IntegerField
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.generic import TemplateView
@@ -108,6 +108,17 @@ def members(request):
             Q(name__icontains=query) |
             Q(employee_id__icontains=query)
         )
+    # 表示順の並べ替え
+    space_members =(
+        space_members.annotate(
+            role_order=Case(
+                When(id=space.owner_user.id, then=Value(0)),    # オーナー
+                When(is_admin=True, then=Value(1)),             # 管理者
+                default=Value(2),                               # 一般ユーザー
+                output_field=IntegerField(),
+            )
+        )
+    ).order_by("role_order", "employee_id")
 
     context = {
         "space":space,
