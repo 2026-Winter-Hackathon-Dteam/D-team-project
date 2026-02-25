@@ -15,11 +15,11 @@
 <div class="min-h-screen py-10 px-4 space-y-6">
   <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg">
     <!-- ヘッダー帯 -->
-    <div class="bg-teamy-navy px-6 py-1 rounded-t-lg flex justify-between items-center min-h-[72px]">
+    <div class="bg-teamy-navy px-5 py-1 rounded-t-lg flex justify-between items-center min-h-[64px]">
       <div class="flex items-center gap-3 m-2">
         
         <div id="team-select-container" class="relative group flex items-center min-h-[44px]">
-          <button type="button" class="flex items-center text-white text-2xl font-bold hover:opacity-80 transition-opacity focus:outline-none">
+          <button type="button" class="flex items-center text-white text-xl font-bold hover:opacity-80 transition-opacity focus:outline-none">
             <span id="selected-team-name">
               {% if team_id %}
                 {% for team in teams %}
@@ -46,7 +46,7 @@
           </div>
         </div>
 
-        <span id="header-title-text" class="text-white text-xl font-bold tracking-wider self-center" 
+        <span id="header-title-text" class="text-white text-lg font-bold tracking-wider self-center" 
         data-user-name="{{ target_user.name }}">
           と {{ target_user.name }} さんの価値観
         </span>
@@ -60,7 +60,7 @@
       <!-- マネージャー分析ボタン -->
       {% if is_team_leader %}
       <a id="manager-btn" href="{% url 'analysis:managers_page' %}?team_id={{ team_id }}"
-        class="self-center inline-block bg-teamy-teal hover:bg-teamy-tealDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-semibold px-6 py-2 rounded-full shadow-md text-sm">
+        class="self-center inline-block bg-teamy-teal hover:bg-teamy-tealDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-semibold px-5 py-1.5 rounded-full shadow-sm text-xs">
         マネージャー向け分析へ
       </a>
       {% endif %}
@@ -75,12 +75,12 @@
     <!-- 左：タブ -->
     <div class="flex gap-8">
       <button id="tab-me-btn"
-              class="px-6 py-2 text-gray-400 text-lg font-bold">
+              class="px-6 py-2 text-gray-400 text-base font-bold">
         あなたの価値観
       </button>
 
       <button id="tab-team-btn"
-              class="px-6 py-2 text-teamy-teal text-lg font-bold border-b-2 border-teamy-teal -mb-[1px]">
+              class="px-6 py-2 text-teamy-teal text-base font-bold border-b-2 border-teamy-teal -mb-[1px]">
         チームとの比較
       </button>
     </div>
