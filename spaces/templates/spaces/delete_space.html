@@ -4,15 +4,15 @@
 {% block title %}スペース削除{% endblock %}
 
 {% block content %}
-<div class="flex flex-col justify-center items-center gap-6 h-[calc(100vh-96px)]">
-  <div class="w-full max-w-[720px] h-[70%] flex flex-col items-center border border-gray-100 bg-white text-xl shadow-2xl p-10">
-    <h1 class="text-4xl text-teamy-navy font-extrabold">スペース削除</h1>
+<div class="flex flex-col justify-center items-center gap-6 h-[calc(100vh-80px)]">
+  <div class="w-full max-w-[720px] h-[80%] flex flex-col justify-evenly items-center border border-gray-100 bg-white shadow-2xl p-10">
+    <h1 class="text-3xl text-teamy-navy font-extrabold">スペース削除</h1>
 
-    <p class="text-black text-center mt-4">このスペースを削除すると、<br>
-        所属するユーザー情報など、<br>
+    <p class="text-black text-center leading-relaxed mt-4">このスペースを削除すると<br>
+        所属するユーザー情報など<br>
         スペースに関連する全てのデータが失われます。<br><br></p>
-    <p class="text-red-500 text-center mb-4">
-        !この操作は取り消すことはできません!</p>
+    <p class="text-red-500 text-center font-bold mb-4">
+        ！この操作は取り消すことはできません！</p>
     <p class="text-black text-center mb-4">
         削除しますか？</p>
 
@@ -20,8 +20,8 @@
       <div class="flex justify-center pt-6 gap-8">
         <!-- 削除ボタン：モーダルを開く -->
         <button type="button" onclick="openDeleteModal()" 
-          class="bg-teamy-orange hover:bg-teamy-orangeDark text-white font-medium
-                      py-3 px-12 rounded-full transition-transform shadow-md 
+          class="bg-red-500 hover:bg-red-700 text-white font-medium
+                      px-6 py-2 rounded-full transition-transform shadow-md 
                       hover:scale-[1.03] hover:shadow-md active:scale-[0.98]">
           削除する
         </button>
@@ -29,7 +29,7 @@
         <!-- キャンセルボタン -->
         <a href="{% url 'spaces:space_edit' space.id %}" 
           class="bg-teamy-gray hover:bg-teamy-grayDark text-white font-medium
-                      py-3 px-12 rounded-full transition-transform shadow-md 
+                      px-6 py-2 rounded-full transition-transform shadow-md 
                       hover:scale-[1.03] hover:shadow-md active:scale-[0.98]">
           キャンセル
         </a>
@@ -40,30 +40,30 @@
 
 <!-- 最終確認モーダル -->
 <div id="deleteSpaceModal" class="fixed hidden inset-0 z-50">
-  <div class="modal-bg absolute inset-0 bg-black/50 flex items-center justify-center">
-    <div class="modal-content flex flex-col items-center justify-center bg-white rounded-lg shadow-xl w-full max-w-[480px] min-h-[400px] p-10 relative">
+  <div class="modal-bg absolute inset-0 bg-black/50 flex items-center justify-center" onclick="closeDeleteModal()">
+    <div class="modal-content flex flex-col items-center justify-center bg-white rounded-lg shadow-xl w-full max-w-[480px] min-h-[400px] p-12 relative" onclick="event.stopPropagation()">
       
       <!-- 閉じるボタン -->
       <button type="button" class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600" onclick="closeDeleteModal()">×</button>
 
       <div class="flex flex-col items-center w-full gap-6">
         <span class="text-2xl font-medium text-center">このスペースを<br>本当に削除しますか？</span>
-        <p class="text-red-500 text-center mb-4">
-        !この操作は取り消すことはできません!</p>
+        <p class="text-red-500 text-center font-bold mb-4">
+        ！この操作は取り消すことはできません！</p>
         <!-- 対象スペース表示 -->
           <div class="flex flex-col items-center justify-center
                       bg-teamy-grayLight rounded-md shadow-md
-                      w-full p-10 gap-2">
+                      w-full p-8 gap-2">
             <span class="text-2xl font-medium text-center">{{ space.name }}</span>
           </div>
         <!-- ボタンコンテナ -->
-        <div class="flex justify-center gap-4 w-full pt-6">
+        <div class="flex justify-around w-full pt-6">
           <!-- 削除ボタン -->
-          <form method="POST" action="{% url 'spaces:space_delete' space.id %}" class="flex-1">
+          <form method="POST" action="{% url 'spaces:space_delete' space.id %}">
             {% csrf_token %}
             <button type="submit" 
-              class="bg-teamy-orange hover:bg-teamy-orangeDark text-white font-medium
-                      py-3 px-12 rounded-full transition-transform shadow-md 
+              class="bg-red-500 hover:bg-red-700 text-white font-medium
+                      px-6 py-2 rounded-full transition-transform shadow-md 
                       hover:scale-[1.03] hover:shadow-md active:scale-[0.98]">
              削除する
             </button>
@@ -72,7 +72,7 @@
           <!-- キャンセルボタン -->
           <button type="button" 
             class="bg-teamy-gray hover:bg-teamy-grayDark text-white font-medium
-                      py-3 px-12 rounded-full transition-transform shadow-md 
+                      px-6 py-2 rounded-full transition-transform shadow-md 
                       hover:scale-[1.03] hover:shadow-md active:scale-[0.98]" onclick="closeDeleteModal()">
              キャンセル
           </button>
