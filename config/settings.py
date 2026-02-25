@@ -12,15 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.getenv("DEBUG", "False")だけではDjangoは文字列の"False"を受け取ってしまって、boolianのFalseにならない
-DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "yes")
+DEBUG = True
 
-# .env.prodのスペース対策
-ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.getenv("ALLOWED_HOSTS", "").split(",")
-    if host.strip()
-]
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
 
 
 # Application definition
@@ -85,8 +79,6 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
-# LOGIN_URL = "accounts:login"
-LOGOUT_REDIRECT_URL = "accounts:login"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
