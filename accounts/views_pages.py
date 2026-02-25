@@ -194,12 +194,15 @@ def edit_member(request, pk):
 
     space=request.user.space
     member = get_object_or_404(User, pk=pk, space=space)
-
     user_teams = Teams.objects.filter(
         space = space,
         team_users__user = member
     ).distinct()
 
+    # オーナーの削除権限編集不可
+    if member == space.owner_user:
+        PermissionDenied
+        
     # 作成ボタンが押された（POST）なら、登録処理を行う
     if request.method == "POST":
         form = EditMemberForm(
