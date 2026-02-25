@@ -4,20 +4,22 @@
 {% block title %}add_space{% endblock %}
 
 {% block content %}
-<div class="flex flex-col justify-center items-center gap-6 h-[calc(100vh-96px)]">
+<div class="flex flex-col justify-center items-center gap-6 h-[calc(100vh-80px)]">
   <!-- ======== 見出し ======== -->
-  <div class="w-full max-w-[720px] h-[70%] flex flex-col items-center border border-gray-100 bg-white text-xl shadow-2xl p-10">
-    <h1 class="text-4xl text-teamy-navy font-extrabold">スペース編集</h1>
+  <div class="w-full max-w-[720px] h-[80%] flex flex-col items-center border border-gray-100 bg-white shadow-2xl p-10">
+    <h1 class="text-3xl text-teamy-navy font-extrabold">スペース編集</h1>
 
     <!-- ======== フォーム ======== -->
     <form method="post" class="flex flex-col p-4 h-full w-[90%] mx-auto">
       {% csrf_token %}
 
       <!-- inputs -->
-      <div class="flex flex-col gap-8 py-6 flex-grow justify-around">
+      <div class="flex flex-col gap-8 py-6 flex-grow justify-evenly text-base">
         <label class="flex flex-row items-center gap-4">
           <span class="flex-[1]">スペース名</span>
-          {{ form.name }}
+            <div class="flex-[2]">
+              {{ form.name }}
+            </div>
           </label>
 
       <div class="flex flex-row items-start gap-4">
@@ -72,7 +74,7 @@
       <!-- button -->
       <div class="flex flex-col items-center gap-2 mt-6">
         <button type="submit"
-          class="add-account self-center inline-block  bg-[#F1A46C] hover:bg-[#E89455] hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-medium px-6 py-2 border-gray-400 rounded-full shadow-md">
+          class="add-account self-center inline-block  bg-teamy-orange hover:bg-teamy-orangeDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-medium px-6 py-2 border-gray-400 rounded-full shadow-md">
           変更する
         </button>
       </div>
@@ -80,11 +82,11 @@
   </div>
   </div>
 
-  <!-- オーナーアカウント削除（オーナーのみ） -->
-  <div class="flex flex-col items-center gap-1">
-  <span class="text-base">スペースを削除する</span>
+  <!-- スペース削除 -->
+  <div class="flex items-center gap-2">
+  <span class="text-sm">スペースを削除する</span>
       <div class="flex flex-col items-center gap-2 mt-auto">
-        <a href="{% url 'spaces:space_delete_confirm' space.id %}" class="add-account self-center inline-block  bg-gray-300 hover:bg-gray-400 hover:scale-[1.03] active:scale-[0.98] transition-transform text-sm px-6 py-1 border-gray-400 rounded-full shadow-md">削除</a>
+        <a href="{% url 'spaces:space_delete_confirm' space.id %}" class="add-account self-center inline-block  bg-gray-300 hover:bg-gray-400 hover:scale-[1.03] active:scale-[0.98] transition-transform text-xs px-6 py-1 border-gray-400 rounded-full shadow-md">削除</a>
       </div>
   </div>
 </div>
