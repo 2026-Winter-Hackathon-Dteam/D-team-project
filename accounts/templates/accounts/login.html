@@ -4,7 +4,7 @@
 {% block title %}login{% endblock %}
 
 {% block content %}
-<div class="flex justify-center items-center gap-4 h-[calc(100vh-96px)]">
+<div class="flex justify-center items-center gap-4 h-[calc(100vh-80px)]">
   <!-- ======== 見出し ======== -->
   <div class="w-full max-w-[480px] h-[80%] flex flex-col items-center border border-gray-100 bg-white text-xl shadow-2xl p-10">
     <h1 class="text-4xl text-teamy-navy font-extrabold">ログイン</h1>
@@ -39,11 +39,6 @@
           class="add-account self-center inline-block  bg-[#F1A46C] hover:bg-[#E89455] hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-medium px-6 py-2 border-gray-400 rounded-full shadow-md">
           ログイン
         </button>
-
-        <!-- ======== サインアップ導線 ======== -->
-        <div class="text-base mt-6 text-gray-500 hover:text-gray-800">
-          <a href="{% url 'accounts:signup' %}">アカウント作成へ</a>
-        </div>
       </div>
     </form>
   </div>
