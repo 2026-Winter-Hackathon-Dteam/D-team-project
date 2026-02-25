@@ -14,13 +14,13 @@
         class="modal-close absolute top-4 right-4 text-gray-400 text-4xl hover:text-gray-600">×</button>
 
         <!-- ======== 本体 ======== -->
-        <form method="POST">
+        <form method="POST" action="{% url 'accounts:delete_member' %}">
           {% csrf_token %}
           <div class="flex flex-col items-center w-full p-10 gap-10">
             <span class="text-2xl font-medium">このユーザーを<br>削除しますか？</span>
             <div class="flex justify-center bg-teamy-grayLight rounded-md shadow-md w-full p-10">
-              <span id="deleteTargetText">山田 太郎：12345</span>
-              <input type="hidden" name="member_id" id="deleteTargetId">
+              <span id="deleteTargetText">{{ member.name }}{{ member.employee_id }}</span>
+              <input type="hidden" name="pk" id="deleteTargetId">
             </div> 
           </div>
 

@@ -12,9 +12,10 @@ urlpatterns = [
     path('signup/', OwnerSignupView.as_view(), name='signup'),
     path('login/', CustomLoginView.as_view(), name='login'),
     path("logout/", CustomLogoutView.as_view(), name="logout"),
+    path('profile/', views_pages.profile , name='profile'),
+    path('change_password/', CustomPasswordChangeView.as_view(), name='change_password'),
     path('members/', views_pages.members , name='members'),
     path('create-member/', views_pages.create_member, name='create_member'),
     path('edit_member/<uuid:pk>/', views_pages.edit_member , name='edit_member'),
-    path('profile/', views_pages.profile , name='profile'),
-    path('change_password/', CustomPasswordChangeView.as_view(), name='change_password'),
+    path('delete_member/', views_pages.delete_member , name='delete_member'),
 ]

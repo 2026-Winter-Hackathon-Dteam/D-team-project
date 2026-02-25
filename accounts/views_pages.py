@@ -5,10 +5,12 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.generic import TemplateView
+from django.views.decorators.http import require_POST
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
+from django.core.exceptions import PermissionDenied
 from .forms import  OwnerMemberCreateForm, CustomPasswordChangeForm, ProfileForm, EditMemberForm
 from teams.models import Team_Users, Teams
 
@@ -25,8 +27,10 @@ class TopView(TemplateView):
 # 一般ユーザー作成
 @login_required
 def create_member(request):
-    space=request.user.space
+    if not request.user.is_admin:
+        PermissionDenied
 
+    space=request.user.space
     # 作成ボタンが押された（POST）なら、登録処理を行う
     if request.method == "POST":
         form = OwnerMemberCreateForm(
@@ -38,7 +42,7 @@ def create_member(request):
         if form.is_valid():
             # 新規作成ユーザー登録後の表示のためパスワードを変数に格納
             raw_password = generate_password()
-            # is_adminの取得
+            # is_adminの取得(オーナーのみ指定可能)
             if request.user == space.owner_user:
                 is_admin = form.cleaned_data.get("is_admin", False)
             else:
@@ -86,6 +90,9 @@ def create_member(request):
 # メンバー表示
 @login_required
 def members(request):
+    if not request.user.is_admin:
+        PermissionDenied
+        
     space=request.user.space
     query = request.GET.get("q", "").strip()
     
@@ -171,6 +178,9 @@ class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
 # メンバーの権限編集
 @login_required
 def edit_member(request, pk):
+    if not request.user.is_admin:
+        PermissionDenied
+
     space=request.user.space
     member = get_object_or_404(User, pk=pk, space=space)
 
@@ -214,8 +224,32 @@ def edit_member(request, pk):
 # ***************************************************************************
 # メンバー削除
 @login_required
+@require_POST
 def delete_member(request):
-    return render(request, "accounts/change_password.html")
+    if not request.user.is_admin:
+        PermissionDenied
+
+    space = request.user.space
+    pk = request.POST.get("pk")
+    member = get_object_or_404(User, pk=pk, space=space)
+
+    # オーナーの削除不可
+    if member == space.owner_user:
+        PermissionDenied
+    # リーダーの削除前処理
+    teams = Teams.objects.filter(
+        space = space,
+        leader_user = member
+    )
+    teams.update(leader_user=None)
+
+    # 削除処理
+    try:
+        member.delete()
+        messages.success(request, "ユーザーを削除しました")
+    except:
+        messages.error(request, "削除に失敗しました")
+    return redirect("accounts:members")
 
 
 # ***************************************************************************

@@ -9,6 +9,14 @@
   <div class="flex items-center justify-between">
     <!-- スペース名 -->
     <h1 class="text-3xl font-bold text-teamy-navy">{{ space.name }}</h1>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="border-b border-green-500 text-green-700 pb-2 mb-4">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
     
     <div class="add_member flex items-center gap-3">
       <!-- [？]ヘルプリンク -->
@@ -133,7 +141,8 @@
 
                 <button type="button" class="btn-delete transition-transform hover:scale-125 active:scale-95 inline-block"
                         data-modal="deleteMemberModal"
-                        data-name="{{ member.user_name }}"
+                        data-uuid="{{ member.id }}"
+                        data-name="{{ member.name }}"
                         data-user-id="{{ member.employee_id }}">
                   <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
                 </button>
