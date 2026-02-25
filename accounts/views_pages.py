@@ -2,14 +2,14 @@ import secrets
 import string
 from django.db import IntegrityError, transaction
 from django.db.models import Q
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.generic import TemplateView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
-from .forms import  OwnerMemberCreateForm, CustomPasswordChangeForm, ProfileForm
+from .forms import  OwnerMemberCreateForm, CustomPasswordChangeForm, ProfileForm, EditMemberForm
 from teams.models import Team_Users, Teams
 
 
@@ -108,6 +108,7 @@ def members(request):
     }
     return render(request, "accounts/members.html", context)
 
+
 # ***************************************************************************
 # プロフィール保存
 @login_required
@@ -150,12 +151,9 @@ def profile(request):
         }
     )
 
-# ***************************************************************************
-# メンバー編集
-@login_required
-def edit_member(request):
-    return render(request, "accounts/edit_member.html")
 
+# ***************************************************************************
+# パスワード変更変更
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     form_class = CustomPasswordChangeForm
     template_name="accounts/change_password.html"
@@ -167,10 +165,56 @@ class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
 
     def get_success_url(self):
         return self.request.path
+    
+
+# ***************************************************************************
+# メンバーの権限編集
+@login_required
+def edit_member(request, pk):
+    space=request.user.space
+    member = get_object_or_404(User, pk=pk, space=space)
+
+    user_teams = Teams.objects.filter(
+        space = space,
+        team_users__user = member
+    ).distinct()
+
+    # 作成ボタンが押された（POST）なら、登録処理を行う
+    if request.method == "POST":
+        form = EditMemberForm(
+            request.POST,
+            user = member
+        )
+
+        if form.is_valid():
+            try:
+                # 管理者権限の保存
+                member.is_admin = form.cleaned_data["is_admin"]
+                member.save(update_fields=["is_admin"])
+
+                messages.success(request, "権限編集を完了しました")
+                return redirect("accounts:members")
+            
+            except IntegrityError:
+                form.add_error(None, "登録処理中にエラーが発生しました")
+    else:
+        form = EditMemberForm(user = member)
+
+    return render(
+        request, 
+        "accounts/edit_member.html", 
+        { 
+            "form":form , 
+            "member":member,
+            "user_teams":user_teams
+        }
+    )
+
+
 # ***************************************************************************
 # メンバー削除
 @login_required
-def change_password(request):
+def delete_member(request):
     return render(request, "accounts/change_password.html")
 
 

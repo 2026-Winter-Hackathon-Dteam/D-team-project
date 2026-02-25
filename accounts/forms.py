@@ -210,6 +210,7 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         # フォームの初期化
         super().__init__(*args, **kwargs)
 
+
 # ***************************************************************************
 # プロフィールフォーム
 class ProfileForm(forms.ModelForm):
@@ -238,3 +239,26 @@ class ProfileForm(forms.ModelForm):
         if user:
             self.fields["name"].initial = user.name
             self.fields["is_profile_public"].initial = user.is_profile_public
+
+
+# ***************************************************************************
+# 権限編集フォーム
+class EditMemberForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["is_admin"]
+        widgets = {
+            "is_admin":forms.CheckboxInput(attrs={
+                "class":"sr-only peer"
+            })
+        }
+
+    # フォーム表示時の処理
+    def __init__(self, *args, **kwargs):
+        # ユーザー情報を受け取る
+        user = kwargs.pop("user", None)
+        # フォームの初期化
+        super().__init__(*args, **kwargs)
+
+        if user:
+            self.fields["is_admin"].initial = user.is_admin

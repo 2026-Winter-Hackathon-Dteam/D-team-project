@@ -14,7 +14,7 @@ urlpatterns = [
     path("logout/", CustomLogoutView.as_view(), name="logout"),
     path('members/', views_pages.members , name='members'),
     path('create-member/', views_pages.create_member, name='create_member'),
-    path('edit_member/', views_pages.edit_member , name='edit_member'),
+    path('edit_member/<uuid:pk>/', views_pages.edit_member , name='edit_member'),
     path('profile/', views_pages.profile , name='profile'),
     path('change_password/', CustomPasswordChangeView.as_view(), name='change_password'),
 ]
