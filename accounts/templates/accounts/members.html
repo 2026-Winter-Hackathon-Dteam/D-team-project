@@ -125,9 +125,11 @@
             <!-- ===== 編集・削除 ===== -->
             <td class="py-3 px-2 text-right">
               <div class="inline-flex items-center gap-2">
-              <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
-                 <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
-              </a>
+                {% if g_is_owner %}
+                  <a href="{% url 'accounts:edit_member' member.pk %}" class="transition-transform hover:scale-125 active:scale-95 inline-block">
+                    <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
+                  </a>
+                {% endif %}
 
                 <button type="button" class="btn-delete transition-transform hover:scale-125 active:scale-95 inline-block"
                         data-modal="deleteMemberModal"
