@@ -176,7 +176,8 @@
                     class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125 shrink-0"
                     data-member-id="{{ member.user.id }}"
                     data-member-name="{{ member.user.name }}"
-                    data-member-employee-id="{{ member.user.employee_id }}">
+                    data-member-employee-id="{{ member.user.employee_id }}"
+                    data-is-leader="{% if selected_team.leader_user and member.user.id == selected_team.leader_user.id %}true{% else %}false{% endif %}">
                     <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7 shrink-0">
                   </button>
 

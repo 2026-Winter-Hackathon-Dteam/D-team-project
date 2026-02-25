@@ -218,7 +218,31 @@ def add_member(request):
 
     if form.is_valid():
         form.save()
-        return redirect(f"{reverse('teams:team_index')}?team_id={form.team.id}")
+        team = form.team  # form内で保持している前提
+
+        # ===== 再描画用データ =====
+        teams = Teams.objects.filter(
+            space=current_user.space
+        ).order_by("created_at")
+
+        selected_team = team
+
+        team_members = Team_Users.objects.filter(
+            team=selected_team
+        ).select_related("user")
+
+        context = {
+            "teams": teams,
+            "selected_team": selected_team,
+            "team_members": team_members,
+            "create_form": TeamCreateForm(space=current_user.space),
+        }
+
+        response = render(request, "teams/teams.html", context)
+
+        response["HX-Trigger"] = "memberAdded"
+
+        return response
 
     # ===== エラー時 =====
     teams = Teams.objects.filter(

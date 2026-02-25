@@ -107,6 +107,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // display要素（ID）がある場合のみ代入
         const display = document.getElementById('memberDeleteTargetIdDisplay');
         if (display) display.textContent = btn.dataset.memberId;
+        // リーダー削除確認
+        const leaderNotice = document.getElementById('leaderNotice');
+        if (leaderNotice) {
+          if (btn.dataset.isLeader === "true") {
+            leaderNotice.classList.remove('hidden');
+          } else {
+            leaderNotice.classList.add('hidden');
+          }
+        }
+
         modal.classList.remove('hidden');
       }
       return;
