@@ -125,19 +125,20 @@
             <!-- ===== 編集・削除 ===== -->
             <td class="py-3 px-2 text-right">
               <div class="inline-flex items-center gap-2">
-                  <!-- 編集 -->
-                <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
-                  <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
-                </a>
-
-                <!-- 削除   -->
+                
                 {% if member.space.owner_user == member %}
-                  <!-- オーナー：グレーアウト（クリック不可） -->
-                  <div class="inline-block opacity-30 cursor-not-allowed">
-                    <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
-                  </div>
+                <!-- オーナー：グレーアウト（クリック不可・spanタグ化） -->
+                <span class="inline-block opacity-30 cursor-default pointer-events-none">
+                  <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
+                </span>
+                <span class="inline-block opacity-30 cursor-not-allowed">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
+                </span>
                 {% else %}
-                  <!-- 通常削除 -->
+                  <!-- オーナー以外：通常表示 -->
+                  <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
+                    <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
+                  </a>
                   <button type="button"
                           class="btn-delete transition-transform hover:scale-125 active:scale-95 inline-block"
                           data-modal="deleteMemberModal"
