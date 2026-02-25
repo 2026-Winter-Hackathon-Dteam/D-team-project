@@ -125,16 +125,27 @@
             <!-- ===== 編集・削除 ===== -->
             <td class="py-3 px-2 text-right">
               <div class="inline-flex items-center gap-2">
-              <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
-                 <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
-              </a>
+                  <!-- 編集 -->
+                <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
+                  <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
+                </a>
 
-                <button type="button" class="btn-delete transition-transform hover:scale-125 active:scale-95 inline-block"
-                        data-modal="deleteMemberModal"
-                        data-name="{{ member.user_name }}"
-                        data-user-id="{{ member.employee_id }}">
-                  <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
-                </button>
+                <!-- 削除   -->
+                {% if member.space.owner_user == member %}
+                  <!-- オーナー：グレーアウト（クリック不可） -->
+                  <div class="inline-block opacity-30 cursor-not-allowed">
+                    <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
+                  </div>
+                {% else %}
+                  <!-- 通常削除 -->
+                  <button type="button"
+                          class="btn-delete transition-transform hover:scale-125 active:scale-95 inline-block"
+                          data-modal="deleteMemberModal"
+                          data-name="{{ member.user_name }}"
+                          data-user-id="{{ member.employee_id }}">
+                    <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
+                  </button>  
+                {% endif %}   
               </div>
             </td>
           </tr>
