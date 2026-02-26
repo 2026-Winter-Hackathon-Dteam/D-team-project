@@ -64,11 +64,7 @@
                   data-team-id="{{ team.id }}"
                   data-team-name="{{ team.name }}"
                   data-team-description="{{ team.description|default_if_none:'' }}">
-<<<<<<< HEAD
                   <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-6 h-6 shrink-0">
-=======
-                  <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-7 h-7 shrink-0">
->>>>>>> develop
                 </button>
                 <button
                   type="button"
@@ -184,11 +180,7 @@
                     data-member-name="{{ member.user.name }}"
                     data-member-employee-id="{{ member.user.employee_id }}"
                     data-is-leader="{% if selected_team.leader_user and member.user.id == selected_team.leader_user.id %}true{% else %}false{% endif %}">
-<<<<<<< HEAD
                     <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-6 h-6 shrink-0">
-=======
-                    <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7 shrink-0">
->>>>>>> develop
                   </button>
 
                 </div>
