@@ -4,6 +4,11 @@ module.exports = {
     "./**/*.html",
     "./static/**/*.js",
   ],
+    safelist: [
+    "sr-only",
+    "peer",
+    "peer-checked:bg-teamy-orange",
+  ],
   theme: {
     extend: {
       colors: {
