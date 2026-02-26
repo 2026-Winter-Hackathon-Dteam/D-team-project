@@ -17,22 +17,41 @@
         <form method="POST" action="{% url 'teams:create_team' %}">
           {% csrf_token %}
 
+          {% if create_form %}
+            {% for error in create_form.non_field_errors %}
+              <div class="mb-4 p-3 bg-red-50 border border-red-300 rounded text-red-600 text-base">
+                ・{{ error }}
+              </div>
+            {% endfor %}
+          {% endif %}
+
           <div class="space-y-8 pt-6">
           <!-- チーム名 -->
             <div>
               <label class="block font-medium mb-2">チーム名
               </label>
-            <input type="text" name="team_name" class="w-full border border-gray-400 rounded-lg p-3" required>
+            <input type="text" name="name" value="{{ create_form.name.value|default_if_none:'' }}" class="w-full border border-gray-400 rounded-lg p-3">
+            {% if create_form.name.errors %}
+              <p class="text-red-500 text-sm mt-1">
+                {{ create_form.name.errors.0 }}
+              </p>
+            {% endif %}
             </div>
 
             <!-- チーム説明 -->
             <div>
               <label class="block font-medium mb-2">チームについての説明（任意）</label>
               <textarea 
-                name="team_description" 
+                name="description" 
                 maxlength="30"
                 class="w-full border border-gray-400 rounded-lg p-3 min-h-36 resize-none"
-              ></textarea>
+              >{{ create_form.description.value|default_if_none:'' }}</textarea>
+
+              {% if create_form.description.errors %}
+                <p class="text-red-500 text-sm mt-1">
+                  {{ create_form.description.errors.0 }}
+                </p>
+              {% endif %}
             </div>
 
             <!-- 作成ボタン -->
@@ -49,3 +68,7 @@
     </div>
   </div>
 </div>
+
+{% if create_form and create_form.errors %}
+  <div id="create-team-error-flag" data-has-errors="true"></div>
+{% endif %}

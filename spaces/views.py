@@ -69,6 +69,22 @@ def space_edit(request, space_id):
     }
     return render(request, "spaces/add_space.html", context)
 
+# space削除確認ページの表示
+@login_required
+@require_http_methods(["GET"])
+def space_delete_confirm(request, space_id):
+    current_user = request.user
+    
+    space = get_object_or_404(Spaces, id=space_id)
+    
+    # current_user がスペースのオーナーであることを確認
+    if current_user != space.owner_user:
+        return redirect('accounts:top')  # オーナーでない場合はトップページへリダイレクト
+    
+    context = {
+        "space": space,
+    }
+    return render(request, "spaces/delete_space.html", context)
 
 # space削除
 @login_required
@@ -84,11 +100,8 @@ def space_delete(request, space_id):
     if current_user != space.owner_user:
         return redirect('accounts:top')  # オーナーでない場合はトップページへリダイレクト
     
-    if request.method == "POST":
-        space.owner_user = None
-        space.save(update_fields=['owner_user'])
-        space.users.all().delete()
-        space.delete()
-        return redirect('accounts:top') # トップページへリダイレクト
-    
-    return redirect('spaces:space_edit', space_id=space_id)  # GETリクエストは編集ページへリダイレクト
+    space.owner_user = None
+    space.save(update_fields=['owner_user'])
+    space.users.all().delete()
+    space.delete()
+    return redirect('accounts:top') # トップページへリダイレクト

@@ -16,13 +16,22 @@
         <!-- ======== フォーム ======== -->
         <form method="POST" action="{% url 'teams:edit_team' %}">
           {% csrf_token %}
-          <input type="hidden" name="team_id" id="editTargetId">
+          <input type="hidden" name="team_id" id="editTargetId" value="{% if selected_team %}{{ selected_team.id }}{% endif %}">
 
           <div class="space-y-8 pt-6">
           <!-- チーム名 -->
             <div>
               <label class="block font-medium mb-2">チーム名</label>
-              <input type="text" name="team_name" value="{{ selected_team.name }}" class="w-full border border-gray-400 rounded-lg p-3" required>
+              <input type="text"
+                     name="name"
+                     value="{% if edit_form and edit_form.name.value != None %}{{ edit_form.name.value }}{% elif selected_team %}{{ selected_team.name }}{% endif %}"
+                     class="w-full border border-gray-400 rounded-lg p-3">
+
+              {% if edit_form.name.errors %}
+                <p class="text-red-500 text-sm mt-1">
+                  {{ edit_form.name.errors.0 }}
+                </p>
+              {% endif %}
             </div>
 
             {% comment %}
@@ -54,16 +63,20 @@
             </div>
             {% endcomment %}
 
-
             <!-- チーム説明 -->
             <div>
               <label class="block font-medium mb-2">チームについての説明（任意）</label>
               <textarea 
-                name="team_description" 
+                name="description"
                 maxlength="30"
                 class="w-full border border-gray-400 rounded-lg p-3 min-h-36 resize-none"
-              >{{ selected_team.description }}</textarea>
-              <!-- ↑models追加後にコメントアウト外す -->
+              >{% if edit_form and edit_form.description.value != None %}{{ edit_form.description.value }}{% elif selected_team %}{{ selected_team.description }}{% endif %}</textarea>
+
+              {% if edit_form.description.errors %}
+                <p class="text-red-500 text-sm mt-1">
+                  {{ edit_form.description.errors.0 }}
+                </p>
+              {% endif %}
             </div>
             
             <!-- 作成ボタン -->
@@ -81,19 +94,19 @@
   </div>
 </div>
 
+{% if edit_form and edit_form.errors %}
+  <div id="edit-team-error-flag"></div>
+{% endif %}
+
 <script>
   // リーダー選択の変更をinputに反映する
   document.querySelectorAll('.leader-radio').forEach(radio => {
     radio.addEventListener('change', (e) => {
-      // 選択されたラジオボタンのすぐ横にある名前（span）を取得
       const name = e.target.nextElementSibling.textContent;
-      // summary内のテキストを書き換え
       const displaySpan = document.getElementById('selected-leader-name');
       displaySpan.textContent = name;
       displaySpan.classList.remove('text-gray-500');
       displaySpan.classList.add('text-gray-900', 'font-bold');
-
-      // 選択したらプルダウンを閉じる
       document.getElementById('leader-details').removeAttribute('open');
     });
   });
