@@ -20,15 +20,11 @@ def set_current_team(request, team_id):
     return redirect(f"{reverse('teams:team_index')}?team_id={team_id}")
 
 
-#@login_required # ログイン機能実装後に有効化
-@require_http_methods(["GET"]) # 追記
+@login_required
+@require_http_methods(["GET"])
 def team_index(request):
-    # ログインユーザー取得（未ログイン時はログイン画面に遷移、space所属確認の時に必要。）
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(User, pk="11111111-1111-1111-1111-222222222001") #テスト用ユーザー
-        # return redirect('login') #本番用
+    # ログインユーザー取得
+    current_user = request.user
 
     # チーム一覧取得
     teams = Teams.objects.filter(space=current_user.space).order_by("created_at")
@@ -61,19 +57,11 @@ def team_index(request):
     return render(request, "teams/teams.html", context)
 
 
-# @login_required  # ログイン機能実装後に有効化
+@login_required
 @require_POST
 def create_team(request):
 
-    # ===== 開発用ユーザー取得 =====
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"
-        )
-        # return redirect('login') #本番用
+    current_user = request.user
 
     if not current_user.is_admin:
         return redirect("teams:team_index")
@@ -103,19 +91,11 @@ def create_team(request):
     })
 
 
-# @login_required  # ログイン機能実装後に有効化
+@login_required
 @require_POST
 def delete_team(request):
 
-    # ===== 開発用 強制ユーザー取得 =====
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"  # テスト用管理者
-        )
-        # return redirect('login') #本番用
+    current_user = request.user
 
     # ===== 管理者チェック =====
     if not current_user.is_admin:
@@ -139,19 +119,11 @@ def delete_team(request):
 
     return redirect("teams:team_index")
 
-# @login_required  # ログイン機能実装後有効化
+@login_required
 @require_POST
 def edit_team(request):
 
-    # ===== 開発用 強制ユーザー取得 =====
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"  # テスト用管理者
-        )
-        # return redirect('login') #本番用
+    current_user = request.user
 
     # ===== 管理者チェック =====
     if not current_user.is_admin:
@@ -194,19 +166,11 @@ def edit_team(request):
         "edit_form": form,
     })
 
-# @login_required  # ログイン機能実装後有効化
+@login_required
 @require_POST
 def add_member(request):
 
-    # ===== 開発用 強制ユーザー取得 =====
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"
-        )
-        # return redirect('login')  # 本番用
+    current_user = request.user
 
     if not current_user.is_admin:
         return HttpResponse(status=403)
@@ -269,19 +233,11 @@ def add_member(request):
     })
 
 
-# @login_required  # ログイン機能実装後有効化
+@login_required
 @require_http_methods(["GET"])
 def user_search(request):
 
-    # 開発用ユーザー取得
-    if request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"
-        )
-        # return redirect('login')  # 本番用
+    current_user = request.user
 
     query = request.GET.get("q", "").strip()
     team_id = request.GET.get("team_id")
@@ -315,19 +271,11 @@ def user_search(request):
 
 
 # ===== メンバー削除 =====
-# @login_required  # ログイン機能実装後有効化
+@login_required
 @require_POST
 def delete_member(request):
 
-    # ===== 開発用 ユーザー取得 =====
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"  # テスト用管理者
-        )
-        # return redirect('login')  # 本番用
+    current_user = request.user
 
     # ===== 管理者チェック =====
     if not current_user.is_admin:
@@ -389,19 +337,11 @@ def delete_member(request):
 
 
 # ===== リーダー設定 =====
-# @login_required  # ログイン機能実装後有効化
+@login_required
 @require_POST
 def set_leader(request):
 
-    # ===== 開発用 ユーザー取得 =====
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"  # テスト用管理者
-        )
-        # return redirect('login')  # 本番用
+    current_user = request.user
 
     # ===== 管理者チェック =====
     if not current_user.is_admin:
