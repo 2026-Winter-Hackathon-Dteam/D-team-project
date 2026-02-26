@@ -11,6 +11,7 @@ from django.views.decorators.http import require_http_methods # 追記
 from django.views.decorators.http import require_POST
 from django.shortcuts import redirect
 from django.db.models import Q
+from .forms import TeamCreateForm, TeamEditForm, AddMemberForm
 
 User = get_user_model()
 
@@ -19,36 +20,20 @@ def set_current_team(request, team_id):
     return redirect(f"{reverse('teams:team_index')}?team_id={team_id}")
 
 
-#@login_required # ログイン機能実装後に有効化
-@require_http_methods(["GET"]) # 追記
+@login_required
+@require_http_methods(["GET"])
 def team_index(request):
-    # チームを作られた順に並べて取り出す
-    teams = Teams.objects.all().order_by("created_at")
+    # ログインユーザー取得
+    current_user = request.user
+
+    # チーム一覧取得
+    teams = Teams.objects.filter(space=current_user.space).order_by("created_at")
+
+    create_form = TeamCreateForm(space=current_user.space)
 
     # ユーザーがクリックしたチームのIDを取り出す
     # GETパラメータからteam_idを取得（なければNone）
     selected_team_id = request.GET.get("team_id")
-
-       # ここから追記(team_id未指定時)
-    if not selected_team_id:
-        selected_team = None
-        team_members = []
-    
-        context = {
-            "teams": teams,
-            "selected_team": selected_team,
-            "team_members": team_members
-        }
-        return render(request, "teams/teams.html", context)
-        
-    # ログインユーザー取得（未ログイン時はログイン画面に遷移、space所属確認の時に必要。）
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(User, pk="11111111-1111-1111-1111-222222222001") #テスト用ユーザー
-        # return redirect('login') #本番用
-
-
     # 選択されたチームの初期値
     selected_team = None
     team_members = []
@@ -56,75 +41,61 @@ def team_index(request):
     # 選択されたチームのIDが取得されているならチームメンバー情報を取り出す
     if selected_team_id:
         selected_team = get_object_or_404(
-            Teams, 
+            Teams,
             id=selected_team_id,
-            space_id=current_user.space_id # 追記(5,同一space所属で見れるという権限チェックを追加する)
-            )
+            space=current_user.space # 追記(5,同一space所属で見れるという権限チェックを追加する)
+        )
         team_members = Team_Users.objects.filter(team=selected_team).select_related("user")
-
+    
     context = {
         "teams": teams,
         "selected_team": selected_team,
         "team_members": team_members,
+        "create_form": create_form,  
     }
+
     return render(request, "teams/teams.html", context)
 
 
-# @login_required  # ログイン機能実装後に有効化
+@login_required
 @require_POST
 def create_team(request):
-    # ===== 開発用 強制ユーザー取得 =====
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"  # テスト用管理者
-        )
-        # return redirect('login') #本番用
-    
-        # ===== 管理者チェック =====
+
+    current_user = request.user
+
     if not current_user.is_admin:
         return redirect("teams:team_index")
 
-    team_name = request.POST.get("team_name", "").strip()
-    description = request.POST.get("team_description", "").strip()
-
-    # 空チェック
-    if not team_name:
-        return redirect("teams:team_index")
-
-    # 重複チェック
-    if Teams.objects.filter(
-        name=team_name,
+    form = TeamCreateForm(
+        request.POST,
         space=current_user.space
-    ).exists():
-        return redirect("teams:team_index")
-
-    # 作成
-    Teams.objects.create(
-        name=team_name,
-        description=description, 
-        space=current_user.space,
-        leader_user=None
     )
 
-    return redirect("teams:team_index")
+    if form.is_valid():
+        team = form.save(commit=False)
+        team.space = current_user.space
+        team.leader_user = None
+        team.save()
+        return redirect("teams:team_index")
+
+    # バリデーションエラー時
+    teams = Teams.objects.filter(
+        space=current_user.space
+    ).order_by("created_at")
+
+    return render(request, "teams/teams.html", {
+        "teams": teams,
+        "selected_team": None,
+        "team_members": [],
+        "create_form": form,
+    })
 
 
-# @login_required  # ログイン機能実装後に有効化
+@login_required
 @require_POST
 def delete_team(request):
 
-    # ===== 開発用 強制ユーザー取得 =====
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"  # テスト用管理者
-        )
-        # return redirect('login') #本番用
+    current_user = request.user
 
     # ===== 管理者チェック =====
     if not current_user.is_admin:
@@ -148,117 +119,125 @@ def delete_team(request):
 
     return redirect("teams:team_index")
 
-# @login_required  # ログイン機能実装後有効化
+@login_required
 @require_POST
 def edit_team(request):
 
-    # ===== 開発用 強制ユーザー取得 =====
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"  # テスト用管理者
-        )
-        # return redirect('login') #本番用
+    current_user = request.user
 
     # ===== 管理者チェック =====
     if not current_user.is_admin:
         return redirect("teams:team_index")
 
     team_id = request.POST.get("team_id")
-    team_name = request.POST.get("team_name", "").strip()
-    description = request.POST.get("team_description", "").strip()
 
-    if not team_id:
-        return redirect("teams:team_index")
-
-    # ===== 対象チーム取得（同一spaceチェック） =====
     team = get_object_or_404(
         Teams,
         id=team_id,
         space=current_user.space
     )
 
-    # ===== 空チェック =====
-    if not team_name:
-        return redirect("teams:team_index")
-
-    # ===== 重複チェック（自分を除外） =====
-    if Teams.objects.filter(
-        name=team_name,
+    form = TeamEditForm(
+        request.POST,
+        instance=team,
         space=current_user.space
-    ).exclude(id=team_id).exists():
-        return redirect("teams:team_index")
+    )
 
-    # ===== 更新 =====
-    team.name = team_name
-    team.description = description
-    team.save()
+    if form.is_valid():
+        form.save()
+        return redirect(f"{reverse('teams:team_index')}?team_id={team.id}")
 
-    return redirect(f"{reverse('teams:team_index')}?team_id={team.id}")
+    # エラー時
+    teams = Teams.objects.filter(
+        space=current_user.space
+    ).order_by("created_at")
 
-# @login_required  # ログイン機能実装後有効化
+    team_members = Team_Users.objects.filter(
+        team=team
+    ).select_related("user")
+
+    create_form = TeamCreateForm(space=current_user.space)
+
+    return render(request, "teams/teams.html", {
+        "teams": teams,
+        "selected_team": team,
+        "team_members": team_members,
+        "create_form": create_form,
+        "edit_form": form,
+    })
+
+@login_required
 @require_POST
 def add_member(request):
 
-    # ===== 開発用 強制ユーザー取得 =====
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"
-        )
-        # return redirect('login')  # 本番用
+    current_user = request.user
 
     if not current_user.is_admin:
         return HttpResponse(status=403)
 
-    team_id = request.POST.get("team_id")
-    user_id = request.POST.get("user_id")
-
-    if not team_id or not user_id:
-        return HttpResponse(status=400)
-
-    team = get_object_or_404(
-        Teams,
-        id=team_id,
-        space=current_user.space
+    form = AddMemberForm(
+        request.POST,
+        current_user=current_user
     )
 
-    user = get_object_or_404(User, id=user_id)
+    if form.is_valid():
+        form.save()
+        team = form.team  # form内で保持している前提
 
-    # すでに所属しているかチェック
-    if not Team_Users.objects.filter(team=team, user=user).exists():
-        Team_Users.objects.create(team=team, user=user)
+        # ===== 再描画用データ =====
+        teams = Teams.objects.filter(
+            space=current_user.space
+        ).order_by("created_at")
 
-    # 通常のteamsページをそのまま返す
-    teams = Teams.objects.all().order_by("created_at")
-    selected_team = team
-    team_members = Team_Users.objects.filter(team=team).select_related("user")
+        selected_team = team
 
-    context = {
+        team_members = Team_Users.objects.filter(
+            team=selected_team
+        ).select_related("user")
+
+        context = {
+            "teams": teams,
+            "selected_team": selected_team,
+            "team_members": team_members,
+            "create_form": TeamCreateForm(space=current_user.space),
+        }
+
+        response = render(request, "teams/teams.html", context)
+
+        response["HX-Trigger"] = "memberAdded"
+
+        return response
+
+    # ===== エラー時 =====
+    teams = Teams.objects.filter(
+        space=current_user.space
+    ).order_by("created_at")
+
+    selected_team = Teams.objects.filter(
+        id=request.POST.get("team_id"),
+        space=current_user.space
+    ).first()
+
+    team_members = Team_Users.objects.filter(
+        team=selected_team
+    ).select_related("user") if selected_team else []
+
+    create_form = TeamCreateForm(space=current_user.space)
+
+    return render(request, "teams/teams.html", {
         "teams": teams,
         "selected_team": selected_team,
         "team_members": team_members,
-    }
+        "create_form": create_form,
+        "add_member_form": form,
+    })
 
-    return render(request, "teams/teams.html", context)
 
-# @login_required  # ログイン機能実装後有効化
+@login_required
 @require_http_methods(["GET"])
 def user_search(request):
 
-    # 開発用ユーザー取得
-    if request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"
-        )
-        # return redirect('login')  # 本番用
+    current_user = request.user
 
     query = request.GET.get("q", "").strip()
     team_id = request.GET.get("team_id")
@@ -270,29 +249,33 @@ def user_search(request):
             Q(name__icontains=query) |
             Q(employee_id__icontains=query)
         )
+# ===== 追加済判定用：対象チームに所属している user_id 一覧 =====
+    selected_team_users = set()
+    if team_id:
+        team = get_object_or_404(
+            Teams,
+            id=team_id,
+            space=current_user.space
+        )
+        selected_team_users = set(
+            Team_Users.objects.filter(team=team).values_list("user_id", flat=True)
+        )
 
     context = {
         "users": users,
         "team_id": team_id,
+        "selected_team_users": selected_team_users,
     }
 
     return render(request, "teams/modals/result_list.html", context)
 
 
 # ===== メンバー削除 =====
-# @login_required  # ログイン機能実装後有効化
+@login_required
 @require_POST
 def delete_member(request):
 
-    # ===== 開発用 ユーザー取得 =====
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"  # テスト用管理者
-        )
-        # return redirect('login')  # 本番用
+    current_user = request.user
 
     # ===== 管理者チェック =====
     if not current_user.is_admin:
@@ -313,6 +296,8 @@ def delete_member(request):
         space=current_user.space
     )
 
+    is_leader = str(team.leader_user_id) == str(user_id)
+
     # ===== チームメンバー紐付け取得 =====
     link = get_object_or_404(
         Team_Users,
@@ -320,8 +305,18 @@ def delete_member(request):
         user_id=user_id
     )
 
+
     # ===== 削除実行 =====
     link.delete()
+
+    # リーダー削除ならリーダー解除
+    if is_leader:
+        team.leader_user = None
+        team.save(update_fields=["leader_user", "updated_at"])
+
+        response = HttpResponse(status=204)
+        response["HX-Redirect"] = f"{reverse('teams:team_index')}?team_id={team.id}"
+        return response
 
     # ===== 再描画用データ取得 =====
     team_members = Team_Users.objects.filter(
@@ -342,19 +337,11 @@ def delete_member(request):
 
 
 # ===== リーダー設定 =====
-# @login_required  # ログイン機能実装後有効化
+@login_required
 @require_POST
 def set_leader(request):
 
-    # ===== 開発用 ユーザー取得 =====
-    if getattr(request, "user", None) and request.user.is_authenticated:
-        current_user = request.user
-    else:
-        current_user = get_object_or_404(
-            User,
-            pk="11111111-1111-1111-1111-222222222001"  # テスト用管理者
-        )
-        # return redirect('login')  # 本番用
+    current_user = request.user
 
     # ===== 管理者チェック =====
     if not current_user.is_admin:
