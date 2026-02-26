@@ -11,6 +11,7 @@ from .services import recalc_team_scores
 from .views_graph import _get_user_scores_only, _get_user_scores_with_team, _get_team_scores, _get_team_scatter_data
 from .views_advices import _get_user_advices_with_team, _get_team_advices
 from django.contrib.auth.decorators import login_required
+from django.db.models import Max
 
 
 # 回答保存　submit_answersを1回実行すると、SQLへのクエリは3+N回（Nはユーザーが所属するチーム数）
@@ -172,6 +173,7 @@ def personal_analysis(request):
 
     # チーム未選択時はスコアのみ表示、ユーザーがteamに所属していなければ、チーム選択前にリダイレクト
     team_graph_data = None
+    allmembers = False
     if not team_id:
         graph_data = _get_user_scores_only(user)
         advice_data = []
@@ -180,6 +182,31 @@ def personal_analysis(request):
         is_member = Team_Users.objects.filter(user=user, team_id=team_id).exists()
         if not is_member:
             return redirect("analysis:personal_analysis")
+        
+        # チーム取得
+        team = get_object_or_404(Teams, id=team_id)
+        
+        # チーム所属ユーザーを取得
+        team_user_ids = Team_Users.objects.filter(
+            team=team
+        ).values_list("user_id", flat=True)
+
+        # 各ユーザーの最新回答時刻を取得
+        latest_per_user = (
+            UserValueScore.objects
+            .filter(user_id__in=team_user_ids)
+            .values("user_id")
+            .annotate(latest_time=Max("created_at"))
+        )
+
+        answered_user_ids = [entry["user_id"] for entry in latest_per_user]
+        
+        # 選択チームの所属人数と回答済み人数を取得
+        total_members = team_user_ids.count()
+        answered_members = len(answered_user_ids)
+        
+        allmembers = total_members == answered_members
+        
         graph_data = _get_user_scores_with_team(user, team_id=team_id)
         # value_key_id,personal_score_normalized,team_mean_normalizedにフィルタリング
         graph_data = [
@@ -203,6 +230,7 @@ def personal_analysis(request):
         "teams": team_options,
         "is_team_leader": is_team_leader,
         "target_user": user,
+        "allmember_answered": allmembers,
     }
     print(f"[DEBUG] Rendering personal_analysis with context: {context}")
     return render(request, "analysis/personal_analysis.html", context)
@@ -256,6 +284,7 @@ def managers_page(request):
 
     context = {
         "team_id": team_id,
+        "team": team,
         "team_advice_data": team_advice,
         "team_scatter_data": l_team_scatter_data,
         "is_team_leader": is_team_leader,
