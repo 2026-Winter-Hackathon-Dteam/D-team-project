@@ -106,24 +106,17 @@ function attachHoverSync() {
 }
 
 
-// アコーディオンの開閉
-function toggleAccordion(contentId, button) {
+// アコーディオンの開閉で矢印回転
+document.querySelectorAll('.accordion-item').forEach(item => {
 
-    // 開閉対象のコンテンツと矢印を取得
-    const content = document.getElementById(contentId);
-    const icon = button.querySelector('svg');
+    const arrow = item.querySelector('.arrow');
 
-    // hiddenクラスの有無で開閉判定
-    if (content.classList.contains('hidden')) {
+    item.addEventListener('toggle', () => {
+        if (item.open) {
+            arrow.classList.add('rotate-180');
+        } else {
+            arrow.classList.remove('rotate-180');
+        }
+    });
 
-        // 開く＆矢印回転
-        content.classList.remove('hidden');
-        if (icon) icon.classList.add('rotate-180');
-
-    } else {
-
-        // 閉じる＆矢印回転
-        content.classList.add('hidden');
-        if (icon) icon.classList.remove('rotate-180');
-    }
-}
+});
