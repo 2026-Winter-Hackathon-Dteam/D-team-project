@@ -6,37 +6,60 @@
 {% block content %}
 <div class="flex justify-center items-center gap-4 h-[calc(100vh-80px)]">
   <!-- ======== 見出し ======== -->
-  <div class="w-full max-w-[480px] h-[80%] flex flex-col items-center border border-gray-100 bg-white text-xl shadow-2xl p-10">
-    <h1 class="text-4xl text-teamy-navy font-extrabold">ログイン</h1>
+  <div class="w-full max-w-[420px] min-h-[400px] flex flex-col items-center border border-gray-100 bg-white text-lg shadow-2xl p-8">
+    <h1 class="text-3xl text-teamy-navy font-extrabold">ログイン</h1>
 
     <!-- ======== フォーム ======== -->
-    <form method="post" class="flex flex-col p-4 h-full w-[90%] mx-auto">
+    <form method="post" class="flex flex-col p-3 h-full w-[90%] mx-auto">
       {% csrf_token %}
 
       <!-- inputs -->
-      <div class="flex flex-col gap-8 py-6 flex-grow justify-center">
-        {{form.non_field_errors}}
-        <label class="flex flex-col gap-1">
-          {{form.space_code.label_tag}}
+      <div class="flex flex-col gap-8 py-5 flex-grow justify-center">
+
+        {% if form.non_field_errors %}
+          <div class="text-red-500 text-xs bg-red-50 p-2 rounded break-words
+                      [&>ul]:list-none [&>ul]:m-0 [&>ul]:p-0
+                      [&>ul>li]:m-0 [&>ul>li]:break-words">
+            {{form.non_field_errors}}
+          </div>
+        {% endif %}
+
+        <label class="flex flex-col gap-1 w-full text-base">
+          {{form.space_code.label}}
           {{form.space_code}}
-          {{form.space_code.errors}}
+          <!-- Djangoが生成するul/liタグのスタイルを[&>ul>li]で強制上書き＆折り返し -->
+          <div class="text-red-500 text-[10px] leading-tight break-words
+                      [&>ul]:list-none [&>ul]:m-0 [&>ul]:p-0
+                      [&>ul>li]:m-0 [&>ul>li]:break-words">
+            {{form.space_code.errors}}
+          </div>
         </label>
-        <label class="flex flex-col gap-1">
-          {{form.employee_id.label_tag}}
+
+        <label class="flex flex-col gap-1 w-full text-base">
+          {{form.employee_id.label}}
           {{form.employee_id}}
-          {{form.employee_id.errors}}
+          <div class="text-red-500 text-[10px] leading-tight break-words
+                      [&>ul]:list-none [&>ul]:m-0 [&>ul]:p-0
+                      [&>ul>li]:m-0 [&>ul>li]:break-words">
+            {{form.employee_id.errors}}
+          </div>
         </label>
-        <label class="flex flex-col gap-1">
-          {{form.password.label_tag}}
+
+        <label class="flex flex-col gap-1 w-full text-base">
+          {{form.password.label}}
           {{form.password}}
-          {{form.password.errors}}
+          <div class="text-red-500 text-[10px] leading-tight break-words
+                      [&>ul]:list-none [&>ul]:m-0 [&>ul]:p-0
+                      [&>ul>li]:m-0 [&>ul>li]:break-words">
+            {{form.password.errors}}
+          </div>
         </label>
       </div>
 
       <!-- button -->
-      <div class="flex flex-col items-center gap-2 mt-6">
+      <div class="flex flex-col items-center gap-2 mt-4">
         <button type="submit"
-          class="add-account self-center inline-block  bg-[#F1A46C] hover:bg-[#E89455] hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-medium px-6 py-2 border-gray-400 rounded-full shadow-md">
+          class="add-account self-center inline-block bg-teamy-orange hover:bg-teamy-orangeDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-medium px-5 py-1.5 border-gray-400 rounded-full shadow-md">
           ログイン
         </button>
       </div>
