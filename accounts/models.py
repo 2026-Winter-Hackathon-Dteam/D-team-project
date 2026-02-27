@@ -60,7 +60,7 @@ class CustomUserManager(BaseUserManager):
 
     # オーナーとスペースの同時作成
     @transaction.atomic
-    def create_space_with_owner(self, space_name, space_code, employee_id, password, **extra_fields):
+    def create_space_with_owner(self, space_name, space_code, employee_id, password, name, **extra_fields):
         space = Spaces.objects.create(
             name = space_name,
             code = space_code
@@ -68,6 +68,7 @@ class CustomUserManager(BaseUserManager):
         owner = self.create_owner(
             space = space,
             employee_id = employee_id,
+            name = name,
             password = password,
             **extra_fields
         )
