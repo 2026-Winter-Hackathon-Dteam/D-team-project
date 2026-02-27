@@ -134,20 +134,23 @@
             <td class="py-3 px-2 text-right">
               <div class="inline-flex items-center gap-2">
 
-                {% if g_is_owner %}
+                {% if user.is_admin or g_is_owner %}
                   {% if member.id == member.space.owner_user.id %}
                     <!-- オーナー：編集・削除ともにグレー -->
-                    <span class="inline-block opacity-30 cursor-default pointer-events-none">
-                      <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
-                    </span>
+                     {% if g_is_owner %}
+                      <span class="inline-block opacity-30 cursor-default pointer-events-none">
+                        <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
+                      </span>
+                    {% endif %}
                     <span class="inline-block opacity-30 cursor-default pointer-events-none">
                       <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
                     </span>
                   {% else %}
-                    <a href="{% url 'accounts:edit_member' member.pk %}" class="transition-transform hover:scale-125 active:scale-95 inline-block">
-                      <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
-                    </a>
-
+                    {% if g_is_owner %}
+                      <a href="{% url 'accounts:edit_member' member.pk %}" class="transition-transform hover:scale-125 active:scale-95 inline-block">
+                        <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
+                      </a>
+                    {% endif %}
                     <button type="button" class="btn-delete transition-transform hover:scale-125 active:scale-95 inline-block"
                             data-modal="deleteMemberModal"
                             data-uuid="{{ member.id }}"
