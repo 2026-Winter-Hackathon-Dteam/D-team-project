@@ -23,7 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // クリックイベント
   document.addEventListener('click', (e) => {
-    
+    // チーム行クリック処理
+    const row = e.target.closest('.team-row');
+    if (row) {
+
+      // ボタンなら無視
+      if (e.target.closest('button')) return;
+
+      const teamId = row.dataset.teamId;
+      location.href = `?team_id=${teamId}`;
+      return;
+    }
+
     //  背景クリックでモーダルを閉じる
     if (e.target.classList.contains('modal-bg')) {
       const modal = e.target.closest('.fixed.inset-0');
