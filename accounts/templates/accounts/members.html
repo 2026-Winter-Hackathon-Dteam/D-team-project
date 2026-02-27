@@ -156,22 +156,6 @@
                       <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
                     </button>
                   {% endif %}
-
-                {% else %}
-                  {% if member.id == member.space.owner_user.id %}
-                    <!-- オーナー行：削除のみグレー -->
-                    <span class="inline-block opacity-30 cursor-default pointer-events-none">
-                      <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
-                    </span>
-                  {% else %}
-                    <button type="button" class="btn-delete transition-transform hover:scale-125 active:scale-95 inline-block"
-                            data-modal="deleteMemberModal"
-                            data-uuid="{{ member.id }}"
-                            data-name="{{ member.name }}"
-                            data-user-id="{{ member.employee_id }}">
-                      <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
-                    </button>
-                  {% endif %}
                 {% endif %}
 
               </div>

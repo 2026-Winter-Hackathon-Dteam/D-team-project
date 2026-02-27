@@ -13,7 +13,7 @@ def normalize_score(score):
 
 # ===== チーム分析マトリクス図　表示スケール設定 =====
 PRACTICAL_STD_MAX = 6
-PRACTICAL_DIFF_MAX = 12
+PRACTICAL_DIFF_MAX = 24  # 理論上の最大値を使用
 DISPLAY_MAX = 50
 
 def normalize_std(std):
