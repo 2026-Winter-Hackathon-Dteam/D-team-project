@@ -19,12 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // もし属性が空なら、HTMLに最初から書かれている文字を「バックアップ」として使う
   let targetUserName = "";
   if (headerTitleText) {
-    targetUserName = headerTitleText.getAttribute('data-user-name') || "";
-    
-    // もし属性から取れなかった場合、HTMLの既存テキストから名前部分を推測して保持
-    if (!targetUserName || targetUserName === "" || targetUserName === "None") {
-      targetUserName = headerTitleText.textContent.replace('と ', '').replace(' さんの価値観', '').trim();
-    }
+    targetUserName = headerTitleText.getAttribute('data-user-name') || "";    
   }
 
   // ===== ピンの配置 =====

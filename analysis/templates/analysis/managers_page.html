@@ -44,7 +44,7 @@
 
         <!-- タイトル -->
         <span class="text-white text-lg font-bold tracking-wider self-center">
-          の価値観分析
+          {{ team.name }}の価値観分析
         </span>
       </div>
 
@@ -155,11 +155,10 @@
         {% for advice in team_advice_data %}
 
         <!-- アコーディオンアイテム -->
-        <div class="accordion-item">
+        <details class="accordion-item group">
 
           <!-- ボタン -->
-          <button class="w-full flex justify-between items-center py-4 px-8 text-left hover:bg-slate-50 transition-colors focus:outline-none" 
-                  onclick="toggleAccordion('content-{{ forloop.counter }}', this)">
+          <summary class="w-full flex justify-between items-center py-4 px-8 text-left hover:bg-slate-50 transition-colors focus:outline-none list-none cursor-pointer">
                   <!-- JS：toggleAccordionの引数に、対象の項目ID,クリックされた箇所（this）を渡して判別させる  -->
             <span class="text-lg font-bold text-teamy-navy">
               {% if advice.value_key_id == "context" %}1. コミュニケーションの文脈
@@ -172,13 +171,13 @@
               {% elif advice.value_key_id == "time" %}8.効率的なスケジューリングの方法
               {% else %}{{ advice.value_key_id }}{% endif %}
             </span>
-            <svg class="w-5 h-5 text-slate-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-slate-400 transform transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
-          </button>
+          </summary>
 
           <!-- コンテンツ -->
-          <div id="content-{{ forloop.counter }}" class="hidden overflow-hidden transition-all duration-300">
+          <div id="content-{{ forloop.counter }}" class="overflow-hidden transition-all duration-300">
             <div class="px-10 py-8 space-y-8 bg-white border-t border-gray-100">
               
               <div class="flex justify-start">
@@ -218,7 +217,7 @@
 
             </div>
           </div>
-        </div>
+        </details>
         {% endfor %}
       </div>
     </div>
