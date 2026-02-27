@@ -17,8 +17,8 @@ class OwnerSignupView(View):
     template_name = "accounts/signup_owner.html"
 
     def get(self, request):
-        space_form = SpaceCreateForm()
-        user_form = OwnerSignUpForm()
+        space_form = SpaceCreateForm(prefix='space')
+        user_form = OwnerSignUpForm(prefix='user')
 
         context = {
             "space_form":space_form,
@@ -28,8 +28,8 @@ class OwnerSignupView(View):
 
     def post(self, request):
         # 回答を受け取る
-        space_form = SpaceCreateForm(request.POST)
-        user_form = OwnerSignUpForm(request.POST)
+        space_form = SpaceCreateForm(request.POST, prefix='space')
+        user_form = OwnerSignUpForm(request.POST, prefix='user')
         context = {
             "space_form":space_form,
             "user_form":user_form,
@@ -41,9 +41,9 @@ class OwnerSignupView(View):
                 space, owner = User.objects.create_space_with_owner(
                     space_name=space_form.cleaned_data["name"],
                     space_code=space_form.cleaned_data["code"],
+                    employee_id=user_form.cleaned_data["employee_id"],
                     password=user_form.cleaned_data["password1"],
                     name=user_form.cleaned_data["name"],
-                    employee_id=user_form.cleaned_data["employee_id"],
                 )
                 # 正常登録出来たらログインページにリダイレクト
                 return redirect("accounts:login")
