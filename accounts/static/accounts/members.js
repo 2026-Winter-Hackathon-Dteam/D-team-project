@@ -50,7 +50,7 @@
     if (deleteModal && deleteText && deleteIdInput) {
       // datasetから情報を取得してセット
       deleteText.textContent = `${btn.dataset.name}：${btn.dataset.userId}`;
-      deleteIdInput.value = btn.dataset.userId;
+      deleteIdInput.value = btn.dataset.uuid;
       deleteModal.classList.remove('hidden');
     }
   });

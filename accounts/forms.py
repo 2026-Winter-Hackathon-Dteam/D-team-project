@@ -1,7 +1,7 @@
 import re
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from spaces.models import Spaces
 from teams.models import Teams
 
@@ -184,6 +184,32 @@ class LoginForm(AuthenticationForm):
 
         return super().clean()
     
+# ***************************************************************************
+# パスワード変更フォーム
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label="旧パスワード",
+        widget=forms.PasswordInput(attrs={
+            "class":"border border-gray-400 rounded-lg p-2"
+        })
+    )
+    new_password1 = forms.CharField(
+        label="新パスワード",
+        widget=forms.PasswordInput(attrs={
+            "class":"border border-gray-400 rounded-lg p-2"
+        })
+    )
+    new_password2 = forms.CharField(
+        label="新パスワード（確認）",
+        widget=forms.PasswordInput(attrs={
+            "class":"border border-gray-400 rounded-lg p-2"
+        })
+    )
+
+    def __init__(self, *args, **kwargs):
+        # フォームの初期化
+        super().__init__(*args, **kwargs)
+
 
 # ***************************************************************************
 # プロフィールフォーム
@@ -213,3 +239,26 @@ class ProfileForm(forms.ModelForm):
         if user:
             self.fields["name"].initial = user.name
             self.fields["is_profile_public"].initial = user.is_profile_public
+
+
+# ***************************************************************************
+# 権限編集フォーム
+class EditMemberForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["is_admin"]
+        widgets = {
+            "is_admin":forms.CheckboxInput(attrs={
+                "class":"sr-only peer"
+            })
+        }
+
+    # フォーム表示時の処理
+    def __init__(self, *args, **kwargs):
+        # ユーザー情報を受け取る
+        user = kwargs.pop("user", None)
+        # フォームの初期化
+        super().__init__(*args, **kwargs)
+
+        if user:
+            self.fields["is_admin"].initial = user.is_admin

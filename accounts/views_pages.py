@@ -1,13 +1,17 @@
 import secrets
 import string
 from django.db import IntegrityError, transaction
-from django.db.models import Q
-from django.shortcuts import render, redirect
+from django.db.models import Q, Case, When, Value, IntegerField
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.views.generic import TemplateView
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_POST
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from .forms import  OwnerMemberCreateForm, ProfileForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordChangeView
+from django.core.exceptions import PermissionDenied
+from .forms import  OwnerMemberCreateForm, CustomPasswordChangeForm, ProfileForm, EditMemberForm
 from teams.models import Team_Users, Teams
 
 
@@ -23,8 +27,10 @@ class TopView(TemplateView):
 # 一般ユーザー作成
 @login_required
 def create_member(request):
-    space=request.user.space
+    if not request.user.is_admin:
+        PermissionDenied
 
+    space=request.user.space
     # 作成ボタンが押された（POST）なら、登録処理を行う
     if request.method == "POST":
         form = OwnerMemberCreateForm(
@@ -36,7 +42,7 @@ def create_member(request):
         if form.is_valid():
             # 新規作成ユーザー登録後の表示のためパスワードを変数に格納
             raw_password = generate_password()
-            # is_adminの取得
+            # is_adminの取得(オーナーのみ指定可能)
             if request.user == space.owner_user:
                 is_admin = form.cleaned_data.get("is_admin", False)
             else:
@@ -84,6 +90,9 @@ def create_member(request):
 # メンバー表示
 @login_required
 def members(request):
+    if not request.user.is_admin:
+        PermissionDenied
+        
     space=request.user.space
     query = request.GET.get("q", "").strip()
     
@@ -99,12 +108,24 @@ def members(request):
             Q(name__icontains=query) |
             Q(employee_id__icontains=query)
         )
+    # 表示順の並べ替え
+    space_members =(
+        space_members.annotate(
+            role_order=Case(
+                When(id=space.owner_user.id, then=Value(0)),    # オーナー
+                When(is_admin=True, then=Value(1)),             # 管理者
+                default=Value(2),                               # 一般ユーザー
+                output_field=IntegerField(),
+            )
+        )
+    ).order_by("role_order", "employee_id")
 
     context = {
         "space":space,
         "space_members": space_members,
     }
     return render(request, "accounts/members.html", context)
+
 
 # ***************************************************************************
 # プロフィール保存
@@ -148,17 +169,101 @@ def profile(request):
         }
     )
 
+
 # ***************************************************************************
-# メンバー編集
+# パスワード変更変更
+class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+    form_class = CustomPasswordChangeForm
+    template_name="accounts/change_password.html"
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "パスワードを変更しました")
+        return response
+
+    def get_success_url(self):
+        return self.request.path
+    
+
+# ***************************************************************************
+# メンバーの権限編集
 @login_required
-def edit_member(request):
-    return render(request, "accounts/edit_member.html")
+def edit_member(request, pk):
+    if not request.user.is_admin:
+        PermissionDenied
+
+    space=request.user.space
+    member = get_object_or_404(User, pk=pk, space=space)
+    user_teams = Teams.objects.filter(
+        space = space,
+        team_users__user = member
+    ).distinct()
+
+    # オーナーの削除権限編集不可
+    if member == space.owner_user:
+        PermissionDenied
+        
+    # 作成ボタンが押された（POST）なら、登録処理を行う
+    if request.method == "POST":
+        form = EditMemberForm(
+            request.POST,
+            user = member
+        )
+
+        if form.is_valid():
+            try:
+                # 管理者権限の保存
+                member.is_admin = form.cleaned_data["is_admin"]
+                member.save(update_fields=["is_admin"])
+
+                messages.success(request, "権限編集を完了しました")
+                return redirect("accounts:members")
+            
+            except IntegrityError:
+                form.add_error(None, "登録処理中にエラーが発生しました")
+    else:
+        form = EditMemberForm(user = member)
+
+    return render(
+        request, 
+        "accounts/edit_member.html", 
+        { 
+            "form":form , 
+            "member":member,
+            "user_teams":user_teams
+        }
+    )
+
 
 # ***************************************************************************
 # メンバー削除
 @login_required
-def change_password(request):
-    return render(request, "accounts/change_password.html")
+@require_POST
+def delete_member(request):
+    if not request.user.is_admin:
+        PermissionDenied
+
+    space = request.user.space
+    pk = request.POST.get("pk")
+    member = get_object_or_404(User, pk=pk, space=space)
+
+    # オーナーの削除不可
+    if member == space.owner_user:
+        PermissionDenied
+    # リーダーの削除前処理
+    teams = Teams.objects.filter(
+        space = space,
+        leader_user = member
+    )
+    teams.update(leader_user=None)
+
+    # 削除処理
+    try:
+        member.delete()
+        messages.success(request, "ユーザーを削除しました")
+    except:
+        messages.error(request, "削除に失敗しました")
+    return redirect("accounts:members")
 
 
 # ***************************************************************************
