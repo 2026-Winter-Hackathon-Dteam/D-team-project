@@ -101,11 +101,11 @@ def _get_team_advices(team_id):
         max_diff = abs(score.max_diff)
 
         # それぞれのvalue_keyごとにcodeを判定
-        if std_dev < 3 and max_diff < 6:
+        if std_dev < 3 and max_diff < 12:
             code = "Q1_stable_harmony"
-        elif std_dev < 3 and max_diff >= 6:
+        elif std_dev < 3 and max_diff >= 12:
             code = "Q2_deep_focus"
-        elif std_dev >= 3 and max_diff < 6:
+        elif std_dev >= 3 and max_diff < 12:
             code = "Q3_partial_diversity"
         else:
             code = "Q4_wide_diversity"
