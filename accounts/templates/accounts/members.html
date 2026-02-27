@@ -9,10 +9,18 @@
   <div class="flex items-center justify-between">
     <!-- スペース名 -->
     <h1 class="text-3xl font-bold text-teamy-navy">{{ space.name }}</h1>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="rounded-md bg-teamy-pinkRed/10 text-teamy-pinkRed px-4 py-2">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
     
     <div class="add_member flex items-center gap-3">
       <!-- [？]ヘルプリンク -->
-        <button type="button" class="btn-help h-7 w-7">
+        <button type="button" class="btn-help h-7 w-7 transition-transform hover:scale-110">
           <img src="{% static 'imgs/help.png' %}" alt="へルプを表示">
         </button>
 
@@ -125,16 +133,34 @@
             <!-- ===== 編集・削除 ===== -->
             <td class="py-3 px-2 text-right">
               <div class="inline-flex items-center gap-2">
-              <a href="#" class="transition-transform hover:scale-125 active:scale-95 inline-block">
-                 <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
-              </a>
 
-                <button type="button" class="btn-delete transition-transform hover:scale-125 active:scale-95 inline-block"
-                        data-modal="deleteMemberModal"
-                        data-name="{{ member.user_name }}"
-                        data-user-id="{{ member.employee_id }}">
-                  <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
-                </button>
+                {% if user.is_admin or g_is_owner %}
+                  {% if member.id == member.space.owner_user.id %}
+                    <!-- オーナー：編集・削除ともにグレー -->
+                     {% if g_is_owner %}
+                      <span class="inline-block opacity-30 cursor-default pointer-events-none">
+                        <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
+                      </span>
+                    {% endif %}
+                    <span class="inline-block opacity-30 cursor-default pointer-events-none">
+                      <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
+                    </span>
+                  {% else %}
+                    {% if g_is_owner %}
+                      <a href="{% url 'accounts:edit_member' member.pk %}" class="transition-transform hover:scale-125 active:scale-95 inline-block">
+                        <img src="{% static 'accounts/imgs/edit.svg' %}" alt="edit" class="w-6 h-6">
+                      </a>
+                    {% endif %}
+                    <button type="button" class="btn-delete transition-transform hover:scale-125 active:scale-95 inline-block"
+                            data-modal="deleteMemberModal"
+                            data-uuid="{{ member.id }}"
+                            data-name="{{ member.name }}"
+                            data-user-id="{{ member.employee_id }}">
+                      <img src="{% static 'accounts/imgs/trash.svg' %}" alt="trash" class="w-6 h-6">
+                    </button>
+                  {% endif %}
+                {% endif %}
+
               </div>
             </td>
           </tr>

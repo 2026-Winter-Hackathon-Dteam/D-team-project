@@ -15,44 +15,44 @@
 <div class="min-h-screen py-10 px-4 space-y-6">
   <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg">
     <!-- ヘッダー帯 -->
-    <div class="bg-teamy-navy px-6 py-1 rounded-t-lg flex justify-between items-center min-h-[72px]">
+    <div class="bg-teamy-navy px-5 py-1 rounded-t-lg flex justify-between items-center min-h-[64px]">
       <div class="flex items-center gap-3 m-2">
         
-<div id="team-select-container" class="relative group flex items-center min-h-[44px]">
-  <button type="button" class="flex items-center text-white text-2xl font-bold hover:opacity-80 transition-opacity focus:outline-none">
-    <span id="selected-team-name">
-      {% if team_id %}
-        {% for team in teams %}
-          {% if team.id == team_id %}
-            {{ team.name }}
-          {% endif %}
-        {% endfor %}
-      {% else %}
-        チームを選択
-      {% endif %}
-    </span>
-    <svg class="ml-2 w-5 h-5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-    </svg>
-  </button>
+        <div id="team-select-container" class="relative group flex items-center min-h-[44px]">
+          <button type="button" class="flex items-center text-white text-xl font-bold hover:opacity-80 transition-opacity focus:outline-none">
+            <span id="selected-team-name">
+              {% if team_id %}
+                {% for team in teams %}
+                  {% if team.id == team_id %}
+                    {{ team.name }}
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                チームを選択
+              {% endif %}
+            </span>
+            <svg class="ml-2 w-5 h-5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
 
-  <div class="absolute top-full left-0 mt-1 whitespace-nowrap min-w-[200px] bg-white border border-gray-100 shadow-xl rounded-md py-2 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 z-[100]">
-    {% for team in teams %}
-      <a href="?team_id={{ team.id }}&tab=team" 
-         class="block px-6 py-3 text-gray-800 hover:text-teamy-teal hover:bg-gray-50 text-lg {% if team.id == team_id %}font-bold text-teamy-teal{% endif %}">
-        {{ team.name }}
-      </a>
-    {% endfor %}
-  </div>
-</div>
+          <div class="absolute top-full left-0 mt-1 whitespace-nowrap min-w-[200px] bg-white border border-gray-100 shadow-xl rounded-md py-2 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 z-[100]">
+            {% for team in teams %}
+              <a href="?team_id={{ team.id }}&tab=team" 
+                class="block px-6 py-3 text-gray-800 hover:text-teamy-teal hover:bg-gray-50 text-lg {% if team.id == team_id %}font-bold text-teamy-teal{% endif %}">
+                {{ team.name }}
+              </a>
+            {% endfor %}
+          </div>
+        </div>
 
-<span id="header-title-text" class="text-white text-xl font-bold tracking-wider self-center" 
-data-user-name="{{ target_user.name }}">
-  と {{ target_user.name }} さんの価値観
-</span>
+        <span id="header-title-text" class="text-white text-lg font-bold tracking-wider self-center" 
+        data-user-name="{{ target_user.name }}">
+          と {{ target_user.name }} さんの価値観
+        </span>
 
         <!-- [？]ヘルプリンク -->
-        <button type="button" class="btn-help h-6 w-6">
+        <button type="button" class="btn-help h-6 w-6 transition-transform hover:scale-110">
           <img src="{% static 'imgs/help.png' %}" alt="へルプを表示">
         </button>
       </div>
@@ -60,7 +60,7 @@ data-user-name="{{ target_user.name }}">
       <!-- マネージャー分析ボタン -->
       {% if is_team_leader %}
       <a id="manager-btn" href="{% url 'analysis:managers_page' %}?team_id={{ team_id }}"
-        class="self-center inline-block bg-teamy-teal hover:bg-teamy-tealDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-semibold px-6 py-2 rounded-full shadow-md text-sm">
+        class="self-center inline-block bg-teamy-teal hover:bg-teamy-tealDark hover:scale-[1.03] active:scale-[0.98] transition-transform text-white font-semibold px-5 py-1.5 rounded-full shadow-sm text-xs">
         マネージャー向け分析へ
       </a>
       {% endif %}
@@ -75,25 +75,14 @@ data-user-name="{{ target_user.name }}">
     <!-- 左：タブ -->
     <div class="flex gap-8">
       <button id="tab-me-btn"
-              class="px-6 py-2 text-gray-400 text-lg font-bold">
+              class="px-6 py-2 text-gray-400 text-base font-bold">
         あなたの価値観
       </button>
 
       <button id="tab-team-btn"
-              class="px-6 py-2 text-teamy-teal text-lg font-bold border-b-2 border-teamy-teal -mb-[1px]">
+              class="px-6 py-2 text-teamy-teal text-base font-bold border-b-2 border-teamy-teal -mb-[1px]">
         チームとの比較
       </button>
-    </div>
-
-    <!-- 右：未回答表示 -->
-    <div class="ml-auto flex items-center pb-2">
-      {% if not allmember_answered %}
-        <div class="px-4 py-1 rounded-md bg-teamy-pinkRed/10">
-          <span class="text-sm text-teamy-pinkRed">
-            ⚠️ 質問に未回答のチームメンバーがいます
-          </span>
-        </div>
-      {% endif %}
     </div>
 
   </div>
@@ -127,6 +116,17 @@ data-user-name="{{ target_user.name }}">
       <!-- チームとの比較ページ -->
       <div id="content-team" class="hidden relative min-h-[400px]">
 
+        <!-- 未回答表示（チーム比較ページのみ） -->
+        <div class="flex justify-end pb-2">
+          {% if not allmember_answered %}
+            <div class="px-4 py-1 rounded-md bg-teamy-pinkRed/10">
+              <span class="text-sm text-teamy-pinkRed">
+                ⚠️ 質問に未回答のチームメンバーがいます
+              </span>
+            </div>
+          {% endif %}
+        </div>
+
         {% if team_id and graph_data and team_graph_data %}
           {% include "analysis/includes/personal_team.html" %}
         {% else %}
@@ -134,6 +134,7 @@ data-user-name="{{ target_user.name }}">
           <div class="absolute inset-0 z-30 bg-teamy-grayDark/60 rounded-xl flex justify-center items-start pt-32">
             <div class="text-center p-8 bg-teamy-grayLight rounded-2xl max-w-md w-full mx-4">
               <p class="text-teamy-grayText leading-relaxed">
+                チームを選択してください。<br><br>
                 チームに所属することで<br>
                 結果が表示されます。
               </p>

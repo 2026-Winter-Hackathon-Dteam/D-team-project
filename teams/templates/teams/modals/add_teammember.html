@@ -32,7 +32,7 @@
                class="w-full rounded-full border border-gray-400 py-3 pr-6 pl-14 text-xl" 
                placeholder="検索" 
                hx-get="{% url 'teams:user_search' %}" 
-               hx-trigger="keyup changed delay:500ms" 
+               hx-trigger="keyup changed delay:500ms, memberAdded from:body" 
                hx-target="#search-results"
                hx-vals='{"team_id": "{{ selected_team.id }}"}' /> 
                 <!-- hx-get= レスポンスをどこに表示するか !!urlができたら{# #}コメントアウトを外す!! -->

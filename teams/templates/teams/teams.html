@@ -3,7 +3,7 @@
 {% block title %}Teams{% endblock %}
 
 {% block content %}
-<div class="max-w-[1800px] mx-auto px-8 py-10">
+<div class="mx-auto px-8 py-10">
   <div class="flex flex-row gap-12 items-start">
 
     <!-- ================= 左：チームリスト ================= -->
@@ -12,15 +12,15 @@
       <!-- ===== 上部ヘッダ ===== -->
       <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-bold text-teamy-navy">チームリスト</h1>
-        {% if True %} <!-- ===== 本番でif user.is_admin への変更を忘れないようにする！！ ===== -->
+        {% if user.is_admin %} <!-- ===== 本番でif user.is_admin への変更を忘れないようにする！！ ===== -->
         <div class="flex items-center gap-4">
-          <button type="button" class="btn-help h-8 w-8 transition-transform hover:scale-110">
+          <button type="button" class="btn-help h-7 w-7 transition-transform hover:scale-110">
             <img src="{% static 'imgs/help.png' %}" alt="ヘルプ">
           </button>
           <button
             type="button"
             id="openCreateTeam"
-            class="bg-teamy-orange hover:bg-teamy-orangeDark text-white px-5 py-2 rounded-full text-base font-bold transition-all hover:scale-[1.03]">
+            class="shrink-0 whitespace-nowrap bg-teamy-orange hover:bg-teamy-orangeDark text-white px-6 py-2 rounded-full text-sm font-semibold transition-all hover:scale-[1.03]">
             ＋ チームを作成
           </button>
         </div>
@@ -31,22 +31,23 @@
       <table class="w-full text-left table-fixed">
         <thead>
           <tr class="text-teamy-grayText border-b-2 border-gray-200">
-            <th class="py-4 px-2 font-medium text-xl w-[45%]">チーム</th>
-            <th class="py-4 px-2 font-medium text-xl w-[40%]">リーダー</th>
-            <th class="py-4 px-2 w-[100px]"></th>
+            <th class="py-3 px-2 font-medium text-base w-[45%]">チーム</th>
+            <th class="py-3 px-2 font-medium text-base w-[40%]">リーダー</th>
+            <th class="py-3 px-2 w-[100px]"></th>
           </tr>
         </thead>
 
-        <tbody class="text-xl">
+        <tbody class="text-base">
           {% for team in teams %}
-          <tr class="border-b border-gray-50 hover:bg-gray-100 transition-colors
-                     {% if selected_team and team.id == selected_team.id %}bg-gray-50{% endif %}">
-            <td class="py-4 px-2">
+          <tr data-team-id="{{ team.id }}"
+              class="team-row cursor-pointer border-b border-gray-50 hover:bg-gray-100 transition-colors
+              {% if selected_team and team.id == selected_team.id %}bg-gray-50{% endif %}">
+            <td class="py-3 px-2 break-all  break-words">
               <a href="?team_id={{ team.id }}" class="block w-full">
                 {{ team.name }}
               </a>
             </td>
-            <td class="py-4 px-2">
+            <td class="py-3 px-2">
               {% if team.leader_user %}
                 {{ team.leader_user.name }}
               {% else %}
@@ -55,20 +56,22 @@
                 </span>
               {% endif %}
             </td>
-            <td class="py-4 px-2 text-right w-[100px]">
+            <td class="py-3 px-2 text-right w-[100px]">
               <div class="flex gap-4 justify-end items-center">
                 <button
                   type="button"
                   class="btn-edit-team p-2 -m-2 transition-transform hover:scale-125 shrink-0"
-                  data-team-id="{{ team.id }}">
-                  <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-7 h-7 shrink-0">
+                  data-team-id="{{ team.id }}"
+                  data-team-name="{{ team.name }}"
+                  data-team-description="{{ team.description|default_if_none:'' }}">
+                  <img src="{% static 'accounts/imgs/edit.svg' %}" class="w-6 h-6 shrink-0">
                 </button>
                 <button
                   type="button"
                   class="btn-delete-team p-2 -m-2 transition-transform hover:scale-125 shrink-0"
                   data-team-id="{{ team.id }}"
                   data-team-name="{{ team.name }}">
-                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7 shrink-0">
+                  <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-6 h-6 shrink-0">
                 </button>
               </div>
             </td>
@@ -89,9 +92,9 @@
 
       <!-- ===== 上部ヘッダ ===== -->
       {% if selected_team %}
-      <div class="flex items-center justify-between mb-8">
-        <div class="flex items-baseline gap-6">
-          <h2 class="text-3xl font-bold text-teamy-navy">
+      <div class="flex items-start justify-between mb-8">
+        <div class="flex items-baseline gap-6 min-w-0">
+          <h2 class="text-3xl font-bold text-teamy-navy break-words min-w-0">
             {{ selected_team.name }}
           </h2>
           <p class="text-gray-500 text-lg">
@@ -99,11 +102,11 @@
           </p>
         </div>
 
-        {% if True %} <!-- ===== 本番でif user.is_admin への変更を忘れないようにする！！ ===== -->
+        {% if user.is_admin %} <!-- ===== 本番でif user.is_admin への変更を忘れないようにする！！ ===== -->
         <button
           type="button"
           id="openAddMember"
-          class="bg-teamy-teal hover:bg-teamy-tealDark text-white px-6 py-2 rounded-full text-base font-bold transition-all hover:scale-[1.03]">
+          class="shrink-0 whitespace-nowrap bg-teamy-teal hover:bg-teamy-tealDark text-white px-6 py-2 rounded-full text-sm font-semibold transition-all hover:scale-[1.03]">
           ＋ メンバーを追加
         </button>
         {% endif %}
@@ -114,18 +117,18 @@
       <table class="w-full text-left">
         <thead>
           <tr class="text-teamy-grayText border-b-2 border-gray-200">
-            <th class="py-4 px-2 font-medium text-xl w-[40%]">名前</th>
-            <th class="py-4 px-2 font-medium text-xl w-[20%]">社員ID</th>
-            <th class="py-4 px-2 font-medium text-xl w-[30%] text-center">価値観ページ</th>
-            <th class="py-4 w-[100px]"></th>
+            <th class="py-3 px-2 font-medium text-base w-[40%]">名前</th>
+            <th class="py-3 px-2 font-medium text-base w-[20%]">社員ID</th>
+            <th class="py-3 px-2 font-medium text-base w-[30%] text-center">価値観ページ</th>
+            <th class="py-3 w-[100px]"></th>
           </tr>
         </thead>
 
-        <tbody class="text-xl">
+        <tbody class="text-base">
           {% if selected_team %}
             {% for member in team_members %}
             <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-              <td class="py-4 px-2">
+              <td class="py-3 px-2">
                 {% if member.user.id == selected_team.leader_user.id %}
                 <div class="flex items-center gap-2">
                   <img src="{% static 'accounts/imgs/leader.png' %}" class="w-8 h-8 shrink-0" alt="leader">
@@ -138,20 +141,21 @@
                 {% endif %}
               </td>
 
-              <td class="py-4 px-2 text-gray-700">
+              <td class="py-3 px-2 text-gray-700">
                 {{ member.user.employee_id }}
               </td>
 
-              <td class="py-4 px-2 text-center">
+              <td class="py-3 px-2 text-center">
                 {% if member.user.is_profile_public %}
-                <button class="border border-teamy-teal text-teamy-teal text-base px-4 py-1 rounded-full hover:bg-cyan-50 transition-colors font-medium">
+                <a href="{% url 'analysis:members_page' %}?user_id={{ member.user.id }}"
+                  class="inline-block border border-teamy-teal text-teamy-teal text-sm px-4 py-1 rounded-full hover:bg-cyan-50 transition-colors font-medium">
                   ページをみる
-                </button>
+                </a>
                 {% endif %}
               </td>
 
-              <td class="py-4 text-right w-[100px]">
-                {% if True %} <!-- ===== 本番でif user.is_admin への変更を忘れないようにする！！ ===== -->
+              <td class="py-3 text-right w-[100px]">
+                {% if user.is_admin %} <!-- ===== 本番でif user.is_admin への変更を忘れないようにする！！ ===== -->
                 <div class="flex items-center justify-end gap-4">
 
                   {% if not selected_team.leader_user or member.user.id != selected_team.leader_user.id %}
@@ -164,7 +168,7 @@
                     data-member-name="{{ member.user.name }}"
                     data-member-employee-id="{{ member.user.employee_id }}"
                   >
-                    <img src="{% static 'teams/imgs/leader_gray.png' %}" class="w-7 h-7 shrink-0" alt="leader">
+                    <img src="{% static 'teams/imgs/leader_gray.png' %}" class="w-6 h-6 shrink-0" alt="leader">
                   </button>
                   {% endif %}
 
@@ -174,8 +178,9 @@
                     class="btn-delete-member p-2 -m-2 transition-transform hover:scale-125 shrink-0"
                     data-member-id="{{ member.user.id }}"
                     data-member-name="{{ member.user.name }}"
-                    data-member-employee-id="{{ member.user.employee_id }}">
-                    <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-7 h-7 shrink-0">
+                    data-member-employee-id="{{ member.user.employee_id }}"
+                    data-is-leader="{% if selected_team.leader_user and member.user.id == selected_team.leader_user.id %}true{% else %}false{% endif %}">
+                    <img src="{% static 'accounts/imgs/trash.svg' %}" class="w-6 h-6 shrink-0">
                   </button>
 
                 </div>
