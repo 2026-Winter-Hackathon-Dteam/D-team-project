@@ -6,7 +6,7 @@
 {% block content %}
 <div class="flex justify-center items-center gap-4 h-[calc(100vh-80px)]">
   <!-- ======== 見出し ======== -->
-  <div class="w-full max-w-[420px] min-h-[400px] flex flex-col items-center border border-gray-100 bg-white text-lg shadow-2xl p-8">
+  <div class="w-full max-w-md min-h-96 overflow-auto flex flex-col items-center border border-gray-100 bg-white text-lg shadow-2xl p-8">
     <h1 class="text-3xl text-teamy-navy font-extrabold">ログイン</h1>
 
     <!-- ======== フォーム ======== -->
@@ -17,7 +17,7 @@
       <div class="flex flex-col gap-8 py-5 flex-grow justify-center">
 
         {% if form.non_field_errors %}
-          <div class="text-red-500 text-xs bg-red-50 p-2 rounded break-words
+          <div class="text-red-500 text-sm bg-red-50 p-2 rounded break-words
                       [&>ul]:list-none [&>ul]:m-0 [&>ul]:p-0
                       [&>ul>li]:m-0 [&>ul>li]:break-words">
             {{form.non_field_errors}}
@@ -28,7 +28,7 @@
           {{form.space_code.label}}
           {{form.space_code}}
           <!-- Djangoが生成するul/liタグのスタイルを[&>ul>li]で強制上書き＆折り返し -->
-          <div class="text-red-500 text-[10px] leading-tight break-words
+          <div class="text-red-500 text-sm leading-tight break-words
                       [&>ul]:list-none [&>ul]:m-0 [&>ul]:p-0
                       [&>ul>li]:m-0 [&>ul>li]:break-words">
             {{form.space_code.errors}}
@@ -38,7 +38,7 @@
         <label class="flex flex-col gap-1 w-full text-base">
           {{form.employee_id.label}}
           {{form.employee_id}}
-          <div class="text-red-500 text-[10px] leading-tight break-words
+          <div class="text-red-500 text-sm leading-tight break-words
                       [&>ul]:list-none [&>ul]:m-0 [&>ul]:p-0
                       [&>ul>li]:m-0 [&>ul>li]:break-words">
             {{form.employee_id.errors}}
@@ -48,7 +48,7 @@
         <label class="flex flex-col gap-1 w-full text-base">
           {{form.password.label}}
           {{form.password}}
-          <div class="text-red-500 text-[10px] leading-tight break-words
+          <div class="text-red-500 text-sm leading-tight break-words
                       [&>ul]:list-none [&>ul]:m-0 [&>ul]:p-0
                       [&>ul>li]:m-0 [&>ul>li]:break-words">
             {{form.password.errors}}

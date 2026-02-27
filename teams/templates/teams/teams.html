@@ -20,7 +20,7 @@
           <button
             type="button"
             id="openCreateTeam"
-            class="bg-teamy-orange hover:bg-teamy-orangeDark text-white px-6 py-2 rounded-full text-sm font-semibold transition-all hover:scale-[1.03]">
+            class="shrink-0 whitespace-nowrap bg-teamy-orange hover:bg-teamy-orangeDark text-white px-6 py-2 rounded-full text-sm font-semibold transition-all hover:scale-[1.03]">
             ＋ チームを作成
           </button>
         </div>
@@ -92,8 +92,8 @@
 
       <!-- ===== 上部ヘッダ ===== -->
       {% if selected_team %}
-      <div class="flex items-center justify-between mb-8">
-        <div class="flex items-baseline gap-6">
+      <div class="flex items-start justify-between mb-8">
+        <div class="flex items-baseline gap-6 min-w-0">
           <h2 class="text-3xl font-bold text-teamy-navy">
             {{ selected_team.name }}
           </h2>
@@ -106,7 +106,7 @@
         <button
           type="button"
           id="openAddMember"
-          class="bg-teamy-teal hover:bg-teamy-tealDark text-white px-6 py-2 rounded-full text-sm font-semibold transition-all hover:scale-[1.03]">
+          class="shrink-0 whitespace-nowrap bg-teamy-teal hover:bg-teamy-tealDark text-white px-6 py-2 rounded-full text-sm font-semibold transition-all hover:scale-[1.03]">
           ＋ メンバーを追加
         </button>
         {% endif %}
