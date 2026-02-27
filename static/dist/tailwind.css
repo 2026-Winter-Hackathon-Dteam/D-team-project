@@ -984,6 +984,10 @@ video {
   min-height: 9rem;
 }
 
+.min-h-96 {
+  min-height: 24rem;
+}
+
 .min-h-\[400px\] {
   min-height: 400px;
 }
@@ -1166,6 +1170,10 @@ video {
   width: 1px;
 }
 
+.min-w-0 {
+  min-width: 0px;
+}
+
 .min-w-\[120px\] {
   min-width: 120px;
 }
@@ -1198,10 +1206,13 @@ video {
   max-width: 80rem;
 }
 
+<<<<<<< feature/yanko/login_teams_UI
+=======
 .max-w-\[420px\] {
   max-width: 420px;
 }
 
+>>>>>>> develop
 .max-w-\[460px\] {
   max-width: 460px;
 }

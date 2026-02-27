@@ -20,7 +20,7 @@
           <button
             type="button"
             id="openCreateTeam"
-            class="bg-teamy-orange hover:bg-teamy-orangeDark text-white px-6 py-2 rounded-full text-sm font-semibold transition-all hover:scale-[1.03]">
+            class="shrink-0 whitespace-nowrap bg-teamy-orange hover:bg-teamy-orangeDark text-white px-6 py-2 rounded-full text-sm font-semibold transition-all hover:scale-[1.03]">
             ＋ チームを作成
           </button>
         </div>
@@ -39,10 +39,10 @@
 
         <tbody class="text-base">
           {% for team in teams %}
-          <tr onclick="location.href='?team_id={{ team.id }}'"
-              class="cursor-pointer border-b border-gray-50 hover:bg-gray-100 transition-colors
+          <tr data-team-id="{{ team.id }}"
+              class="team-row cursor-pointer border-b border-gray-50 hover:bg-gray-100 transition-colors
               {% if selected_team and team.id == selected_team.id %}bg-gray-50{% endif %}">
-            <td class="py-3 px-2">
+            <td class="py-3 px-2 break-all  break-words">
               <a href="?team_id={{ team.id }}" class="block w-full">
                 {{ team.name }}
               </a>
@@ -92,9 +92,9 @@
 
       <!-- ===== 上部ヘッダ ===== -->
       {% if selected_team %}
-      <div class="flex items-center justify-between mb-8">
-        <div class="flex items-baseline gap-6">
-          <h2 class="text-3xl font-bold text-teamy-navy">
+      <div class="flex items-start justify-between mb-8">
+        <div class="flex items-baseline gap-6 min-w-0">
+          <h2 class="text-3xl font-bold text-teamy-navy break-words min-w-0">
             {{ selected_team.name }}
           </h2>
           <p class="text-gray-500 text-lg">
@@ -106,7 +106,7 @@
         <button
           type="button"
           id="openAddMember"
-          class="bg-teamy-teal hover:bg-teamy-tealDark text-white px-6 py-2 rounded-full text-sm font-semibold transition-all hover:scale-[1.03]">
+          class="shrink-0 whitespace-nowrap bg-teamy-teal hover:bg-teamy-tealDark text-white px-6 py-2 rounded-full text-sm font-semibold transition-all hover:scale-[1.03]">
           ＋ メンバーを追加
         </button>
         {% endif %}

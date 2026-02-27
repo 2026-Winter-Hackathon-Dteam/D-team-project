@@ -18,12 +18,68 @@ document.addEventListener('DOMContentLoaded', () => {
     // フォーム外のinput（検索窓など）をクリア
     const inputs = modal.querySelectorAll('input:not([type="hidden"])');
     inputs.forEach(input => { input.value = ''; });
-
   };
 
   // クリックイベント
   document.addEventListener('click', (e) => {
-    
+
+    // チーム編集（最優先で処理）
+    const editBtn = e.target.closest('.btn-edit-team');
+    if (editBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const modal = document.getElementById('editTeamModal');
+      if (modal) {
+        // まず前回入力を消す
+        resetModalForm(modal);
+
+        // team_id
+        const idInput = document.getElementById('editTargetId');
+        if (idInput) idInput.value = editBtn.dataset.teamId || '';
+
+        // team名
+        const nameInput = modal.querySelector('input[name="name"]');
+        if (nameInput) nameInput.value = editBtn.dataset.teamName || '';
+
+        // description
+        const descTextarea = modal.querySelector('textarea[name="description"]');
+        if (descTextarea) descTextarea.value = editBtn.dataset.teamDescription || '';
+
+        modal.classList.remove('hidden');
+      }
+      return;
+    }
+
+    // チーム削除（最優先で処理）
+    const deleteTeamBtn = e.target.closest('.btn-delete-team');
+    if (deleteTeamBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const modal = document.getElementById('deleteTeamModal');
+      if (modal) {
+        const text = document.getElementById('deleteTargetText');
+        if (text) text.textContent = deleteTeamBtn.dataset.teamName;
+
+        const idInput = document.getElementById('deleteTargetId');
+        if (idInput) idInput.value = deleteTeamBtn.dataset.teamId;
+
+        modal.classList.remove('hidden');
+      }
+      return;
+    }
+
+    // チーム行クリック処理
+    const row = e.target.closest('.team-row');
+    if (row) {
+
+      // ボタンなら無視
+      if (e.target.closest('button')) return;
+
+      const teamId = row.dataset.teamId;
+      location.href = `?team_id=${teamId}`;
+      return;
+    }
+
     //  背景クリックでモーダルを閉じる
     if (e.target.classList.contains('modal-bg')) {
       const modal = e.target.closest('.fixed.inset-0');
@@ -57,42 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
     //  メンバー追加（右側の詳細エリア）
     if (btn.id === 'openAddMember') {
       document.getElementById('searchMemberModal')?.classList.remove('hidden');
-      return;
-    }
-
-    //  チーム編集
-    if (btn.classList.contains('btn-edit-team')) {
-      e.preventDefault();
-      const modal = document.getElementById('editTeamModal');
-      if (modal) {
-        // まず前回入力を消す
-        resetModalForm(modal);
-
-        // team_id
-        document.getElementById('editTargetId').value = btn.dataset.teamId || '';
-
-        // team名
-        const nameInput = modal.querySelector('input[name="name"]');
-        if (nameInput) nameInput.value = btn.dataset.teamName || '';
-
-        // description
-        const descTextarea = modal.querySelector('textarea[name="description"]');
-        if (descTextarea) descTextarea.value = btn.dataset.teamDescription || '';
-
-        modal.classList.remove('hidden');
-      }
-      return;
-    }
-
-    //  チーム削除
-    if (btn.classList.contains('btn-delete-team')) {
-      e.preventDefault();
-      const modal = document.getElementById('deleteTeamModal');
-      if (modal) {
-        document.getElementById('deleteTargetText').textContent = btn.dataset.teamName;
-        document.getElementById('deleteTargetId').value = btn.dataset.teamId;
-        modal.classList.remove('hidden');
-      }
       return;
     }
 
@@ -163,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-  }); 
+  });
 });
 
 // ===== HTMX用 CSRF自動付与 =====
